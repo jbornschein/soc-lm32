@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/1499/vhdl/Tests-DE1/soc_lm32/wb_sram
+END
+asram_core.v
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/1499/vhdl/Tests-DE1/soc_lm32/wb_sram/asram_core.v
+END
+asram_top.v
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/1499/vhdl/Tests-DE1/soc_lm32/wb_sram/asram_top.v
+END

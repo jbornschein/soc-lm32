@@ -1,0 +1,11 @@
+system_tb.v
+system.v
+wb_lm32/lm32_cpu.v
+wb_conmax/wb_conmax_top.v
+wb_conmax/wb_conmax_arb.v
+wb_conmax/wb_conmax_rf.v
+wb_conmax/wb_conmax_msel.v
+wb_conmax/wb_conmax_pri_enc.v
+wb_conmax/wb_conmax_pri_dec.v
+wb_conmax/wb_conmax_master_if.v
+wb_conmax/wb_conmax_slave_if.v

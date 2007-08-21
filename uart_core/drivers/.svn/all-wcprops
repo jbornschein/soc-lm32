@@ -1,0 +1,11 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/1519/vhdl/Tests-DE1/soc_lm32/uart_core/drivers
+END
+peripheral.mk
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/1519/vhdl/Tests-DE1/soc_lm32/uart_core/drivers/peripheral.mk
+END

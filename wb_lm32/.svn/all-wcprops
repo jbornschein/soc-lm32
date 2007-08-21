@@ -1,0 +1,191 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/1626/vhdl/Tests-DE1/soc_lm32/wb_lm32
+END
+lm32_instruction_unit.v
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_instruction_unit.v
+END
+jtag_cores.v
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/jtag_cores.v
+END
+typea.v
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/typea.v
+END
+typeb.v
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/typeb.v
+END
+spiprog.v
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/spiprog.v
+END
+lm32_monitor_ram.v
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_monitor_ram.v
+END
+lm32_debug.v
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_debug.v
+END
+lm32_multiplier.v
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/1497/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_multiplier.v
+END
+lm32_cpu.v
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_cpu.v
+END
+lm32_load_store_unit.v
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_load_store_unit.v
+END
+lm32_logic_op.v
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_logic_op.v
+END
+lm32_interrupt.v
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_interrupt.v
+END
+lm32_addsub.v
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_addsub.v
+END
+lm32_shifter.v
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/1497/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_shifter.v
+END
+lm32_dcache.v
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_dcache.v
+END
+lm32_include_all.v
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_include_all.v
+END
+lm32_adder.v
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_adder.v
+END
+lm32_ram.v
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_ram.v
+END
+lm32_include.v
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_include.v
+END
+jtag_lm32.v
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/jtag_lm32.v
+END
+lm32_jtag.v
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_jtag.v
+END
+lm32_monitor.v
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_monitor.v
+END
+er1.v
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/er1.v
+END
+JTAGB.v
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/JTAGB.v
+END
+system.sdc
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/system.sdc
+END
+system_conf.v
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/1622/vhdl/Tests-DE1/soc_lm32/wb_lm32/system_conf.v
+END
+lm32_top.v
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_top.v
+END
+lm32_decoder.v
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_decoder.v
+END
+lm32_functions.v
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_functions.v
+END
+lm32_mc_arithmetic.v
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/1510/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_mc_arithmetic.v
+END
+lm32_icache.v
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/1626/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_icache.v
+END

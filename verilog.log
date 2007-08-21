@@ -1,0 +1,353 @@
+GPLCVER_2.11a of 07/05/05 (Linux-elf).
+Copyright (c) 1991-2005 Pragmatic C Software Corp.
+  All Rights reserved.  Licensed under the GNU General Public License (GPL).
+  See the 'COPYING' file for details.  NO WARRANTY provided.
+Today is Tue Aug 21 13:19:51 2007.
+             ** CVER VERILOG SIMULATOR HELP MESSAGE **
+ 
+  Cver is a Verilog HDL simulator following the 1995 IEEE P1364 standard
+  with some 2001 P1364 LRM features added and some modifications to match
+  actual behavior of de facto standard XL simulator.  Modeling in C/C++ and
+  Verilog using PLI 1 and PLI 2 interfaces is supported.  PLI implementation
+  follows 2001 P1364 LRM.  Cver now supports faster compiled to byte code
+  virtual machine (VM) execution simulation selected using -O (optimize on)
+  option (** NOTE -O not available in GPL Cver).  See release notes in doc
+  directory for list of P1364 2001 supported features and list of known
+  problems.
+ 
+  Usage:  cver [intermixed options and Verilog source files].
+ 
+  Command line and -f command file options must be in lower case and must
+  begin with a - or +.  Each option requires a separate - or +.  Type
+  'cver -?' or 'cver -h' to generate this help message.  To enter the
+  Verilog statement interactive debugger (press interrupt (^c) or execute
+  $stop), then type :help' for interactive debugger help.
+ 
+  It is assumed that you already know Verilog and have access to a P1364 LRM
+  or other Verilog documentation.  Cver supports both PLI (Programming
+  Language Interface) 1 tf_ and acc_ and PLI 2 vpi_ utility, design object
+  and callback routines using +loadpli1= and +loadvpi= dynamic PLI load
+  options defined below.  Both old PLI 1 and new PLI 2 libraries can be
+  dynamically loaded during one run.  See examples in examples.vpi,
+  examples.tf and examples.acc release directories for examples showing how
+  to link and run PLI models.  If you need to statically link PLI models, you
+  must obtain different Cver binary and cverobj.o library.  Cver contains a
+  number of new system tasks and functions.  See systasks.1 man page in the
+  doc directory for definition of every system task and system function
+  supported by Cver.
+ 
+  Cver generally produces results matching other simulators even when other
+  simulators differ from P1364 standard up to differences in event order.
+  However, Cver does not change port direction because of net connection
+  direction (i.e. treat nets with wrong side of port drivers as inouts)
+  unless the +change_port_type option is selected.  It is suggested that
+  you change your designs so port type changing is not needed, but for full
+  compatibility with other simulators always run with +change_port_type
+  option.  Cver implements pulse (glitch) detection for gates as well as
+  paths.  This may cause some simulation result differences.  This more
+  stringent pulse analysis is consistent with Cver's intended use as
+  accurate gate level simulator.
+ 
+  Since all options are collected before processing, if any options are
+  duplicated, the rightmost (last) will be used.  All Cver options are
+  listed in this help message.  Any other option will be ignored by Cver
+  although it may be scanned and used by a user PLI routine.  All options
+  not listed in this help message will have warning 506 emitted for minus
+  options and inform 410 for plus options.
+ 
+  Options defined in the IEEE P1364 reference manual are supported and have
+  the following effect:
+ 
+   -f [file]  Read options and source file names from [file] until it is
+         exhausted at which point continue reading from command line.  May
+         be nested.
+   -l [file]  By default all output is written to stdout and to log file
+         verilog.log.  -l changes to log file [file].  System task
+         $log([file]) changes to log file [file] during simulation, $nolog
+         turns off log file output.  Added system task $flushlog calls OS
+         fflush on log file.  $reset does not reset log file.
+   -s    Stop just before starting simulation and enter interactive debugger.
+   -i [file]  Read interactive debugger commands from file [file] the first
+         time interactive mode is entered (usually with -s but possibly by
+         $stop or interrupt signal (^c)).  Nested -i [file] options are
+         chained not nested.
+   -c    Translate source and all referenced library models only.  Ends just
+         before loading the translated model into memory.
+   -w    Suppress all warning messages.  See +suppress_warns added option for
+         suppression of warnings and informs by message number.
+   -d    Dump source that is constructed from internal representation.  All
+         parameters are replaced by their constant value in the
+         reconstructed source output.  Debugger source listing lists lines
+         from source files instead of reconstructing source.
+   -q    Quiet mode.  Do not print normal progress messages.  Opposite
+         of -q is +verbose that prints even more progress messages than normal.
+   +mindelays, +typdelays, +maxdelays  Choose either minimum, typical or
+         maximum value from any constant (min:typ:max) forms in source.
+         Selection is made during input scanning so min:typ:max forms
+         become constant numbers at translation time.
+   -t    Trace procedural statement execution.  Use -et to trace event
+         processing.  In other simulators, -t means both -t and -et.
+         $settrace,  $setevtrace, $cleartrace, $clearevtrace to control
+         tracing during simulation.
+   +libnocell  Ignore `celldefine directives in source and libraries.  This
+         should not be used if delay back annotation is used since it will
+         probably cause annotation to fail.
+   +notimingchecks  After checking for correct syntax, ignore timing checks.
+   -u    Ignored.  For all upper case, use an OS filter command to convert
+         source to all upper case.
+ 
+  Only default and +librescan library scanning order supported.  By default
+  all library files from -v [file] and all directories of library elements
+  from -y [directory] are scanned from first to last according to input option
+  order.  If unresolved names remain after completion of a pass, the list is
+  rescanned from the beginning.  If +librescan option is selected, unresolved
+  names are resolved one at a time in order they are first seen.  After a
+  name has been resolved, the next name in order is resolved by rescanning
+  from the beginning of library list.  Options to control order dependent
+  resolution and +libnamehide are not implemented.  Library options are:
+ 
+   -v [file]   Treat [file] as a library containing module and UDP
+         definitions.  File is sequentially searched for definitions that
+         resolve unresolved names.  Within a -v file, if a name if defined
+         before use, it is resolved before moving to next library element.
+   -y [directory]  Treat every file in [directory] as a -v library although
+         usually each file will only contain one definition.  File name in
+         directory along with +libext+ option used to find unresolved name.
+   +libext+  In -y directory files, name resolution uses file names.  If
+         no +libext+ option is present only files whose name exactly
+         matches an unresolved module or primitive will be read.  There can
+         be no extension.  Normally, each -y file will contain the
+         definition for exactly one element but if more elements are present
+         they will be used to resolve other unresolved elements.  Use
+         +libext+[extension with dot]+[extension with dot]+...  to cause
+         file name extensions to be removed before matching file names to
+         unresolved element names.  Only one +libext+ option may appear and
+         matching is in order when library extensions do not follow the
+         simple .[suffix name] convention.  If all files in -y directories
+         end with either .v or .V (a common case), use +libext+.v+.V+
+   +librescan  Rescan to beginning of library file and directory list after
+         every unresolved name is resolved.  At most one name resolved per
+         library pass.
+   +libverbose  Emit detailed trace messages giving resolution order and
+         reason a particular element was resolved at the particular place.
+   +show_canceled_e  Path and gate (1 bit continuous assignments implemented
+         as gates) outputs set to X when pulses occur that cause scheduled
+         but not matured events to be canceled because second input edge
+         occurs before output has changed (switched).  The output
+         remains at X until another input edge causes an output change
+         because it is unknown if a pulse (glitch) will cause output
+         switching.  Some other simulators use a less pessimistic algorithm
+         that assumes pulses never cause switching and schedule a change
+         from X back to original output value on trailing edge of pulse.  If
+         your model will not run, use the +warn_canceled_e instead of this
+         option and examine warnings.  Cver does not allow only some
+         paths and gates to use pulse X showing using specify section
+         directives because X showing does not slow down simulation.
+         Normally X from a pulse is shown on leading edge of glitch.  Use
+         +pulse_e_style_ondetect to cause X to be shown(driven) when pulse
+         detected from input change.  Option is standardized replacement for
+         previous +spikes option.
+   +noshow_canceled_e  Path and gate outputs not driven (shown) as X when
+         pulses occur (second input change earlier than selected delay).
+         This is the default (normally it is not needed).  It selects normal
+         Verilog inertial delay algorithm where the latest input change
+         causes the previously scheduled but unmatured event to be canceled.
+   +pulse_e_style_ondetect  If +show_canceled_e option selected, this option
+         causes output to be set to X (shown) when the pulse (glitch) is
+         detected.  If this option is not selected, output is set to X
+         (shown) when the pulse propagates to an output.  This option
+         selects a more pessimistic (starting earlier) X region.
+   +pulse_e_style_onevent  If +show_canceled_e option selected, this option
+         selects the default output setting to X (showing) option that sets
+         output to X when glitch propagates to output (leading edge is time
+         at which the event scheduled latest matures).  There is no reason
+         to use this option since it is default.  Control of X showing for
+         individual gates and paths is not supported.
+   +warn_canceled_e  Emit warning for every gate (including UDP) or path event
+         cancel (inertial cancel and reschedule).  This option may cause
+         voluminous output so the $suppress_warns and $allow_warns system
+         tasks can be used to select particular time periods when warnings
+         are emitted.  This option and +show_canceled_e are unrelated so both
+         error messages and x showing (injection) may be enabled.
+   +nowarn_canceled_e  Because this option is the default it is never needed
+         Last of all +warn_canceled_e and +nowarn_canceled_e is used.
+ 
+  The following two options for dynamically loading user PLI libraries are
+  not explicitly defined in IEEE P1364 reference manual but are supported
+  by all modern simulators.  If you need to statically link your PLI models
+  you must request a different Cver binary and cverobj.o static PLI library,
+  but we strongly encourage use of dynamic PLI loading:
+ 
+   +loadpli1=[.so library]:[boostrap routines]  Load [.so library] dynamic
+         library containing user PLI 1 model and execute each bootstrap
+         routine.  [bootstrap routines] is a comma separated list of C
+         routines.  List may be empty but : is still required.  No spaces
+         are allowed around the equal sign, the colon or commas separating
+         bootstrap C routine names.  All dynamic libraries defined by
+         +loadpli1= options are first loaded using OS dlopen mechanism and
+         then all bootstrap routines are executed before elaboration begins.
+         The OS specific dynamic library suffix (.so on Linux) may be
+         omitted.  If omitted and the [.so library] is not found in any
+         LD_LIBRARY_PATH directory, the dynamic library suffix is added and
+         the LD_LIBRARY_PATH directories are searched again.
+ 
+         Each [bootstrap routines] list routine must return a pointer to a
+         s_tfcell veriusertfs table that ends with zero value type field.
+         Multiple +loadpli1= options are allowed and just before elaboration
+         all [bootstrap routines] for every +loadpli1= option are executed.
+         Each s_tfcell returned table is added to one design wide master
+         s_tfcell table in option and routine in list order.  The master
+         table defines all PLI 1 system functions and tasks used during a
+         simulation run.  The [bootstrap routines] must not call any PLI
+         routines.  Any C file containing [bootstrap routines] list must
+         include both veriuser.h and cv_veriuser.h files.  Some OS shells
+         may require quoting and escaping option separators and file names
+         within the +loadpli1= option string.  Problem can be avoided by
+         coding +loadpli1= option in a -f command argument file. See release
+         examples.tf directory in tests_and_examples directory for example
+         PLI 1 programs and make files specific to your operating system.
+   +loadvpi=[.so library]:[boostrap routines]  Load [.so library] dynamic
+         library containing user PLI 2 vpi model and execute each bootstrap
+         routine.  [bootstrap routines] is a comma separated list of C/C++
+         routines.  List may be empty but : is still required.  No spaces
+         are allowed around the equal sign, the colon or commas separating
+         bootstrap C routine names.  All dynamic libraries defined by
+         +loadvpi= options are first loaded using OS dlopen mechanism and
+         then all bootstrap routines are executed before elaboration begins.
+         The OS specific dynamic library suffix (.so on Linux) may be
+         omitted.  If omitted and the [.so library] is not found in any
+         LD_LIBRARY_PATH directory, the dynamic library suffix is added and
+         the LD_LIBRARY_PATH directories are searched again.
+ 
+         Each [bootstrap routines] is saved on an ordered list and executed
+         in order before elaboration begins.  Normally [bootstrap routines]
+         will execute routines in vlog_startup_routines table, but any PLI 2
+         vpi routines callable before elaboration may be called including
+         vpi_register_systf and vpi_register_cb PLI 2 routines.  Some OS
+         shells may require quoting and escaping option separators and file
+         names within the +loadvpi= option string.  Problem can be avoided by
+         coding +loadvpi= option in a -f command argument file. See release
+         examples.vpi directory for example PLI 1 programs and make files
+         specific to your operating system.
+ 
+  The following other options not defined in the IEEE P1364 reference manual
+  are supported:
+   +verbose  Print various simulation progress messages and design component
+         counts.  Memory sizes do not count memory used by udp tables.
+   +maxerrors [number]  Normally translation terminates after 32
+         errors.  Use this option to change the number. 0 means no limit.
+         Option applies to translation only, simulation is never stopped.
+   -e    Turn off printing of non fatal error messages.
+   -informs  Turn on printing of informatory messages.  Off by default.
+         Informs may be emitted during translation and during simulation.
+         Enable this option to determine if a plus option is misspelled and
+         to cause OS error message description strings to be printed.
+         Option will probably produce voluminous output unless
+         +suppress_warns+[+ separated list] option(s) also used.
+   -O    Turn on simulation byte code optimizer (**NOTE not available in
+         GPL Cver).  If this option is selected statement breakpoints
+         can not be set but all other interpreter features are supported.
+   -et   Turn on event tracing.  Option is similar to the -t (or $settrace)
+         option but -t only traces procedural execution.  To dynamically
+         control event tracing use $setevtrace and $clearevtrace system
+         tasks.  Option produces voluminous output. Use -t and -et to
+         duplicate other simulator -t tracing.
+   +tracefile [name]  Set the output file for any trace output (either
+         statement or event).  Use $settracefile system task to change
+         trace file during execution.  Name can be stdout and if no option
+         or $tracefile, defaults to stdout and log file.  $flushlog system
+         task flushes this file during simulation.
+   +printstats  Print tables of design contents.  Primitives, instances,
+         and wires that will use silicon area are tabulated.  More
+         detailed alternative to $showallinstances.
+   +printallstats  Option equivalent to +printstats but additionally prints
+         the declarative content of every module.
+   +suppress_warns+  Individual warning and informatory messages can be
+         suppressed (not errors) by including a + separated list. i.e.
+         +suppress_warns+403+502+507+564+.  All such options are combined.
+         The $suppress_warns([comma separated list]) and $allow_warns
+         system tasks can be used during simulation for the same effect.
+   +remove_gate_0delays  Change all gates with #0 or #(0, 0, 0) delay to no
+         delay (1 bit continuous assigns implemented as gates).  Option can
+         significantly speed up simulation but in very rare situation cause
+         simulation to fail (#0 delays used to mask races).  If you see a
+         large simulation speed up from option, you can probably speed up
+         simulation even more by recoding most common cells as udps.  Option
+         needed because some simulators only allow delay annotation if gate
+         has a delay coded in source.
+   +nokeepcommands  Do not save interactive commands to history list.  By
+         default,  Interactive commands are saved to history list.  The
+         $keepcommands; and $nokeepcommands; system tasks enable and disable
+         saving of of history during simulation.  Option should be used when
+         interactive input comes from $input or from shell pipe to stdin.
+   +define+[symbol] or +define+[symbol]=[string]   Define back quote macro
+         symbol [symbol] with an empty text string (first form) for use with
+         `ifdef and `ifndef macro facility.  [symbol] does not include back
+         quote.  Second form defines symbol with value [string].  [String]
+         must not contain white space but can contain anything else including
+         surrounding quotes.  Escaped surrounding quotes are converted to
+         normal quotes while non escaped will probably be removed
+         by your shell.  The $scan$plusargs system task is an alternative
+         for setting preprocessor values into variables.
+   +incdir+[path]+[path]+...+  Define paths that are searched for `include
+         files when `include file not found in current directory.  Only
+         `include files that are non absolute paths (not staring with '/'
+         or '.' or '..' or '~') are searched for using +incdir paths.
+         Paths that do not end with '/' have a '/' path separator appended
+         to end.  For file included in different directory, files included
+         from it are still searched for in original (not include file)
+         directory.  Multiple +incdir+ options may be specified.  Paths
+         directories are searched in order of +incdir+ options.
+   +sdf_log_file [file]  File is used for SDF annotation instead of default
+         writing of SDF messages and errors to Verilog log file.
+   +sdf_annotate [file] or +sdf_annotate [file]+[scope reference]  File must
+         be in IEEE P1497 standard delay file format.  File is read and used
+         to set delay and specify values.  +mindelays, +typdelays or
+         +maxdelays setting used to select rtriple value.  Multiple
+         +sdf_annotate options (and files) allowed.  If +[scope reference]
+         provided, SDF path references relative to scope.  Otherwise, SDF
+         paths rooted (context is entire design).  Annotation files processed
+         in option order.  Alternatively, $sdf_annotate system task can be
+         used to annotate delays.  See systsks.1 man page for documentation.
+         Large designs that require large SDF files load somewhat faster if
+         command line option instead of system task is used.
+   +sdfverbose  Emit trace messages giving new delay value for every delay
+         changed during +sdf_annotate delay annotation.  Option can generate
+         voluminous output.
+   +sdf_noerrors  Do not emit SDF annotation error messages.  SDF errors do
+         not stop simulation but cause SDF object delay setting to be skipped
+         so +maxerrors error limit does not apply.  Use this option to turn
+         off printing of SDF error messages.
+   +sdf_nowarns  Do not emit warning messages during SDF annotation.  SDF
+         warnings and informs can also be suppressed by message number
+         using +suppress_warns+ option.
+   +switchverbose  Emit trace and size messages for inout and tran gate
+         switch channels elaboration. Use this option to print progress
+         messages when simulating models with very large switch channels.
+   +change_port_type  Some designs require ports that are not declared as
+         inout but are connected as inouts and require bidirectional signal
+         flow for correct simulation have their port type changes to inout.
+         Use this option to cause port direction to be changed to inout for
+         input ports with loconn drivers and for output ports with highconn
+         drivers.  WARNING: Use of this option may be required to match
+         results of other simulators that use port collapsing algorithm.
+   +no_separate_nb_queue  Cver non blocking event scheduling algorithm has
+         changed to match XL (all non blocking events scheduled only
+         after all #0 events processed).  Use this option for backward
+         compatibility with old cver algorithm that mixed non blocking
+         eventing in the #0 queue.  If using this option changes your
+         results, your circuit probably has a race.
+   +nospecify  Simulation run with specify section ignored.  This option
+         causes specify section to be read and parsed but it is discarded
+         before simulation.  +nospecify of course implies +notimingchecks.
+   +nointeractive  Option turns off interactive environment, interrupt signal
+         (^c) causes immediate termination.  $stop causes a warning to be
+         printed without stopping.  Suppress warning 560 to silently ignore
+         stops.  If machine code simulation option +compiled_sim is selected,
+          this option is automatically turned on.
+   +snapshot  If +nointeractive option is selected, if interrupt signal
+         (^c) is generated, this option causes a port mortem activity
+         snapshot to be printed before program termination.  Debugger
+         :where and $snapshot system task produces same output without
+         ending simulation.
+**Special help mode successfully completed.

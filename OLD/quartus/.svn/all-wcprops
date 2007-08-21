@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/1626/vhdl/Tests-DE1/soc_lm32/quartus
+END
+top.vhd
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/1626/vhdl/Tests-DE1/soc_lm32/quartus/top.vhd
+END
+DE1_pin_assignments.csv
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/1369/vhdl/Tests-DE1/soc_lm32/quartus/DE1_pin_assignments.csv
+END
+lm32.qws
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/1626/vhdl/Tests-DE1/soc_lm32/quartus/lm32.qws
+END
+System.bsf
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/1377/vhdl/Tests-DE1/soc_lm32/quartus/System.bsf
+END
+lm32.qpf
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/1369/vhdl/Tests-DE1/soc_lm32/quartus/lm32.qpf
+END
+lm32.qsf
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/1626/vhdl/Tests-DE1/soc_lm32/quartus/lm32.qsf
+END
+lm32.sim.vwf
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/1497/vhdl/Tests-DE1/soc_lm32/quartus/lm32.sim.vwf
+END
+lm32.bdf
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/1483/vhdl/Tests-DE1/soc_lm32/quartus/lm32.bdf
+END
+lm32.cdf
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/1626/vhdl/Tests-DE1/soc_lm32/quartus/lm32.cdf
+END
+lm32.sim.cvwf
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/1497/vhdl/Tests-DE1/soc_lm32/quartus/lm32.sim.cvwf
+END
+lm32_uart.vwf
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/1483/vhdl/Tests-DE1/soc_lm32/quartus/lm32_uart.vwf
+END
+wb_sram.vhd
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/1497/vhdl/Tests-DE1/soc_lm32/quartus/wb_sram.vhd
+END
+sim_sram.vwf
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/1484/vhdl/Tests-DE1/soc_lm32/quartus/sim_sram.vwf
+END
+uart_test.vwf
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/1519/vhdl/Tests-DE1/soc_lm32/quartus/uart_test.vwf
+END
+lm32uart.cvwf
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/1519/vhdl/Tests-DE1/soc_lm32/quartus/lm32uart.cvwf
+END

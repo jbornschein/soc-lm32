@@ -1,0 +1,132 @@
+V3 93
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../hex.vhd 2007/07/06.17:06:52 J.37
+EN work/nibble7Seg 1184339358 \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../hex.vhd \
+      PB ieee/std_logic_1164 1164763259 PB ieee/NUMERIC_STD 1164763273
+AR work/nibble7Seg/rtl 1184339359 \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../hex.vhd \
+      EN work/nibble7Seg 1184339358
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../intercon.vhd 2007/07/06.17:06:52 J.37
+PH work/intercon_package 1184339360 \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../intercon.vhd \
+      PB ieee/std_logic_1164 1164763259
+PB work/intercon_package 1184339361 \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../intercon.vhd \
+      PH work/intercon_package 1184339360
+EN work/trafic_supervision 1184339362 \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../intercon.vhd \
+      PB ieee/std_logic_1164 1164763259
+AR work/trafic_supervision/rtl 1184339363 \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../intercon.vhd \
+      EN work/trafic_supervision 1184339362
+EN work/intercon 1184339364 \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../intercon.vhd \
+      PB ieee/std_logic_1164 1164763259 PB work/intercon_package 1184339361
+AR work/intercon/rtl 1184339365 \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../intercon.vhd \
+      EN work/intercon 1184339364 CP work/trafic_supervision
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../system.vhd 2007/07/13.17:07:22 J.37
+EN work/System 1184339366 \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../system.vhd \
+      PB ieee/std_logic_1164 1164763259
+AR work/System/rtl 1184339367 \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../system.vhd \
+      EN work/System 1184339366 CP lm32_cpu CP wb_bram CP uart_core CP asram_top \
+      CP wb_gpio CP wb_timer CP nibble7Seg CP intercon
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../TestBench.vhd 2007/07/13.14:58:37 J.37
+EN work/TestBench 1184339368 \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../TestBench.vhd \
+      PB ieee/std_logic_1164 1164763259 PB ieee/std_logic_arith 1164763261 \
+      PB ieee/STD_LOGIC_UNSIGNED 1164763267
+AR work/TestBench/Behavioral 1184339369 \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../TestBench.vhd \
+      EN work/TestBench 1184339368 CP System
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../uart_core/intface.v 2007/07/07.12:21:17 J.37
+MO work/intface \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../uart_core/intface.v
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../uart_core/rxcver.v 2007/07/07.12:21:17 J.37
+MO work/rxcver \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../uart_core/rxcver.v
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../uart_core/txmitt.v 2007/07/07.12:21:17 J.37
+MO work/txmitt \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../uart_core/txmitt.v
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../uart_core/uart_core.v 2007/07/07.12:21:17 J.37
+MO work/uart_core \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../uart_core/uart_core.v \
+      MI intface MI rxcver MI txmitt
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_bram.vhd 2007/07/07.12:21:17 J.37
+EN work/wb_bram 1184339352 \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_bram.vhd \
+      PB ieee/std_logic_1164 1164763259 PB ieee/NUMERIC_STD 1164763273
+AR work/wb_bram/rtl 1184339353 \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_bram.vhd \
+      EN work/wb_bram 1184339352
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_gpio/wb_gpio.vhd 2007/07/06.17:06:53 J.37
+EN work/wb_gpio 1184339354 \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_gpio/wb_gpio.vhd \
+      PB ieee/std_logic_1164 1164763259
+AR work/wb_gpio/rtl 1184339355 \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_gpio/wb_gpio.vhd \
+      EN work/wb_gpio 1184339354
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_adder.v 2007/07/07.12:21:19 J.37 FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_include.v
+MO work/lm32_adder \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_adder.v \
+      MI lm32_addsub
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_addsub.v 2007/07/07.12:21:19 J.37 FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_include.v
+MO work/lm32_addsub \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_addsub.v
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_cpu.v 2007/07/07.12:21:19 J.37 FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_include.v FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_functions.v
+MO work/lm32_cpu \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_cpu.v \
+      MI lm32_adder MI lm32_decoder MI lm32_instruction_unit MI lm32_interrupt \
+      MI lm32_load_store_unit MI lm32_logic_op MI lm32_mc_arithmetic \
+      MI lm32_multiplier MI lm32_shifter
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_decoder.v 2007/07/07.12:21:19 J.37 FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_include.v FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_functions.v
+MO work/lm32_decoder \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_decoder.v
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_instruction_unit.v 2007/07/07.12:21:19 J.37 FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_include.v FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_functions.v
+MO work/lm32_instruction_unit \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_instruction_unit.v
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_interrupt.v 2007/07/13.17:02:07 J.37 FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/system_conf.v FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_include.v
+MO work/lm32_interrupt \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_interrupt.v
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_load_store_unit.v 2007/07/07.12:21:19 J.37 FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_include.v FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_functions.v
+MO work/lm32_load_store_unit \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_load_store_unit.v
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_logic_op.v 2007/07/07.12:21:19 J.37 FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_include.v
+MO work/lm32_logic_op \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_logic_op.v
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_mc_arithmetic.v 2007/07/07.12:21:19 J.37 FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_include.v
+MO work/lm32_mc_arithmetic \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_mc_arithmetic.v
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_multiplier.v 2007/07/06.17:06:53 J.37 FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_include.v
+MO work/lm32_multiplier \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_multiplier.v
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_shifter.v 2007/07/06.17:06:53 J.37 FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_include.v
+MO work/lm32_shifter \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_shifter.v
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_top.v 2007/07/07.12:21:19 J.37 FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_include.v FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_functions.v
+MO work/lm32_top \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_lm32/lm32_top.v \
+      MI lm32_cpu
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_sram/asram_core.v 2007/07/06.17:06:53 J.37
+MO work/asram_core \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_sram/asram_core.v
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_sram/asram_top.v 2007/07/06.17:06:53 J.37
+MO work/asram_top \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_sram/asram_top.v \
+      MI asram_core
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_timer/wb_timer.vhd 2007/07/06.17:06:53 J.37
+EN work/wb_timer 1184339356 \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_timer/wb_timer.vhd \
+      PB ieee/std_logic_1164 1164763259 PB ieee/NUMERIC_STD 1164763273
+AR work/wb_timer/rtl 1184339357 \
+      FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/ise/../wb_timer/wb_timer.vhd \
+      EN work/wb_timer 1184339356
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_functions.v 2007/07/07.12:21:19 J.37
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/lm32_include.v 2007/07/07.12:21:19 J.37 FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/system_conf.v
+FL /home/joerg/src/labor-svn/vhdl/Tests-DE1/soc_lm32/wb_lm32/system_conf.v 2007/07/13.16:36:00 J.37
+FL $XILINX/verilog/src/glbl.v 2007/05/18.23:22:56 J.37
+MO work/glbl FL $XILINX/verilog/src/glbl.v
+FL lm32_include.v 2007/07/13.14:59:54 J.37 FL system_conf.v
+FL system_conf.v 2007/07/13.15:00:07 J.37

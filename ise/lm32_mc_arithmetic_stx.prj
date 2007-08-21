@@ -1,0 +1,2 @@
+verilog isim_temp "../wb_lm32/lm32_mc_arithmetic.v"
+verilog isim_temp "/home/joerg/Xilinx92i/verilog/src/glbl.v"

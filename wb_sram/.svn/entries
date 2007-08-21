@@ -1,0 +1,54 @@
+8
+
+dir
+1629
+https://roulette.das-labor.org/svn/vhdl/Tests-DE1/soc_lm32/wb_sram
+https://roulette.das-labor.org/svn
+
+
+
+2007-05-25T15:11:39.038911Z
+1499
+madex
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+b1d182e4-1ff8-0310-901f-bddb46175740
+
+asram_core.v
+file
+
+
+
+
+2007-06-02T06:33:07.000000Z
+d619697b7c76aadbf6cac53dcffc0ae1
+2007-05-25T15:11:39.038911Z
+1499
+madex
+has-props
+
+asram_top.v
+file
+
+
+
+
+2007-06-02T06:33:07.000000Z
+200263f10ba9cea868def1c3458dbbff
+2007-05-25T15:11:39.038911Z
+1499
+madex
+has-props
+

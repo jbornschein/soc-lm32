@@ -1,0 +1,8 @@
+vhdl isim_temp "../intercon.vhd"
+vhdl isim_temp "../wb_timer/wb_timer.vhd"
+vhdl isim_temp "../wb_gpio/wb_gpio.vhd"
+vhdl isim_temp "../wb_bram.vhd"
+vhdl isim_temp "../hex.vhd"
+vhdl isim_temp "../system.vhd"
+vhdl isim_temp "../TestBench.vhd"
+verilog isim_temp "/home/joerg/Xilinx92i/verilog/src/glbl.v"

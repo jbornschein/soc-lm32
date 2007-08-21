@@ -1,0 +1,21 @@
+ command line:
+   ./TestBench_isim_beh.exe
+Release 9.2.01i - ISE Simulator Engine J.37
+Copyright (c) 1995-2007 Xilinx, Inc.  All rights reserved.
+
+Fri Jul 13 17:13:50 2007
+
+
+***** Begin Stack Trace *****
+[1] unsigned __int128
+[2] [0xffffe420]
+[3] HSim__s6::connectMixedSigToPort(HSimPort*, int, int, HSim__s1*, int, int, void (*)(void*, int, int, void*))
+[4] HSim__s6::connectVlogSig(char const*, HSim__s1*)
+[5] HSimDesign::aBlkConnectSigs(HSim__s6*)
+[6] HSimDesign::vlogElab(HSimConfigDecl*, HSim__s6*)
+[7] HSimDesign::elaboration(HSimConfigDecl*, HSim__s6*)
+[8] HSimSimCtl::runTcl(HSimConfigDecl*, HSim__s6*, int, char**)
+[9] unsigned long
+[10] __libc_start_main
+[11] ./TestBench_isim_beh.exe [0x808ecb1]
+***** End Stack Trace *****

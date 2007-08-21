@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/1519/vhdl/Tests-DE1/soc_lm32/uart_core/drivers/device
+END
+MicoUart.c
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/1519/vhdl/Tests-DE1/soc_lm32/uart_core/drivers/device/MicoUart.c
+END
+MicoUartService.c
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/1519/vhdl/Tests-DE1/soc_lm32/uart_core/drivers/device/MicoUartService.c
+END
+MicoUart.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/1519/vhdl/Tests-DE1/soc_lm32/uart_core/drivers/device/MicoUart.h
+END
+MicoUartService.h
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/1519/vhdl/Tests-DE1/soc_lm32/uart_core/drivers/device/MicoUartService.h
+END
