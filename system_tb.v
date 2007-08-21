@@ -27,6 +27,16 @@ initial begin
 	$dumpvars(-1, dut);
 	$dumpfile("system_tb.vcd");
 //	$readmemh(`TEST_FILE, rom.ram);
+
+        // reset
+	btn[0] = 1;
+	clk    = 0;
+        
+	#(tck*3)
+	btn[0] = 0;
+	$display("RESET DONE");
+
+	#(tck*500) $finish;
 end
 
 endmodule
