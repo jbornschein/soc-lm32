@@ -138,11 +138,12 @@ assign asserted = ip | ~interrupt_n;
 //                          };
 assign ip_csr_read_data = ip;
 assign im_csr_read_data = im;
-generate
-    if (interrupts > 1) 
-    begin
+// XXX JB XXX
+// generate
+//    if (interrupts > 1) 
+//    begin
 // CSR read
-always @(*)
+always @*
 begin
     case (csr)
     `LM32_CSR_IE:  csr_read_data = {{`LM32_WORD_WIDTH-3{1'b0}}, 
@@ -159,36 +160,38 @@ begin
     default:       csr_read_data = {`LM32_WORD_WIDTH{1'bx}};
     endcase
 end
-    end
-    else
-    begin
-// CSR read
-always @(*)
-begin
-    case (csr)
-    `LM32_CSR_IE:  csr_read_data = {{`LM32_WORD_WIDTH-3{1'b0}}, 
-`ifdef CFG_DEBUG_ENABLED
-                                    bie, 
-`else
-                                    1'b0,                                    
-`endif
-                                    eie, 
-                                    ie
-                                   };
-    `LM32_CSR_IP:  csr_read_data = ip;
-    default:       csr_read_data = {`LM32_WORD_WIDTH{1'bx}};
-    endcase
-end
-    end
-endgenerate
+// XXX JB XXX
+//    end
+//    else
+//    begin
+//// CSR read
+//always @*
+//begin
+//    case (csr)
+//    `LM32_CSR_IE:  csr_read_data = {{`LM32_WORD_WIDTH-3{1'b0}}, 
+//`ifdef CFG_DEBUG_ENABLED
+//                                    bie, 
+//`else
+//                                    1'b0,                                    
+//`endif
+//                                    eie, 
+//                                    ie
+//                                   };
+//    `LM32_CSR_IP:  csr_read_data = ip;
+//    default:       csr_read_data = {`LM32_WORD_WIDTH{1'bx}};
+//    endcase
+//end
+//    end
+//endgenerate
     
 /////////////////////////////////////////////////////
 // Sequential Logic
 /////////////////////////////////////////////////////
 
-generate
-    if (interrupts > 1)
-    begin
+// XXX JB XXX
+//generate
+//    if (interrupts > 1)
+//    begin
 // IE, IM, IP - Interrupt Enable, Interrupt Mask and Interrupt Pending CSRs
 always @(posedge clk_i `CFG_RESET_SENSITIVITY)
 begin
@@ -256,75 +259,75 @@ begin
         end
     end
 end
-    end
-else
-    begin
-// IE, IM, IP - Interrupt Enable, Interrupt Mask and Interrupt Pending CSRs
-always @(posedge clk_i `CFG_RESET_SENSITIVITY)
-begin
-    if (rst_i == `TRUE)
-    begin
-        ie <= `FALSE;
-        eie <= `FALSE;
-`ifdef CFG_DEBUG_ENABLED
-        bie <= `FALSE;
-`endif
-        ip <= {interrupts{1'b0}};
-    end
-    else
-    begin
-        // Set IP bit when interrupt line is asserted
-        ip <= asserted;
-`ifdef CFG_DEBUG_ENABLED
-        if (non_debug_exception == `TRUE)
-        begin
-            // Save and then clear interrupt enable
-            eie <= ie;
-            ie <= `FALSE;
-        end
-        else if (debug_exception == `TRUE)
-        begin
-            // Save and then clear interrupt enable
-            bie <= ie;
-            ie <= `FALSE;
-        end
-`else
-        if (exception == `TRUE)
-        begin
-            // Save and then clear interrupt enable
-            eie <= ie;
-            ie <= `FALSE;
-        end
-`endif
-        else if (stall_x == `FALSE)
-        begin
-            if (eret_q_x == `TRUE)
-                // Restore interrupt enable
-                ie <= eie;          
-`ifdef CFG_DEBUG_ENABLED
-            else if (bret_q_x == `TRUE)
-                // Restore interrupt enable
-                ie <= bie;
-`endif
-            else if (csr_write_enable == `TRUE)
-            begin
-                // Handle wcsr write
-                if (csr == `LM32_CSR_IE)
-                begin
-                    ie <= csr_write_data[0];
-                    eie <= csr_write_data[1];
-`ifdef CFG_DEBUG_ENABLED
-                    bie <= csr_write_data[2];
-`endif
-                end
-                if (csr == `LM32_CSR_IP)
-                    ip <= asserted & ~csr_write_data[interrupts-1:0];
-            end
-        end
-    end
-end
-    end
-endgenerate
+//    end
+//else
+//    begin
+//// IE, IM, IP - Interrupt Enable, Interrupt Mask and Interrupt Pending CSRs
+//always @(posedge clk_i `CFG_RESET_SENSITIVITY)
+//begin
+//    if (rst_i == `TRUE)
+//    begin
+//        ie <= `FALSE;
+//        eie <= `FALSE;
+//`ifdef CFG_DEBUG_ENABLED
+//        bie <= `FALSE;
+//`endif
+//        ip <= {interrupts{1'b0}};
+//    end
+//    else
+//    begin
+//        // Set IP bit when interrupt line is asserted
+//        ip <= asserted;
+//`ifdef CFG_DEBUG_ENABLED
+//        if (non_debug_exception == `TRUE)
+//        begin
+//            // Save and then clear interrupt enable
+//            eie <= ie;
+//            ie <= `FALSE;
+//        end
+//        else if (debug_exception == `TRUE)
+//        begin
+//            // Save and then clear interrupt enable
+//            bie <= ie;
+//            ie <= `FALSE;
+//        end
+//`else
+//        if (exception == `TRUE)
+//        begin
+//            // Save and then clear interrupt enable
+//            eie <= ie;
+//            ie <= `FALSE;
+//        end
+//`endif
+//        else if (stall_x == `FALSE)
+//        begin
+//            if (eret_q_x == `TRUE)
+//                // Restore interrupt enable
+//                ie <= eie;          
+//`ifdef CFG_DEBUG_ENABLED
+//            else if (bret_q_x == `TRUE)
+//                // Restore interrupt enable
+//                ie <= bie;
+//`endif
+//            else if (csr_write_enable == `TRUE)
+//            begin
+//                // Handle wcsr write
+//                if (csr == `LM32_CSR_IE)
+//                begin
+//                    ie <= csr_write_data[0];
+//                    eie <= csr_write_data[1];
+//`ifdef CFG_DEBUG_ENABLED
+//                    bie <= csr_write_data[2];
+//`endif
+//                end
+//                if (csr == `LM32_CSR_IP)
+//                    ip <= asserted & ~csr_write_data[interrupts-1:0];
+//            end
+//        end
+//    end
+//end
+//    end
+//endgenerate
 
 endmodule
 
