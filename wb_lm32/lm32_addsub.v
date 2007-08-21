@@ -59,13 +59,11 @@ wire   Cout;
 // Instantiations
 ///////////////////////////////////////////////////// 
 
-       generate
 	     wire [32:0] tmp_addResult = DataA + DataB + Cin;
 	     wire [32:0] tmp_subResult = DataA - DataB - !Cin;   
    
 	     assign  Result = (Add_Sub == 1) ? tmp_addResult[31:0] : tmp_subResult[31:0];
 	     assign  Cout = (Add_Sub == 1) ? tmp_addResult[32] : !tmp_subResult[32];
 
-       endgenerate 
 
 endmodule
