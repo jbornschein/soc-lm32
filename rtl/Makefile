@@ -7,7 +7,7 @@ SYNCLEAN+=system.map system_summary.xml timing.twr
 SYNCLEAN+=system-routed* system_usage* system.ngc param.opt netlist.lst
 
 system_tb.vcd: *.v system_tb.list
-	~/bin/cver +incdir+wb_conmax+wb_lm32 -f system_tb.list
+	~/bin/cver +incdir+wb_conbus+wb_lm32 -f system_tb.list
 
 view: system_tb.vcd
 	gtkwave system_tb.vcd system_tb.save

@@ -1,6 +1,6 @@
 # ==== Clock inputs (CLK) ====
 NET "clk" LOC = "C9" | IOSTANDARD = LVCMOS33 ;
-NET "clk" PERIOD = 20 HIGH 50%;
+NET "clk" PERIOD = 13 HIGH 50%;
 
 
 

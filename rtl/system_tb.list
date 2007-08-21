@@ -11,12 +11,7 @@ wb_lm32/lm32_shifter.v
 wb_lm32/lm32_multiplier.v
 wb_lm32/lm32_mc_arithmetic.v
 wb_lm32/lm32_interrupt.v
+wb_lm32/lm32_icache.v
 wb_bram/wb_bram.v
-wb_conmax/wb_conmax_top.v
-wb_conmax/wb_conmax_arb.v
-wb_conmax/wb_conmax_rf.v
-wb_conmax/wb_conmax_msel.v
-wb_conmax/wb_conmax_pri_enc.v
-wb_conmax/wb_conmax_pri_dec.v
-wb_conmax/wb_conmax_master_if.v
-wb_conmax/wb_conmax_slave_if.v
+wb_conbus/wb_conbus_top.v
+wb_conbus/wb_conbus_arb.v
