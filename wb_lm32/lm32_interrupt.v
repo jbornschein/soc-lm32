@@ -136,8 +136,8 @@ assign asserted = ip | ~interrupt_n;
 //                           eie, 
 //                           ie
 //                          };
-assign ip_csr_read_data = ip;
-assign im_csr_read_data = im;
+wire   ip_csr_read_data = ip;
+wire   im_csr_read_data = im;
 // XXX JB XXX
 // generate
 //    if (interrupts > 1) 

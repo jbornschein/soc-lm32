@@ -88,7 +88,8 @@ parameter base_address = 0;                             // Base address of cacha
 parameter limit = 0;                                    // Limit (highest address) of cachable memory
 
 // For bytes_per_line == 4, we set 1 so part-select range isn't reversed, even though not really used 
-localparam addr_offset_width = bytes_per_line == 4 ? 1 : clogb2(bytes_per_line)-1-2;
+//localparam addr_offset_width = bytes_per_line == 4 ? 1 : clogb2(bytes_per_line)-1-2;
+localparam addr_offset_width = 1;
 localparam addr_offset_lsb = 2;
 localparam addr_offset_msb = (addr_offset_lsb+addr_offset_width-1);
 
@@ -305,7 +306,7 @@ assign wb_select_x =    `TRUE
                      ;
 
 // Make sure data to store is in correct byte lane
-always @(*)
+always @*
 begin
     case (size_x)
     `LM32_SIZE_BYTE:  store_data_x = {4{store_operand_x[7:0]}};
@@ -316,7 +317,7 @@ begin
 end
 
 // Generate byte enable accoring to size of load or store and address being accessed
-always @(*)
+always @*
 begin
     casez ({size_x, load_store_address_x[1:0]})
     {`LM32_SIZE_BYTE, 2'b11}:  byte_enable_x = 4'b0001;
@@ -358,7 +359,7 @@ assign data_m = wb_data_m;
 `endif
 
 // Sub-word selection and sign/zero-extension for loads
-always @(*)
+always @*
 begin
     casez ({size_w, load_store_address_w[1:0]})
     {`LM32_SIZE_BYTE, 2'b11}:  load_data_w = {{24{sign_extend_w & data_w[7]}}, data_w[7:0]};

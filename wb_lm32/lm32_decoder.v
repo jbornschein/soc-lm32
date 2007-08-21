@@ -302,83 +302,83 @@ wire select_call_immediate;                     // Whether to select the call im
 /////////////////////////////////////////////////////
 
 // Determine opcode
-assign op_add    = instruction[`LM32_OP_RNG] == `LM32_OPCODE_ADD;
-assign op_and    = instruction[`LM32_OP_RNG] == `LM32_OPCODE_AND;
-assign op_andhi  = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_ANDHI;
-assign op_b      = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_B;
-assign op_bi     = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_BI;
-assign op_be     = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_BE;
-assign op_bg     = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_BG;
-assign op_bge    = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_BGE;
-assign op_bgeu   = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_BGEU;
-assign op_bgu    = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_BGU;
-assign op_bne    = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_BNE;
-assign op_call   = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_CALL;
-assign op_calli  = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_CALLI;
-assign op_cmpe   = instruction[`LM32_OP_RNG] == `LM32_OPCODE_CMPE;
-assign op_cmpg   = instruction[`LM32_OP_RNG] == `LM32_OPCODE_CMPG;
-assign op_cmpge  = instruction[`LM32_OP_RNG] == `LM32_OPCODE_CMPGE;
-assign op_cmpgeu = instruction[`LM32_OP_RNG] == `LM32_OPCODE_CMPGEU;
-assign op_cmpgu  = instruction[`LM32_OP_RNG] == `LM32_OPCODE_CMPGU;
-assign op_cmpne  = instruction[`LM32_OP_RNG] == `LM32_OPCODE_CMPNE;
+wire   op_add    = instruction[`LM32_OP_RNG] == `LM32_OPCODE_ADD;
+wire   op_and    = instruction[`LM32_OP_RNG] == `LM32_OPCODE_AND;
+wire   op_andhi  = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_ANDHI;
+wire   op_b      = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_B;
+wire   op_bi     = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_BI;
+wire   op_be     = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_BE;
+wire   op_bg     = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_BG;
+wire   op_bge    = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_BGE;
+wire   op_bgeu   = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_BGEU;
+wire   op_bgu    = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_BGU;
+wire   op_bne    = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_BNE;
+wire   op_call   = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_CALL;
+wire   op_calli  = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_CALLI;
+wire   op_cmpe   = instruction[`LM32_OP_RNG] == `LM32_OPCODE_CMPE;
+wire   op_cmpg   = instruction[`LM32_OP_RNG] == `LM32_OPCODE_CMPG;
+wire   op_cmpge  = instruction[`LM32_OP_RNG] == `LM32_OPCODE_CMPGE;
+wire   op_cmpgeu = instruction[`LM32_OP_RNG] == `LM32_OPCODE_CMPGEU;
+wire   op_cmpgu  = instruction[`LM32_OP_RNG] == `LM32_OPCODE_CMPGU;
+wire   op_cmpne  = instruction[`LM32_OP_RNG] == `LM32_OPCODE_CMPNE;
 `ifdef CFG_MC_DIVIDE_ENABLED
-assign op_divu   = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_DIVU;
+wire   op_divu   = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_DIVU;
 `endif
-assign op_lb     = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_LB;
-assign op_lbu    = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_LBU;
-assign op_lh     = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_LH;
-assign op_lhu    = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_LHU;
-assign op_lw     = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_LW;
+wire   op_lb     = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_LB;
+wire   op_lbu    = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_LBU;
+wire   op_lh     = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_LH;
+wire   op_lhu    = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_LHU;
+wire   op_lw     = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_LW;
 `ifdef CFG_MC_DIVIDE_ENABLED
-assign op_modu   = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_MODU;
+wire   op_modu   = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_MODU;
 `endif
 `ifdef LM32_MULTIPLY_ENABLED
-assign op_mul    = instruction[`LM32_OP_RNG] == `LM32_OPCODE_MUL;
+wire   op_mul    = instruction[`LM32_OP_RNG] == `LM32_OPCODE_MUL;
 `endif
-assign op_nor    = instruction[`LM32_OP_RNG] == `LM32_OPCODE_NOR;
-assign op_or     = instruction[`LM32_OP_RNG] == `LM32_OPCODE_OR;
-assign op_orhi   = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_ORHI;
-assign op_raise  = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_RAISE;
-assign op_rcsr   = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_RCSR;
-assign op_sb     = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_SB;
+wire   op_nor    = instruction[`LM32_OP_RNG] == `LM32_OPCODE_NOR;
+wire   op_or     = instruction[`LM32_OP_RNG] == `LM32_OPCODE_OR;
+wire   op_orhi   = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_ORHI;
+wire   op_raise  = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_RAISE;
+wire   op_rcsr   = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_RCSR;
+wire   op_sb     = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_SB;
 `ifdef CFG_SIGN_EXTEND_ENABLED
-assign op_sextb  = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_SEXTB;
-assign op_sexth  = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_SEXTH;
+wire   op_sextb  = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_SEXTB;
+wire   op_sexth  = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_SEXTH;
 `endif
-assign op_sh     = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_SH;
+wire   op_sh     = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_SH;
 `ifdef LM32_BARREL_SHIFT_ENABLED
-assign op_sl     = instruction[`LM32_OP_RNG] == `LM32_OPCODE_SL;      
+wire   op_sl     = instruction[`LM32_OP_RNG] == `LM32_OPCODE_SL;      
 `endif
-assign op_sr     = instruction[`LM32_OP_RNG] == `LM32_OPCODE_SR;
-assign op_sru    = instruction[`LM32_OP_RNG] == `LM32_OPCODE_SRU;
-assign op_sub    = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_SUB;
-assign op_sw     = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_SW;
-assign op_user   = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_USER;
-assign op_wcsr   = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_WCSR;
-assign op_xnor   = instruction[`LM32_OP_RNG] == `LM32_OPCODE_XNOR;
-assign op_xor    = instruction[`LM32_OP_RNG] == `LM32_OPCODE_XOR;
+wire   op_sr     = instruction[`LM32_OP_RNG] == `LM32_OPCODE_SR;
+wire   op_sru    = instruction[`LM32_OP_RNG] == `LM32_OPCODE_SRU;
+wire   op_sub    = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_SUB;
+wire   op_sw     = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_SW;
+wire   op_user   = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_USER;
+wire   op_wcsr   = instruction[`LM32_OPCODE_RNG] == `LM32_OPCODE_WCSR;
+wire   op_xnor   = instruction[`LM32_OP_RNG] == `LM32_OPCODE_XNOR;
+wire   op_xor    = instruction[`LM32_OP_RNG] == `LM32_OPCODE_XOR;
 
 // Group opcodes by function
-assign arith = op_add | op_sub;
-assign logic = op_and | op_andhi | op_nor | op_or | op_orhi | op_xor | op_xnor; 
-assign cmp = op_cmpe | op_cmpg | op_cmpge | op_cmpgeu | op_cmpgu | op_cmpne;
-assign bra = op_b | op_bi | op_be | op_bg | op_bge | op_bgeu  | op_bgu | op_bne;
-assign call = op_call | op_calli;
+wire   arith = op_add | op_sub;
+wire   logic = op_and | op_andhi | op_nor | op_or | op_orhi | op_xor | op_xnor; 
+wire   cmp = op_cmpe | op_cmpg | op_cmpge | op_cmpgeu | op_cmpgu | op_cmpne;
+wire   bra = op_b | op_bi | op_be | op_bg | op_bge | op_bgeu  | op_bgu | op_bne;
+wire   call = op_call | op_calli;
 `ifdef LM32_BARREL_SHIFT_ENABLED
-assign shift = op_sl | op_sr | op_sru;
+wire   shift = op_sl | op_sr | op_sru;
 `endif
 `ifdef LM32_NO_BARREL_SHIFT
-assign shift = op_sr | op_sru;
+wire   shift = op_sr | op_sru;
 `endif
 `ifdef CFG_MC_BARREL_SHIFT_ENABLED
-assign shift_left = op_sl;
-assign shift_right = op_sr | op_sru;
+wire   shift_left = op_sl;
+wire   shift_right = op_sr | op_sru;
 `endif
 `ifdef CFG_SIGN_EXTEND_ENABLED
-assign sext = op_sextb | op_sexth;
+wire   sext = op_sextb | op_sexth;
 `endif
 `ifdef LM32_MULTIPLY_ENABLED
-assign multiply = op_mul;
+wire   multiply = op_mul;
 `endif
 `ifdef CFG_MC_DIVIDE_ENABLED
 assign divide = op_divu; 
@@ -388,7 +388,7 @@ assign load = op_lb | op_lbu | op_lh | op_lhu | op_lw;
 assign store = op_sb | op_sh | op_sw;
 
 // Select pipeline multiplexor controls
-always @(*)
+always @*
 begin
     // D stage
     if (call) 

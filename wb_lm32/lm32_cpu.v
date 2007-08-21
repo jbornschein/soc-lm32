@@ -1210,7 +1210,7 @@ assign raw_m_1 = (write_idx_m == read_idx_1_d) && (write_enable_q_m == `TRUE);
 assign raw_w_1 = (write_idx_w == read_idx_1_d) && (write_enable_q_w == `TRUE);
 
 // Interlock detection - Raise an interlock for RAW hazzards 
-always @(*)
+always @*
 begin
     if (   (   (x_bypass_enable_x == `FALSE)
             && (   ((read_enable_0_d == `TRUE) && (raw_x_0 == `TRUE))
@@ -1229,7 +1229,7 @@ begin
 end
 
 // Bypass for reg port 0
-always @(*)
+always @*
 begin
     if (raw_x_0 == `TRUE)        
         bypass_data_0 = x_result;
@@ -1242,7 +1242,7 @@ begin
 end
 
 // Bypass for reg port 1
-always @(*)
+always @*
 begin
     if (raw_x_1 == `TRUE)
         bypass_data_1 = x_result;
@@ -1255,7 +1255,7 @@ begin
 end
 
 // D stage result selection
-always @(*)
+always @*
 begin
     d_result_0 = d_result_sel_0_d[0] ? {pc_f, 2'b00} : bypass_data_0; 
     case (d_result_sel_1_d)
@@ -1289,7 +1289,7 @@ assign cmp_zero = operand_0_x == operand_1_x;
 assign cmp_negative = adder_result_x[`LM32_WORD_WIDTH-1];
 assign cmp_overflow = adder_overflow_x;
 assign cmp_carry_n = adder_carry_n_x;
-always @(*)
+always @*
 begin
     case (condition_x)
     `LM32_CONDITION_U1:   condition_met_x = `TRUE;
@@ -1305,7 +1305,7 @@ begin
 end
 
 // X stage result selection
-always @(*)
+always @*
 begin
     x_result =   x_result_sel_add_x ? adder_result_x 
                : x_result_sel_csr_x ? csr_read_data_x
@@ -1325,7 +1325,7 @@ begin
 end
 
 // M stage result selection
-always @(*)
+always @*
 begin
     m_result =   m_result_sel_compare_m ? {{`LM32_WORD_WIDTH-1{1'b0}}, condition_met_m}
 `ifdef CFG_PL_BARREL_SHIFT_ENABLED
@@ -1335,7 +1335,7 @@ begin
 end
 
 // W stage result selection
-always @(*)
+always @*
 begin
     w_result =    w_result_sel_load_w ? load_data_w
 `ifdef CFG_PL_MULTIPLY_ENABLED
@@ -1467,7 +1467,7 @@ assign exception_x =           (system_call_exception == `TRUE)
 `endif
 
 // Exception ID
-always @(*)
+always @*
 begin
 `ifdef CFG_DEBUG_ENABLED
 `ifdef CFG_JTAG_ENABLED
@@ -1573,7 +1573,7 @@ assign stall_m =    (stall_wb_load == `TRUE)
 
 // Qualify state changing control signals
 `ifdef LM32_MC_ARITHMETIC_ENABLED
-assign q_d = (valid_d == `TRUE) && (kill_d == `FALSE);
+wire   q_d = (valid_d == `TRUE) && (kill_d == `FALSE);
 `endif
 `ifdef CFG_MC_BARREL_SHIFT_ENABLED
 assign shift_left_q_d = (shift_left_d == `TRUE) && (q_d == `TRUE);
@@ -1586,7 +1586,7 @@ assign multiply_q_d = (multiply_d == `TRUE) && (q_d == `TRUE);
 assign divide_q_d = (divide_d == `TRUE) && (q_d == `TRUE);
 assign modulus_q_d = (modulus_d == `TRUE) && (q_d == `TRUE);
 `endif
-assign q_x = (valid_x == `TRUE) && (kill_x == `FALSE);
+wire   q_x = (valid_x == `TRUE) && (kill_x == `FALSE);
 assign csr_write_enable_q_x = (csr_write_enable_x == `TRUE) && (q_x == `TRUE);
 assign eret_q_x = (eret_x == `TRUE) && (q_x == `TRUE);
 `ifdef CFG_DEBUG_ENABLED
@@ -1601,7 +1601,7 @@ assign load_q_x = (load_x == `TRUE)
 `ifdef CFG_USER_ENABLED
 assign user_valid = (x_result_sel_user_x == `TRUE) && (q_x == `TRUE);
 `endif                              
-assign q_m = (valid_m == `TRUE) && (kill_m == `FALSE) && (exception_m == `FALSE);
+wire   q_m = (valid_m == `TRUE) && (kill_m == `FALSE) && (exception_m == `FALSE);
 assign load_q_m = (load_m == `TRUE) && (q_m == `TRUE);
 assign store_q_m = (store_m == `TRUE) && (q_m == `TRUE);
 `ifdef CFG_DEBUG_ENABLED
@@ -1702,7 +1702,7 @@ assign dflush_x =  (csr_write_enable_q_x == `TRUE)
 assign csr_d = read_idx_0_d[`LM32_CSR_RNG];
 
 // CSR reads
-always @(*)
+always @*
 begin
     case (csr_x)
 `ifdef CFG_INTERRUPTS_ENABLED
@@ -1797,7 +1797,7 @@ end
 
 `ifdef CFG_ICACHE_ENABLED
 `ifdef CFG_DCACHE_ENABLED
-always @(*)
+always @*
 begin
     if (   (icache_refill_request == `TRUE) 
         || (dcache_refill_request == `TRUE)
@@ -1811,7 +1811,7 @@ begin
         valid_a = !icache_refilling && !dcache_refilling;
 end 
 `else
-always @(*)
+always @*
 begin
     if (icache_refill_request == `TRUE) 
         valid_a = `FALSE;
@@ -1823,7 +1823,7 @@ end
 `endif
 `else
 `ifdef CFG_DCACHE_ENABLED
-always @(*)
+always @*
 begin
     if (dcache_refill_request == `TRUE) 
         valid_a = `FALSE;

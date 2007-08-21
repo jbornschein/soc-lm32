@@ -94,7 +94,7 @@ assign result_sign = adder_result_x[`LM32_WORD_WIDTH-1];
 
 // Determine whether an overflow occured when performing a subtraction
 
-always @(*)
+always @*
 begin    
     //  +ve - -ve = -ve -> overflow
     //  -ve - +ve = +ve -> overflow

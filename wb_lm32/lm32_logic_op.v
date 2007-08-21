@@ -61,7 +61,7 @@ integer logic_idx;
 // Combinational Logic
 /////////////////////////////////////////////////////
 
-always @(*)
+always @*
 begin
     for(logic_idx = 0; logic_idx < `LM32_WORD_WIDTH; logic_idx = logic_idx + 1)
         logic_result_x[logic_idx] = logic_op_x[{operand_1_x[logic_idx], operand_0_x[logic_idx]}];

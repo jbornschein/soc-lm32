@@ -5,7 +5,7 @@
 
 //`timescale 1ns / 100 ps
 
-`define CFG_DEBUG_ENABLED
+// `define CFG_DEBUG_ENABLED
 `define CFG_EBA_RESET 32'h0
 `define CFG_DEBA_RESET 32'h0
 

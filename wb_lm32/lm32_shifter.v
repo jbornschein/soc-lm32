@@ -79,7 +79,7 @@ integer shift_idx_1;
 /////////////////////////////////////////////////////
     
 // Select operands - To perform a left shift, we reverse the bits and perform a right shift
-always @(*)
+always @*
 begin
     for (shift_idx_0 = 0; shift_idx_0 < `LM32_WORD_WIDTH; shift_idx_0 = shift_idx_0 + 1)
         left_shift_operand[`LM32_WORD_WIDTH-1-shift_idx_0] = operand_0_x[shift_idx_0];
@@ -95,7 +95,7 @@ assign fill_value = (sign_extend_x == `TRUE) && (direction_x == `LM32_SHIFT_OP_R
 assign right_shift_in = {`LM32_WORD_WIDTH{fill_value}};
 
 // Reverse bits to get left shift result
-always @(*)
+always @*
 begin
     for (shift_idx_1 = 0; shift_idx_1 < `LM32_WORD_WIDTH; shift_idx_1 = shift_idx_1 + 1)
         left_shift_result[`LM32_WORD_WIDTH-1-shift_idx_1] = right_shift_result[shift_idx_1];
