@@ -7,8 +7,8 @@ parameter tck = 20;
 reg        clk;
 reg  [3:0] btn;
 wire [7:0] led;
-wire       uart_rx;
-wire       uart_tx;
+wire       uart_rxd;
+wire       uart_txd;
 
 system dut  (
 	.clk(  clk  ),
@@ -16,8 +16,8 @@ system dut  (
 	.led(  led  ),
 	.btn(  btn  ),
 	// Uart
-	.uart_rx(  uart_rx  ),
-	.uart_tx(  uart_tx  )
+	.uart_rxd(  uart_rxd  ),
+	.uart_txd(  uart_txd  )
 );
 
 

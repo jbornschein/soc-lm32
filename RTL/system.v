@@ -9,8 +9,8 @@ module system(
 	led,
 	btn,
 	// Uart
-	uart_rx, 
-	uart_tx
+	uart_rxd, 
+	uart_txd
 );
 	
 ////////////////////////////////////////////////////////////////////
@@ -23,8 +23,8 @@ input        clk;
 output [7:0] led;
 input  [3:0] btn;
 
-input        uart_rx;
-output       uart_tx;
+input        uart_rxd;
+output       uart_txd;
 
 
 /////////////////////////////////////////////////////////////////////
@@ -99,8 +99,11 @@ wire [1:0]   lm32i_bte,
              uart0_bte,
              lm32d_bte;
 
+wire [31:0]  intr_n;
+wire         uart0_intr;
 
-assign led = lm32i_adr[7:0];
+assign intr_n = { 24'hFFFFFF, 7'b1111111, ~uart0_intr };
+assign led    = lm32i_adr[7:0];
 
 
 /////////////////////////////////////////////////////////////////////
@@ -315,10 +318,10 @@ uart_core #(
 	.UART_ACK_O( uart0_ack ), 
 	.UART_RTY_O( uart0_rty ),
 	.UART_ERR_O( uart0_err ),
-	.INTR(       uart0_int ),
-	.SIN(        uart0_rxd ),
+	.INTR(       uart0_intr ),
+	.SIN(        uart_rxd ),
 	.RXRDY_N(    uart0_rxrdy_n ),
-	.SOUT(       uart0_txd ),
+	.SOUT(       uart_txd ),
 	.TXRDY_N(    uart0_txrdy_n )
 );
 

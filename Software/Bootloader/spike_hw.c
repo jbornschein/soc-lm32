@@ -66,7 +66,6 @@ void uart_init()
 	uart0->lcr = 0x03;  // Line Control Register:    8N1
 	uart0->mcr = 0x00;  // Modem Control Register
 
-
 	// Setup Divisor register (Fclk / Baud)
 	//uart0->div = (FCPU/(57600*16));
 }
