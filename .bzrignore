@@ -26,4 +26,13 @@ RTL/system_usage.xml
 RTL/timing.twr
 RTL/verilog.log
 RTL/xst/
+Software/BRamExtract/bramextract
+Software/Bootloader/crt0ram.d
+Software/Bootloader/image
+Software/Bootloader/image.lst
+Software/Bootloader/image.map
+Software/Bootloader/image.srec
+Software/Bootloader/main.d
+Software/Bootloader/spike_hw.d
+Software/Bootloader/srectovhdl
 

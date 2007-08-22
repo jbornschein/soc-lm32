@@ -40,46 +40,63 @@ wire  [31:0] gnd32 = 32'h0000;
  
 wire [31:0]  lm32i_adr,
              lm32d_adr,
+             uart0_adr,
              bram0_adr;
 
 wire [31:0]  lm32i_dat_r,
              lm32i_dat_w,
              lm32d_dat_r,
              lm32d_dat_w,
+             uart0_dat_r,
+             uart0_dat_w,
              bram0_dat_r,
              bram0_dat_w;
 
 wire [3:0]   lm32i_sel,
              lm32d_sel,
+             uart0_sel,
              bram0_sel;
+
+wire         lm32i_i_we,
+             lm32d_i_we,
+             uart0_i_we,
+             bram0_i_we;
 
 wire         lm32i_cyc,
              lm32d_cyc,
+             uart0_cyc,
              bram0_cyc;
 
 wire         lm32i_stb,
              lm32d_stb,
+             uart0_stb,
              bram0_stb;
 
 wire         lm32i_ack,
              lm32d_ack,
+             uart0_ack,
              bram0_ack;
 
 wire         lm32i_rty,
              lm32d_rty,
+             uart0_rty,
              bram0_rty;
 
 wire         lm32i_err,
              lm32d_err,
+             uart0_err,
              bram0_err;
 
 wire         lm32i_lock,
+             uart0_lock,
              lm32d_lock;
 
 wire [2:0]   lm32i_cti,
+             uart0_cti,
              lm32d_cti;
 
 wire [1:0]   lm32i_bte,
+             uart0_bte,
              lm32d_bte;
 
 
@@ -98,7 +115,7 @@ wb_conbus_top #(
         .s1_addr   ( 4'h9 ),        // flash0
 	.s27_addr_w( 16 ),
 	.s2_addr   ( 16'h0000 ),    // bram0 
-	.s3_addr   ( 16'hF001 ),    // uart0
+	.s3_addr   ( 16'hF000 ),    // uart0
 	.s4_addr   ( 16'hF002 ),
 	.s5_addr   ( 16'hF003 ),
 	.s6_addr   ( 16'hF004 ),
@@ -110,6 +127,7 @@ wb_conbus_top #(
 	.m0_dat_i(  lm32i_dat_w  ),
 	.m0_dat_o(  lm32i_dat_r  ),
 	.m0_adr_i(  lm32i_adr    ),
+	.m0_we_i (  lm32i_we     ),
 	.m0_sel_i(  lm32i_sel    ),
 	.m0_cyc_i(  lm32i_cyc    ),
 	.m0_stb_i(  lm32i_stb    ),
@@ -120,6 +138,7 @@ wb_conbus_top #(
 	.m1_dat_i(  lm32d_dat_w  ),
 	.m1_dat_o(  lm32d_dat_r  ),
 	.m1_adr_i(  lm32d_adr    ),
+	.m1_we_i (  lm32d_we     ),
 	.m1_sel_i(  lm32d_sel    ),
 	.m1_cyc_i(  lm32d_cyc    ),
 	.m1_stb_i(  lm32d_stb    ),
@@ -185,10 +204,16 @@ wb_conbus_top #(
 	.s2_err_i(  gnd         ),
 	.s2_rty_i(  gnd         ),
 	// Slave3
-	.s3_dat_i(  gnd32  ),
-	.s3_ack_i(  gnd    ),
-	.s3_err_i(  gnd    ),
-	.s3_rty_i(  gnd    ),
+	.s3_dat_i(  uart0_dat_r ),
+	.s3_dat_o(  uart0_dat_w ),
+	.s3_adr_o(  uart0_adr   ),
+	.s3_sel_o(  uart0_sel   ),
+	.s3_we_o(   uart0_we    ),
+	.s3_cyc_o(  uart0_cyc   ),
+	.s3_stb_o(  uart0_stb   ),
+	.s3_ack_i(  uart0_ack   ),
+	.s3_err_i(  uart0_err   ),
+	.s3_rty_i(  uart0_rty   ),
 	// Slave4
 	.s4_dat_i(  gnd32  ),
 	.s4_ack_i(  gnd    ),
@@ -264,6 +289,37 @@ wb_bram bram0 (
 	.wb_cyc_i(  bram0_cyc    ),
 	.wb_ack_o(  bram0_ack    ),
 	.wb_we_i(   bram0_we     )
+);
+
+
+/////////////////////////////////////////////////////////////////////
+// uart0
+
+uart_core #(
+	.CLK_IN_MHZ( 50 ),
+	.BAUD_RATE( 57600 )
+) uart0 (
+	.CLK( clk ),
+	.RESET( rst ),
+	//
+	.UART_ADR_I( uart0_adr ),
+	.UART_DAT_I( uart0_dat_w ),
+	.UART_DAT_O( uart0_dat_r ),
+	.UART_STB_I( uart0_stb ),
+	.UART_CYC_I( uart0_cyc ),
+	.UART_WE_I(  uart0_we ),
+	.UART_SEL_I( uart0_sel ),
+	.UART_CTI_I( uart0_cti ),
+	.UART_BTE_I( uart0_bte ),
+	.UART_LOCK_I(uart0_lock ),
+	.UART_ACK_O( uart0_ack ), 
+	.UART_RTY_O( uart0_rty ),
+	.UART_ERR_O( uart0_err ),
+	.INTR(       uart0_int ),
+	.SIN(        uart0_rxd ),
+	.RXRDY_N(    uart0_rxrdy_n ),
+	.SOUT(       uart0_txd ),
+	.TXRDY_N(    uart0_txrdy_n )
 );
 
 initial 

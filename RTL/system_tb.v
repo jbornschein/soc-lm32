@@ -36,7 +36,7 @@ initial begin
 	btn[0] = 0;
 	$display("RESET DONE");
 
-	#(tck*500) $finish;
+	#(tck*50000) $finish;
 end
 
 endmodule

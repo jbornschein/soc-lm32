@@ -13,5 +13,10 @@ wb_lm32/lm32_mc_arithmetic.v
 wb_lm32/lm32_interrupt.v
 wb_lm32/lm32_icache.v
 wb_bram/wb_bram.v
+uart_core/intface.v
+uart_core/modem.v
+uart_core/rxcver.v
+uart_core/txmitt.v
+uart_core/uart_core.v
 wb_conbus/wb_conbus_top.v
 wb_conbus/wb_conbus_arb.v

@@ -3,7 +3,7 @@
 
 #define PROMSTART 0x00000000
 #define RAMSTART  0x00000800
-#define RAMSIZE   (2*1024)
+#define RAMSIZE   0x400
 #define RAMEND    (RAMSTART + RAMSIZE)
 
 #define SRAM_START 0xB0000000
