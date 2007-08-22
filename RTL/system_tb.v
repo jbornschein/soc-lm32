@@ -1,6 +1,8 @@
+`timescale 1 ns / 100 ps
+
 module system_tb;
 
-parameter tck = 10;
+parameter tck = 20;
 
 reg        clk;
 reg  [3:0] btn;
@@ -26,7 +28,6 @@ always #(tck/2) clk = ~clk;
 initial begin
 	$dumpvars(-1, dut);
 	$dumpfile("system_tb.vcd");
-//	$readmemh(`TEST_FILE, rom.ram);
 
         // reset
 	btn[0] = 1;

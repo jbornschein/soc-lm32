@@ -14,7 +14,6 @@ void help()
 	printf( "bramextract <srect-file> <bram-base> <bram-size>\n\n" );
 	printf( " <bram-base> \t \n" );
 	printf( " <bram-size> \t \n\n" );
-	printf( "" );
 };
 
 
@@ -88,7 +87,6 @@ int main(int argc, char **argv)
 	while( !feof(infile) ) {
 		char errmsg[] = "Could not parse '%s'\n";
 		char line[LINESIZE];
-		char *str;
 		uint32_t addr;
 		int len;
 
@@ -144,5 +142,7 @@ int main(int argc, char **argv)
 	for(i = 0; i < ramsize; i+=4) {
 		printf( "%02x%02x%02x%02x\n", ram[i+0], ram[i+1], ram[i+2], ram[i+3] );
 	}
+
+	return 0;
 }
 

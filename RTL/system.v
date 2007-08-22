@@ -35,7 +35,7 @@ output       uart_tx;
 wire         rst   = btn[0];
 wire         gnd   = 1'b0;
 wire   [3:0] gnd4  = 4'h0;
-wire  [31:0] gnd32 = 32'h0000;
+wire  [31:0] gnd32 = 32'h00000000;
 
  
 wire [31:0]  lm32i_adr,
@@ -116,7 +116,7 @@ wb_conbus_top #(
 	.s27_addr_w( 16 ),
 	.s2_addr   ( 16'h0000 ),    // bram0 
 	.s3_addr   ( 16'hF000 ),    // uart0
-	.s4_addr   ( 16'hF002 ),
+	.s4_addr   ( 16'hF002 ),    // timer
 	.s5_addr   ( 16'hF003 ),
 	.s6_addr   ( 16'hF004 ),
 	.s7_addr   ( 16'hF005 )
@@ -297,7 +297,7 @@ wb_bram bram0 (
 
 uart_core #(
 	.CLK_IN_MHZ( 50 ),
-	.BAUD_RATE( 57600 )
+	.BAUD_RATE( 576000 )
 ) uart0 (
 	.CLK( clk ),
 	.RESET( rst ),

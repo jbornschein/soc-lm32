@@ -3,13 +3,16 @@ LM32_LD=lm32-elf-ld
 LM32_OBJCOPY=lm32-elf-objcopy
 LM32_OBJDUMP=lm32-elf-objdump
 
-VHDLFILE=../../wb_bram.vhd
+SREC2VHDL ?= ../../Toolchain/srec2vhdl/srec2vhdl
+SREC2VRAM ?= ../../Toolchain/srec2vram/srec2vram
+
+VRAMFILE=../../RTL/bram0.ram
 
 CFLAGS=-MMD -O2 -Wall -g -s -fomit-frame-pointer -mbarrel-shift-enabled   -mmultiply-enabled -mdivide-enabled -msign-extend-enabled
 LDFLAGS=-Tlinkcmd
 SEGMENTS = -j .text -j .data
 
-all: $(VHDLFILE) 
+all: $(VRAMFILE) 
 
 crt0ram.o: crt0ram.S
 	$(LM32_CC) $(CFLAGS) -c crt0ram.S
@@ -32,14 +35,14 @@ image.bin: image
 image.srec: image image.lst
 	$(LM32_OBJCOPY) $(SEGMENTS) -O srec image image.srec
 
-srectovhdl: srectovhdl.c
-	gcc -o srectovhdl srectovhdl.c
+$(VHDLFILE): image.srec
+	$(SREC2VHDL) image.srec > $(VHDLFILE)
 
-$(VHDLFILE): image.srec srectovhdl
-	srectovhdl image.srec > $(VHDLFILE)
+$(VRAMFILE): image.srec
+	$(SREC2VRAM) image.srec 0x00000000 0x1000 > $(VRAMFILE)
 
 clean:
-	rm -f srectovhdl image image.lst image.bin image.srec image.map  *.o *.d
+	rm -f image image.lst image.bin image.srec image.map  *.o *.d
 
 DEPS := $(wildcard *.d)
 ifneq ($(DEPS),)
