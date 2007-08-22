@@ -98,147 +98,105 @@ wb_conbus_top conmax0 (
 	.m0_dat_i(  lm32i_dat_w  ),
 	.m0_dat_o(  lm32i_dat_r  ),
 	.m0_adr_i(  lm32i_adr    ),
-	.m0_sel_i(   lm32i_sel    ),
-	.m0_cyc_i(   lm32i_cyc    ),
-	.m0_stb_i(   lm32i_stb    ),
-	.m0_ack_o(   lm32i_ack    ),
-	.m0_rty_o(   lm32i_rty    ),
-	.m0_err_o(   lm32i_err    ),
+	.m0_sel_i(  lm32i_sel    ),
+	.m0_cyc_i(  lm32i_cyc    ),
+	.m0_stb_i(  lm32i_stb    ),
+	.m0_ack_o(  lm32i_ack    ),
+	.m0_rty_o(  lm32i_rty    ),
+	.m0_err_o(  lm32i_err    ),
 	// Master1
 	.m1_dat_i(  lm32d_dat_w  ),
 	.m1_dat_o(  lm32d_dat_r  ),
 	.m1_adr_i(  lm32d_adr    ),
-	.m1_sel_i(   lm32d_sel    ),
-	.m1_cyc_i(   lm32d_cyc    ),
-	.m1_stb_i(   lm32d_stb    ),
-	.m1_ack_o(   lm32d_ack    ),
-	.m1_rty_o(   lm32d_rty    ),
-	.m1_err_o(   lm32d_err    ),
+	.m1_sel_i(  lm32d_sel    ),
+	.m1_cyc_i(  lm32d_cyc    ),
+	.m1_stb_i(  lm32d_stb    ),
+	.m1_ack_o(  lm32d_ack    ),
+	.m1_rty_o(  lm32d_rty    ),
+	.m1_err_o(  lm32d_err    ),
 	// Master2
 	.m2_dat_i(  gnd32  ),
 	.m2_adr_i(  gnd32  ),
-	.m2_sel_i(   gnd4   ),
-	.m2_cyc_i(   gnd    ),
-	.m2_stb_i(   gnd    ),
+	.m2_sel_i(  gnd4   ),
+	.m2_cyc_i(  gnd    ),
+	.m2_stb_i(  gnd    ),
 	// Master3
 	.m3_dat_i(  gnd32  ),
 	.m3_adr_i(  gnd32  ),
-	.m3_sel_i(   gnd4   ),
-	.m3_cyc_i(   gnd    ),
-	.m3_stb_i(   gnd    ),
+	.m3_sel_i(  gnd4   ),
+	.m3_cyc_i(  gnd    ),
+	.m3_stb_i(  gnd    ),
 	// Master4
 	.m4_dat_i(  gnd32  ),
 	.m4_adr_i(  gnd32  ),
-	.m4_sel_i(   gnd4   ),
-	.m4_cyc_i(   gnd    ),
-	.m4_stb_i(   gnd    ),
+	.m4_sel_i(  gnd4   ),
+	.m4_cyc_i(  gnd    ),
+	.m4_stb_i(  gnd    ),
 	// Master5
 	.m5_dat_i(  gnd32  ),
 	.m5_adr_i(  gnd32  ),
-	.m5_sel_i(   gnd4   ),
-	.m5_cyc_i(   gnd    ),
-	.m5_stb_i(   gnd    ),
+	.m5_sel_i(  gnd4   ),
+	.m5_cyc_i(  gnd    ),
+	.m5_stb_i(  gnd    ),
 	// Master6
 	.m6_dat_i(  gnd32  ),
 	.m6_adr_i(  gnd32  ),
-	.m6_sel_i(   gnd4   ),
-	.m6_cyc_i(   gnd    ),
-	.m6_stb_i(   gnd    ),
+	.m6_sel_i(  gnd4   ),
+	.m6_cyc_i(  gnd    ),
+	.m6_stb_i(  gnd    ),
 	// Master7
 	.m7_dat_i(  gnd32  ),
 	.m7_adr_i(  gnd32  ),
-	.m7_sel_i(   gnd4   ),
-	.m7_cyc_i(   gnd    ),
-	.m7_stb_i(   gnd    ),
+	.m7_sel_i(  gnd4   ),
+	.m7_cyc_i(  gnd    ),
+	.m7_stb_i(  gnd    ),
 
 	// Slave0
 	.s0_dat_i(  bram0_dat_r ),
 	.s0_dat_o(  bram0_dat_w ),
 	.s0_adr_o(  bram0_adr   ),
-	.s0_sel_o(   bram0_sel    ),
-	.s0_we_o(    bram0_we     ),
-	.s0_cyc_o(   bram0_cyc    ),
-	.s0_stb_o(   bram0_stb    ),
-	.s0_ack_i(   bram0_ack    ),
-	.s0_err_i(   gnd         ),
-	.s0_rty_i(   gnd         ),
+	.s0_sel_o(  bram0_sel   ),
+	.s0_we_o(   bram0_we    ),
+	.s0_cyc_o(  bram0_cyc   ),
+	.s0_stb_o(  bram0_stb   ),
+	.s0_ack_i(  bram0_ack   ),
+	.s0_err_i(  gnd         ),
+	.s0_rty_i(  gnd         ),
 	// Slave1
 	.s1_dat_i(  gnd32  ),
-	.s1_ack_i(   gnd    ),
-	.s1_err_i(   gnd    ),
-	.s1_rty_i(   gnd    ),
+	.s1_ack_i(  gnd    ),
+	.s1_err_i(  gnd    ),
+	.s1_rty_i(  gnd    ),
 	// Slave2
 	.s2_dat_i(  gnd32  ),
-	.s2_ack_i(   gnd  ),
-	.s2_err_i(   gnd  ),
-	.s2_rty_i(   gnd  ),
+	.s2_ack_i(  gnd    ),
+	.s2_err_i(  gnd    ),
+	.s2_rty_i(  gnd    ),
 	// Slave3
 	.s3_dat_i(  gnd32  ),
-	.s3_ack_i(   gnd  ),
-	.s3_err_i(   gnd  ),
-	.s3_rty_i(   gnd  ),
+	.s3_ack_i(  gnd    ),
+	.s3_err_i(  gnd    ),
+	.s3_rty_i(  gnd    ),
 	// Slave4
 	.s4_dat_i(  gnd32  ),
-	.s4_ack_i(   gnd  ),
-	.s4_err_i(   gnd  ),
-	.s4_rty_i(   gnd  ),
+	.s4_ack_i(  gnd    ),
+	.s4_err_i(  gnd    ),
+	.s4_rty_i(  gnd    ),
 	// Slave5
 	.s5_dat_i(  gnd32  ),
-	.s5_ack_i(   gnd  ),
-	.s5_err_i(   gnd  ),
-	.s5_rty_i(   gnd  ),
+	.s5_ack_i(  gnd    ),
+	.s5_err_i(  gnd    ),
+	.s5_rty_i(  gnd    ),
 	// Slave6
 	.s6_dat_i(  gnd32  ),
-	.s6_ack_i(   gnd  ),
-	.s6_err_i(   gnd  ),
-	.s6_rty_i(   gnd  ),
+	.s6_ack_i(  gnd    ),
+	.s6_err_i(  gnd    ),
+	.s6_rty_i(  gnd    ),
 	// Slave7
 	.s7_dat_i(  gnd32  ),
-	.s7_ack_i(   gnd  ),
-	.s7_err_i(   gnd  ),
-	.s7_rty_i(   gnd  )
-/*
-	// Slave8
-	.s8_data_i(  gnd32  ),
-	.s8_ack_i(   gnd  ),
-	.s8_err_i(   gnd  ),
-	.s8_rty_i(   gnd  ),
-	// Slave9
-	.s9_data_i(  gnd32  ),
-	.s9_ack_i(   gnd  ),
-	.s9_err_i(   gnd  ),
-	.s9_rty_i(   gnd  ),
-	// Slave10
-	.s10_data_i(  gnd32  ),
-	.s10_ack_i (  gnd  ),
-	.s10_err_i (  gnd  ),
-	.s10_rty_i (  gnd  ),
-	// Slave11
-	.s11_data_i(  gnd32  ),
-	.s11_ack_i (  gnd  ),
-	.s11_err_i (  gnd  ),
-	.s11_rty_i (  gnd  ),
-	// Slave12
-	.s12_data_i(  gnd32  ),
-	.s12_ack_i (  gnd  ),
-	.s12_err_i (  gnd  ),
-	.s12_rty_i (  gnd  ),
-	// Slave13
-	.s13_data_i(  gnd32  ),
-	.s13_ack_i (  gnd  ),
-	.s13_err_i (  gnd  ),
-	.s13_rty_i (  gnd  ),
-	// Slave14
-	.s14_data_i(  gnd32  ),
-	.s14_ack_i (  gnd  ),
-	.s14_err_i (  gnd  ),
-	.s14_rty_i (  gnd  ),
-	// Slave15
-	.s15_data_i(  gnd32  ),
-	.s15_ack_i (  gnd  ),
-	.s15_err_i (  gnd  ),
-	.s15_rty_i (  gnd  )
-*/
+	.s7_ack_i(  gnd    ),
+	.s7_err_i(  gnd    ),
+	.s7_rty_i(  gnd    )
 );
 
 
@@ -295,5 +253,11 @@ wb_bram bram0 (
 	.wb_ack_o(  bram0_ack    ),
 	.wb_we_i(   bram0_we     )
 );
+
+initial 
+begin
+	$readmemh( "bram0.ram", bram0.ram );
+end
+
 
 endmodule 

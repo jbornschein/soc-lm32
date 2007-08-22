@@ -49,22 +49,11 @@ begin
 		if (wb_we_i) 
 			ram[ addr ] <= wb_dat_i;
 
-		$display( "wb_bram: reading" );
 		wb_dat_o <= ram[ addr ];
 		ack <= ~ack;
 	end else
 		ack <= 0;
     
 end
-
-initial
-begin
-  ram[0] <= 32'h00000000;
-  ram[1] <= 32'h00000001;
-  ram[2] <= 32'h00000002;
-  ram[3] <= 32'h00000003;
-  ram[4] <= 32'h00000004;
-end
-
 
 endmodule
