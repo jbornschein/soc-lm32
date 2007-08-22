@@ -91,7 +91,19 @@ assign led = lm32i_adr[7:0];
 // Wishbone Interconnect
 //
 
-wb_conbus_top conmax0 (
+wb_conbus_top #(
+        .s0_addr_w ( 4 ),
+        .s0_addr   ( 4'h8 ),        // ddr0
+	.s1_addr_w ( 4 ),
+        .s1_addr   ( 4'h9 ),        // flash0
+	.s27_addr_w( 16 ),
+	.s2_addr   ( 16'h0000 ),    // bram0 
+	.s3_addr   ( 16'hF001 ),    // uart0
+	.s4_addr   ( 16'hF002 ),
+	.s5_addr   ( 16'hF003 ),
+	.s6_addr   ( 16'hF004 ),
+	.s7_addr   ( 16'hF005 )
+) conmax0 (
 	.clk_i( clk ),
 	.rst_i( rst ),
 	// Master0
@@ -152,26 +164,26 @@ wb_conbus_top conmax0 (
 	.m7_stb_i(  gnd    ),
 
 	// Slave0
-	.s0_dat_i(  bram0_dat_r ),
-	.s0_dat_o(  bram0_dat_w ),
-	.s0_adr_o(  bram0_adr   ),
-	.s0_sel_o(  bram0_sel   ),
-	.s0_we_o(   bram0_we    ),
-	.s0_cyc_o(  bram0_cyc   ),
-	.s0_stb_o(  bram0_stb   ),
-	.s0_ack_i(  bram0_ack   ),
-	.s0_err_i(  gnd         ),
-	.s0_rty_i(  gnd         ),
+	.s0_dat_i(  gnd32  ),
+	.s0_ack_i(  gnd    ),
+	.s0_err_i(  gnd    ),
+	.s0_rty_i(  gnd    ),
 	// Slave1
 	.s1_dat_i(  gnd32  ),
 	.s1_ack_i(  gnd    ),
 	.s1_err_i(  gnd    ),
 	.s1_rty_i(  gnd    ),
 	// Slave2
-	.s2_dat_i(  gnd32  ),
-	.s2_ack_i(  gnd    ),
-	.s2_err_i(  gnd    ),
-	.s2_rty_i(  gnd    ),
+	.s2_dat_i(  bram0_dat_r ),
+	.s2_dat_o(  bram0_dat_w ),
+	.s2_adr_o(  bram0_adr   ),
+	.s2_sel_o(  bram0_sel   ),
+	.s2_we_o(   bram0_we    ),
+	.s2_cyc_o(  bram0_cyc   ),
+	.s2_stb_o(  bram0_stb   ),
+	.s2_ack_i(  bram0_ack   ),
+	.s2_err_i(  gnd         ),
+	.s2_rty_i(  gnd         ),
 	// Slave3
 	.s3_dat_i(  gnd32  ),
 	.s3_ack_i(  gnd    ),

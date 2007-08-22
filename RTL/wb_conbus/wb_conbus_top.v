@@ -57,7 +57,19 @@
 //`define 		WB_USE_TRISTATE
 
 
-module wb_conbus_top(
+module wb_conbus_top #(
+	parameter		s0_addr_w = 4 ,			// slave 0 address decode width
+	parameter		s0_addr = 4'h0,			// slave 0 address
+	parameter		s1_addr_w = 4 ,			// slave 1 address decode width
+	parameter		s1_addr = 4'h1,			// slave 1 address 
+	parameter		s27_addr_w = 8 ,		// slave 2 to slave 7 address decode width
+	parameter		s2_addr = 8'h92,		// slave 2 address
+	parameter		s3_addr = 8'h93,		// slave 3 address
+	parameter		s4_addr = 8'h94,		// slave 4 address
+	parameter		s5_addr = 8'h95,		// slave 5 address
+	parameter		s6_addr = 8'h96,		// slave 6 address
+	parameter		s7_addr = 8'h97			// slave 7 address
+) (
 	clk_i, rst_i,
 
 	// Master 0 Interface
@@ -131,18 +143,6 @@ module wb_conbus_top(
 // Module Parameters
 //
 
-
-parameter		s0_addr_w = 4 ;			// slave 0 address decode width
-parameter		s0_addr = 4'h0;			// slave 0 address
-parameter		s1_addr_w = 4 ;			// slave 1 address decode width
-parameter		s1_addr = 4'h1;			// slave 1 address 
-parameter		s27_addr_w = 8 ;		// slave 2 to slave 7 address decode width
-parameter		s2_addr = 8'h92;		// slave 2 address
-parameter		s3_addr = 8'h93;		// slave 3 address
-parameter		s4_addr = 8'h94;		// slave 4 address
-parameter		s5_addr = 8'h95;		// slave 5 address
-parameter		s6_addr = 8'h96;		// slave 6 address
-parameter		s7_addr = 8'h97;		// slave 7 address
 
 
 ////////////////////////////////////////////////////////////////////
