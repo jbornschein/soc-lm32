@@ -26,8 +26,8 @@ RTL/system_usage.xml
 RTL/timing.twr
 RTL/verilog.log
 RTL/xst/
-Toolschain/srec2v/srec2v
-Toolschain/uploader/uploader
+Toolchain/srec2v/srec2v
+Toolchain/uploader/uploader
 Software/Bootloader/crt0ram.d
 Software/Bootloader/image
 Software/Bootloader/image.lst
