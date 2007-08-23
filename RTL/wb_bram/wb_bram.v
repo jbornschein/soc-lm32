@@ -3,7 +3,9 @@
 // Wishbone BlockRAM
 //
 
-module wb_bram(
+module wb_bram #(
+	parameter mem_file_name = "none"
+) (
 	clk_i, 
 	rst_i,
 	//
@@ -54,6 +56,14 @@ begin
 	end else
 		ack <= 0;
     
+end
+
+initial 
+begin
+	if (mem_file_name != "none")
+	begin
+		$readmemh(mem_file_name, ram);
+	end
 end
 
 endmodule

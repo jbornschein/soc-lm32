@@ -280,7 +280,9 @@ lm32_cpu lm0 (
 /////////////////////////////////////////////////////////////////////
 // Block RAM
 
-wb_bram bram0 (
+wb_bram #(
+	.mem_file_name( "bram0.ram" )
+) bram0 (
 	.clk_i(  clk  ),
 	.rst_i(  rst  ),
 	//
@@ -324,11 +326,5 @@ uart_core #(
 	.SOUT(       uart_txd ),
 	.TXRDY_N(    uart0_txrdy_n )
 );
-
-initial 
-begin
-	$readmemh( "bram0.ram", bram0.ram );
-end
-
 
 endmodule 
