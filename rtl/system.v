@@ -4,29 +4,15 @@
 //
 
 module system(
-	clk, 
+	input        clk, 
 	// Debug 
-	led,
-	btn,
+	output [7:0] led,
+	input  [3:0] btn,
 	// Uart
-	uart_rxd, 
-	uart_txd
+	input        uart_rxd, 
+	output       uart_txd
 );
 	
-////////////////////////////////////////////////////////////////////
-//
-// Module IOs
-//
-
-input        clk;
-
-output [7:0] led;
-input  [3:0] btn;
-
-input        uart_rxd;
-output       uart_txd;
-
-
 /////////////////////////////////////////////////////////////////////
 //
 // Local wires
@@ -281,7 +267,7 @@ lm32_cpu lm0 (
 // Block RAM
 
 wb_bram #(
-	.mem_file_name( "bram0.ram" )
+	.mem_file_name( "../rtl/bram0.ram" )
 ) bram0 (
 	.clk_i(  clk  ),
 	.rst_i(  rst  ),
