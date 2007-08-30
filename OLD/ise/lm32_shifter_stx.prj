@@ -1,2 +1,0 @@
-verilog isim_temp "../wb_lm32/lm32_shifter.v"
-verilog isim_temp "/home/joerg/Xilinx91i/verilog/src/glbl.v"
