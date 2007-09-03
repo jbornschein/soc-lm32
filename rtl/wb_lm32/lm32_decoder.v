@@ -360,7 +360,7 @@ wire   op_xor    = instruction[`LM32_OP_RNG] == `LM32_OPCODE_XOR;
 
 // Group opcodes by function
 wire   arith = op_add | op_sub;
-wire   logic = op_and | op_andhi | op_nor | op_or | op_orhi | op_xor | op_xnor; 
+wire   logicc = op_and | op_andhi | op_nor | op_or | op_orhi | op_xor | op_xnor; 
 wire   cmp = op_cmpe | op_cmpg | op_cmpge | op_cmpgeu | op_cmpgu | op_cmpne;
 wire   bra = op_b | op_bi | op_be | op_bg | op_bge | op_bgeu  | op_bgu | op_bne;
 wire   call = op_call | op_calli;
@@ -441,7 +441,7 @@ begin
     else if (sext)
         x_result_sel_sext = `TRUE;
 `endif        
-    else if (logic) 
+    else if (logicc) 
         x_result_sel_logic = `TRUE;
 `ifdef CFG_USER_ENABLED        
     else if (op_user)
@@ -466,7 +466,7 @@ end
 
 // Set if result is valid at end of X stage
 assign x_bypass_enable =  arith 
-                        | logic
+                        | logicc
 `ifdef CFG_MC_BARREL_SHIFT_ENABLED
                         | shift_left
                         | shift_right

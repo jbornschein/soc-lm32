@@ -147,12 +147,12 @@ parameter dcache_limit = 0;
 `ifdef CFG_DEBUG_ENABLED
 parameter watchpoints = `CFG_WATCHPOINTS;                       // Number of h/w watchpoint CSRs
 `else
-parameter watchpoints = 0;
+parameter watchpoints = 4'h0;
 `endif
 `ifdef CFG_ROM_DEBUG_ENABLED
 parameter breakpoints = `CFG_BREAKPOINTS;                       // Number of h/w breakpoint CSRs
 `else
-parameter breakpoints = 0;
+parameter breakpoints = 4'h0;
 `endif
 
 `ifdef CFG_INTERRUPTS_ENABLED
