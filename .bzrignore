@@ -38,3 +38,5 @@ Software/Bootloader/main.d
 Software/Bootloader/spike_hw.d
 Software/Bootloader/srectovhdl
 
+system_tb.vvp
+system_tb.vvp.list
