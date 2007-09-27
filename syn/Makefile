@@ -27,6 +27,12 @@ system-routed.ncd: system.ncd
 system.bit: system-routed.ncd
 	bitgen -w system-routed.ncd system.bit
 
+system-routed.xdl: system-routed.ncd
+	xdl -ncd2xdl system-routed.ncd system-routed.xdl
+
+usage: system-routed.xdl
+	xdlanalyze.pl system-routed.xdl 2
+
 clean: 
 	rm -Rf $(XSTCLEAN)
 
