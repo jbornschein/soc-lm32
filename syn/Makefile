@@ -31,7 +31,7 @@ system-routed.xdl: system-routed.ncd
 	xdl -ncd2xdl system-routed.ncd system-routed.xdl
 
 usage: system-routed.xdl
-	xdlanalyze.pl system-routed.xdl 2
+	xdlanalyze.pl system-routed.xdl 1
 
 clean: 
 	rm -Rf $(XSTCLEAN)

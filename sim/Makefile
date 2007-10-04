@@ -3,16 +3,10 @@ GTKWAVE=gtkwave
 IVERILOG=iverilog
 VVP=vvp
 	
-sim: system_tb.view
-
 VINCDIR=					\
 	-I../rtl/wb_farbborg			\
 	-I../rtl/wb_conbus			\
 	-I../rtl/wb_lm32
-
-DUALPORTRAM1_TB_SRC=				\
-	dualportram1_tb.v			\
-	../rtl/dualportram.v			\
 
 SYSTEM_TB_SRC=					\
 	system_tb.v				\
@@ -29,6 +23,7 @@ SYSTEM_TB_SRC=					\
 	../rtl/wb_lm32/lm32_mc_arithmetic.v	\
 	../rtl/wb_lm32/lm32_interrupt.v		\
 	../rtl/wb_lm32/lm32_icache.v		\
+	../rtl/wb_lm32/lm32_ram.v		\
 	../rtl/wb_bram/wb_bram.v		\
 	../rtl/uart_core/intface.v		\
 	../rtl/uart_core/modem.v		\
@@ -37,6 +32,8 @@ SYSTEM_TB_SRC=					\
 	../rtl/uart_core/uart_core.v		\
 	../rtl/wb_conbus/wb_conbus_top.v	\
 	../rtl/wb_conbus/wb_conbus_arb.v
+
+all: system_tb.view
 
 ####################################################################
 # cver simulation
