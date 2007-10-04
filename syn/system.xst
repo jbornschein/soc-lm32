@@ -5,6 +5,5 @@ run
 -opt_mode AREA
 -opt_level 2
 -ofn system.ngc
--p  xc3s500e-fg320-4
-#-p  xc2vp30-7fg676
+-p xc2vp30-ff896-7
 
