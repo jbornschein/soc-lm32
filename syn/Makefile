@@ -31,7 +31,7 @@ system-routed.xdl: system-routed.ncd
 	xdl -ncd2xdl system-routed.ncd system-routed.xdl
 
 system-routed.twr: system-routed.ncd
-        trce -v 10 system-routed.ncd system.pcf
+	trce -v 10 system-routed.ncd system.pcf
 
 timing: system-routed.twr
 
