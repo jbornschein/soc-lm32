@@ -6,7 +6,7 @@ LM32_OBJDUMP=lm32-elf-objdump
 SREC2VHDL ?= ../../Toolchain/srec2vhdl/srec2vhdl
 SREC2VRAM ?= ../../Toolchain/srec2vram/srec2vram
 
-VRAMFILE=../../RTL/bram0.ram
+VRAMFILE=../../rtl/bram0.ram
 
 CFLAGS=-MMD -O2 -Wall -g -s -fomit-frame-pointer -mbarrel-shift-enabled   -mmultiply-enabled -mdivide-enabled -msign-extend-enabled
 LDFLAGS=-Tlinkcmd
@@ -39,7 +39,7 @@ $(VHDLFILE): image.srec
 	$(SREC2VHDL) image.srec > $(VHDLFILE)
 
 $(VRAMFILE): image.srec
-	$(SREC2VRAM) image.srec 0x00000000 0x1000 > $(VRAMFILE)
+	$(SREC2VRAM) image.srec 0x00000000 0x2000 > $(VRAMFILE)
 
 clean:
 	rm -f image image.lst image.bin image.srec image.map  *.o *.d

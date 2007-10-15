@@ -11,6 +11,9 @@ VINCDIR=					\
 SYSTEM_TB_SRC=					\
 	system_tb.v				\
 	../rtl/system.v				\
+	../rtl/lac/lac.v		\
+	../rtl/lac/uart.v		\
+	../rtl/lac/dp_ram.v		\
 	../rtl/wb_lm32/lm32_cpu.v		\
 	../rtl/wb_lm32/lm32_instruction_unit.v	\
 	../rtl/wb_lm32/lm32_decoder.v		\

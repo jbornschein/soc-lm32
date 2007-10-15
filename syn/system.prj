@@ -1,4 +1,7 @@
 verilog work ../rtl/system.v
+verilog work ../rtl/lac/lac.v
+verilog work ../rtl/lac/uart.v
+verilog work ../rtl/lac/dp_ram.v
 verilog work ../rtl/wb_lm32/lm32_cpu.v
 verilog work ../rtl/wb_lm32/lm32_instruction_unit.v
 verilog work ../rtl/wb_lm32/lm32_decoder.v
@@ -11,10 +14,10 @@ verilog work ../rtl/wb_lm32/lm32_multiplier.v
 verilog work ../rtl/wb_lm32/lm32_mc_arithmetic.v
 verilog work ../rtl/wb_lm32/lm32_interrupt.v
 verilog work ../rtl/wb_bram/wb_bram.v
-verilog work ../rtl/wb_conbus/wb_conbus_top.v
-verilog work ../rtl/wb_conbus/wb_conbus_arb.v
 verilog work ../rtl/uart_core/intface.v
 verilog work ../rtl/uart_core/modem.v
 verilog work ../rtl/uart_core/rxcver.v
 verilog work ../rtl/uart_core/txmitt.v
 verilog work ../rtl/uart_core/uart_core.v
+verilog work ../rtl/wb_conbus/wb_conbus_top.v
+verilog work ../rtl/wb_conbus/wb_conbus_arb.v

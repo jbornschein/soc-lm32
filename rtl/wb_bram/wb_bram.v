@@ -35,7 +35,7 @@ output        wb_ack_o;
 
 ///////////////////////////////////////////////////////////////////
 // Local 
-reg  [31:0] ram [2047:0];    // actual RAM
+reg  [31:0] ram [0:2047];    // actual RAM
 reg         ack;
 wire [10:0] addr;
 

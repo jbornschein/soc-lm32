@@ -8,17 +8,17 @@ module system(
 	// Debug 
 	output [7:0] led,
 	input  [3:0] btn,
+	input  [3:0] sw,
 	// Uart
 	input        uart_rxd, 
 	output       uart_txd
 );
 	
-/////////////////////////////////////////////////////////////////////
-//
+//------------------------------------------------------------------
 // Local wires
-//
+//------------------------------------------------------------------
+wire         rst;
 
-wire         rst   = btn[0];
 wire         gnd   = 1'b0;
 wire   [3:0] gnd4  = 4'h0;
 wire  [31:0] gnd32 = 32'h00000000;
@@ -89,19 +89,16 @@ wire [31:0]  intr_n;
 wire         uart0_intr;
 
 assign intr_n = { 24'hFFFFFF, 7'b1111111, ~uart0_intr };
-assign led    = lm32i_adr[7:0];
 
 
-/////////////////////////////////////////////////////////////////////
-//
+//------------------------------------------------------------------
 // Wishbone Interconnect
-//
-
+//------------------------------------------------------------------
 wb_conbus_top #(
-        .s0_addr_w ( 4 ),
-        .s0_addr   ( 4'h8 ),        // ddr0
+	.s0_addr_w ( 4 ),
+	.s0_addr   ( 4'h8 ),        // ddr0
 	.s1_addr_w ( 4 ),
-        .s1_addr   ( 4'h9 ),        // flash0
+	.s1_addr   ( 4'h9 ),        // flash0
 	.s27_addr_w( 16 ),
 	.s2_addr   ( 16'h0000 ),    // bram0 
 	.s3_addr   ( 16'hF000 ),    // uart0
@@ -226,9 +223,9 @@ wb_conbus_top #(
 );
 
 
-/////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------
 // LM32 CPU 
-
+//------------------------------------------------------------------
 lm32_cpu lm0 (
 	.clk_i(  clk  ),
 	.rst_i(  rst  ),
@@ -263,9 +260,9 @@ lm32_cpu lm0 (
 	.D_RTY_I(  lm32d_rty    )
 );
 	
-/////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------
 // Block RAM
-
+//------------------------------------------------------------------
 wb_bram #(
 	.mem_file_name( "../rtl/bram0.ram" )
 ) bram0 (
@@ -283,12 +280,15 @@ wb_bram #(
 );
 
 
-/////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------
 // uart0
+//------------------------------------------------------------------
+wire uart0_rxd;
+wire uart0_txd;
 
 uart_core #(
 	.CLK_IN_MHZ( 50 ),
-	.BAUD_RATE( 576000 )
+	.BAUD_RATE( 115200 )
 ) uart0 (
 	.CLK( clk ),
 	.RESET( rst ),
@@ -307,10 +307,61 @@ uart_core #(
 	.UART_RTY_O( uart0_rty ),
 	.UART_ERR_O( uart0_err ),
 	.INTR(       uart0_intr ),
-	.SIN(        uart_rxd ),
+	.SIN(        uart0_rxd ),
 	.RXRDY_N(    uart0_rxrdy_n ),
-	.SOUT(       uart_txd ),
+	.SOUT(       uart0_txd ),
 	.TXRDY_N(    uart0_txrdy_n )
 );
+
+//------------------------------------------------------------------
+// LogicAnalyzerComponent
+//------------------------------------------------------------------
+wire        lac_rxd;
+wire        lac_txd;
+wire        lac_cts;
+wire        lac_rts;
+assign      lac_rts = 1;
+wire [7:0]  probe;
+wire [7:0]  select;
+
+lac #(
+	.uart_freq_hz(   50000000   ),
+	.uart_baud(        115200   ),
+	.adr_width(            14   ),
+	.width(                 8   )
+) lac0 (
+	.reset(        btn[0]  ),
+	.uart_clk(        clk  ),
+	.uart_rxd(    lac_rxd  ),
+	.uart_cts(    lac_cts  ),
+	.uart_txd(    lac_txd  ),
+	.uart_rts(    lac_rts  ),
+	//
+	.probe_clk(  clk       ),
+	.probe(      probe     ),
+	.select(     select    )
+);
+
+assign probe = (select[3:0] == 'h0) ? { rst, lm32i_stb, lm32i_cyc, lm32i_ack, lm32d_stb, lm32d_cyc, lm32d_we, lm32d_ack } :
+               (select[3:0] == 'h1) ? lm32i_adr[31:24] :
+               (select[3:0] == 'h2) ? lm32i_adr[23:16] :
+               (select[3:0] == 'h3) ? lm32i_adr[15: 8] :
+               (select[3:0] == 'h4) ? lm32i_adr[ 7: 0] :
+               (select[3:0] == 'h5) ? lm32i_dat_r[31:24] :
+               (select[3:0] == 'h6) ? lm32i_dat_r[23:16] :
+               (select[3:0] == 'h7) ? lm32i_dat_r[15: 8] :
+               (select[3:0] == 'h8) ? lm32i_dat_r[ 7: 0] :
+               (select[3:0] == 'h9) ? lm32d_adr[31:24] :
+               (select[3:0] == 'ha) ? lm32d_adr[23:16] :
+               (select[3:0] == 'hb) ? lm32d_adr[15: 8] :
+                                      lm32d_adr[ 7: 0] ;
+
+assign uart_txd  = (sw[0]) ? uart0_txd : lac_txd;
+assign lac_rxd   = (sw[0]) ?         1 : uart_rxd;
+assign uart0_rxd = (sw[0]) ? uart_rxd  : 1;
+
+
+assign led = { clk, rst, ~uart_rxd, ~uart_txd, select[3:0] };
+assign rst = btn[0] | select[7];
 
 endmodule 
