@@ -86,8 +86,8 @@ reg [2:0]	state, next_state;
 assign	gnt = state;
 
 always@(posedge clk or posedge rst)
-	if(rst)		state <= #1 grant0;
-	else		state <= #1 next_state;
+	if(rst)		state <= grant0;
+	else		state <= next_state;
 
 ///////////////////////////////////////////////////////////////////////
 //

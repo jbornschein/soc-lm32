@@ -6,5 +6,6 @@ run
 -opt_level 2
 -ofn system.ngc
 -p  xc3s500e-fg320-4
+-register_balancing yes
 #-p  xc2vp30-7fg676
 

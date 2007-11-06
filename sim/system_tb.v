@@ -1,11 +1,25 @@
+//----------------------------------------------------------------------------
+//
+//----------------------------------------------------------------------------
 `timescale 1 ns / 100 ps
+`include "ddr_include.v"
 
 module system_tb;
 
-parameter tck = 20;
+//----------------------------------------------------------------------------
+// Parameter (may differ for physical synthesis)
+//----------------------------------------------------------------------------
+parameter tck              = 20;       // clock period in ns
+parameter uart_baud_rate   = 900000;  // uart baud rate for simulation 
+parameter ddr_phase_shift  = 100;      //
+parameter ddr_wait200_init = 26;       //
 
+//----------------------------------------------------------------------------
+//
+//----------------------------------------------------------------------------
 reg        clk;
 reg        reset;
+wire [2:0] rot = 0;
 wire [3:0] btn;
 wire [3:0] sw;
 wire [7:0] led;
@@ -25,8 +39,8 @@ wire         rx_avail;
 reg          rx_ack;
 
 uart #(
-	.freq_hz( 50000000  ),
-	.baud(      115200  )
+	.freq_hz(    50000000 ),
+	.baud( uart_baud_rate )
 ) tb_uart (
 	.reset(    reset     ),
 	.clk(      clk       ),
@@ -82,26 +96,83 @@ task uart_wait_tx;
 	end
 endtask
 
+//----------------------------------------------------------------------------
+// DDR connection
+//----------------------------------------------------------------------------
+wire            ddr_clk;
+wire            ddr_clk_n;
+wire            ddr_clk_fb;
+wire            ddr_ras_n;
+wire            ddr_cas_n;
+wire            ddr_we_n;
+wire            ddr_cke;
+wire            ddr_cs_n;
+wire [  `A_RNG] ddr_a;
+wire [ `BA_RNG] ddr_ba;
+wire [ `DQ_RNG] ddr_dq;
+wire [`DQS_RNG] ddr_dqs;
+wire [ `DM_RNG] ddr_dm;
+
+//----------------------------------------------------------------------------
+// Micron DDR Memory
+//----------------------------------------------------------------------------
+ddr mt46v16m16 (
+	.Dq(     ddr_dq    ),
+	.Dqs(    ddr_dqs   ),
+	.Addr(   ddr_a     ),
+	.Ba(     ddr_ba    ),
+	.Clk(    ddr_clk   ),
+	.Clk_n(  ddr_clk_n ),
+	.Cke(    ddr_cke   ),
+	.Cs_n(   ddr_cs_n  ),
+	.Ras_n(  ddr_ras_n ),
+	.Cas_n(  ddr_cas_n ),
+	.We_n(   ddr_we_n  ),
+	.Dm(     ddr_dm    )
+);
+
+assign ddr_clk_fb = ddr_clk;
+
 //------------------------------------------------------------------
 // Decive Under Test 
 //------------------------------------------------------------------
-system dut  (
-	.clk(  clk  ),
+system #(
+	.uart_baud_rate( uart_baud_rate   ),
+	.phase_shift(    ddr_phase_shift  ),
+	.wait200_init(   ddr_wait200_init )
+) dut  (
+	.clk(          clk    ),
 	// Debug
-	.led(  led  ),
-	.btn(  btn  ),
-	.sw(   sw   ),
+	.led(          led    ),
+	.btn(          btn    ),
+	.sw(           sw     ),
+	.rot(          rot    ),
 	// Uart
 	.uart_rxd(  uart_rxd  ),
-	.uart_txd(  uart_txd  )
+	.uart_txd(  uart_txd  ),
+	// DDR Ports
+	.ddr_clk(      ddr_clk     ),
+	.ddr_clk_n(    ddr_clk_n   ),
+	.ddr_clk_fb(   ddr_clk_fb  ),
+	.ddr_ras_n(    ddr_ras_n   ),
+	.ddr_cas_n(    ddr_cas_n   ),
+	.ddr_we_n(     ddr_we_n    ),
+	.ddr_cke(      ddr_cke     ),
+	.ddr_cs_n(     ddr_cs_n    ),
+	.ddr_a(        ddr_a       ),
+	.ddr_ba(       ddr_ba      ),
+	.ddr_dq(       ddr_dq      ),
+	.ddr_dqs(      ddr_dqs     ),
+	.ddr_dm(       ddr_dm      )
 );
 
 assign btn = { 3'b0, reset };
-assign sw  = { 4'b1 };
+assign sw  = { 4'b0001 };
 
 
 /* Clocking device */
-always #(tck/2) clk = ~clk;
+initial         clk <= 0;
+always #(tck/2) clk <= ~clk;
 
 /* Simulation setup */
 initial begin
@@ -109,23 +180,57 @@ initial begin
 	$dumpfile("system_tb.vcd");
 
 	// reset
-	clk    = 0;
-	reset  = 1;
-        
-	#(tck*3)
-	reset  = 0;
-	$display("reset done");
+	#0  reset <= 1;
+	#80 reset <= 0;
 	
-	// send CMD_DISARM
-	uart_send( 'h02 );
-	uart_wait_tx;
-	#(tck*5000)
+	#350000
 
-	// send CMD_ARM
-	uart_send( 'h01 );
+	// send 'g'
+	uart_send( 'h67 );
 	uart_wait_tx;
-	#(tck*5000)
+	#(tck*1000)
 
+	// send '0'
+	uart_send( 'h00 );
+	uart_wait_tx;
+	#(tck*1000)
+
+	// send '0'
+	uart_send( 'h00 );
+	uart_wait_tx;
+	#(tck*1000)
+
+	// send '0'
+	uart_send( 'h00 );
+	uart_wait_tx;
+	#(tck*1000)
+
+	// send '0'
+	uart_send( 'h00 );
+	uart_wait_tx;
+	#(tck*1000)
+
+	// send '0'
+	uart_send( 'h00 );
+	uart_wait_tx;
+	#(tck*1000)
+
+	// send '0'
+	uart_send( 'h00 );
+	uart_wait_tx;
+	#(tck*1000)
+
+	// send '0'
+	uart_send( 'h00 );
+	uart_wait_tx;
+	#(tck*1000)
+
+	// send '0'
+	uart_send( 'h00 );
+	uart_wait_tx;
+	#(tck*1000)
+
+/*
 	// send select value
 	uart_send( 'h00 );
 	uart_wait_tx;
@@ -145,8 +250,9 @@ initial begin
 	uart_send( 'h00 );
 	uart_wait_tx;
 	#(tck*5000)
+*/
 
-	#(tck*200000) $finish;
+	#(tck*10000) $finish;
 end
 
 //------------------------------------------------------------------

@@ -9,10 +9,9 @@
 `define CFG_DEBA_RESET 32'h0
 
 `define CFG_PL_MULTIPLY_ENABLED
-
 `define CFG_PL_BARREL_SHIFT_ENABLED
-
 `define CFG_SIGN_EXTEND_ENABLED
+`define CFG_MC_DIVIDE_ENABLED
 
 // `define CFG_ICACHE_ENABLED
 // `define CFG_ICACHE_ASSOCIATIVITY 1
@@ -21,7 +20,6 @@
 // `define CFG_ICACHE_BASE_ADDRESS 32'h0
 // `define CFG_ICACHE_LIMIT        32'hffffffff
 
-// `define CFG_MC_DIVIDE_ENABLED
 
 
 // `define CFG_DEBUG_ENABLED

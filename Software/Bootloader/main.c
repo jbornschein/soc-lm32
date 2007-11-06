@@ -1,5 +1,10 @@
 #include "spike_hw.h"
 
+
+/* prototypes */
+void writeint(uint8_t nibbles, uint32_t val);
+uint32_t readint(uint8_t nibbles, uint8_t* checksum);
+
 uint32_t readint(uint8_t nibbles, uint8_t* checksum) {
 	uint32_t val = 0, i;
     uint8_t c;
@@ -13,6 +18,7 @@ uint32_t readint(uint8_t nibbles, uint8_t* checksum) {
     	if (i & 1)
     	   *checksum += val;      
     }
+
     return val;
 }
 
@@ -35,17 +41,22 @@ void writeint(uint8_t nibbles, uint32_t val)
 void memtest()
 {
 	volatile int *p;
-	for (p=(int *)SRAM_START; p<(int *)(SRAM_START+SRAM_SIZE); p++) {
+
+	uart_putstr("\r\nMEMTEST...");
+
+	for (p=(int *)RAM_START; p<(int *)(RAM_START+RAM_SIZE); p++) {
 		*p = (int) p;  
 	}
 	
-	for (p=(int *)SRAM_START; p<(int *)(SRAM_START+SRAM_SIZE); p++) {
+	uart_putstr("...");
+
+	for (p=(int *)RAM_START; p<(int *)(RAM_START+RAM_SIZE); p++) {
 		if (*p != (int)p) {
-			uart_putstr("SRAM MEMTEST ERROR\n\r");
+			uart_putstr("\r\nMEMTEST ERROR: ");
+			writeint(8, p);
 		}
-		*p = 0;
 	}
-	uart_putstr("SRAM MEMTEST OK\n\r");
+	uart_putstr("OK\n\r");
 }
 
 int main(int argc, char **argv)
@@ -53,12 +64,12 @@ int main(int argc, char **argv)
 	volatile int8_t  *p;
 	volatile int32_t *p32;
 	uint8_t checksum;
+
 	// Initialize stuff
 	uart_init();
 	//irq_enable();
 
-	uart_putstr("\r\n** SPIKE BOOTLOADER **\n\r");
-	memtest();
+	uart_putstr("\r\n\r\n** SPIKE BOOTLOADER **\n");
 	for(;;) {
 		uint32_t start, size, checksum, help;
 		uart_putchar('>');
@@ -68,6 +79,9 @@ int main(int argc, char **argv)
     		case 'r': // reset
     			jump(0x00000000);
     			break;
+			case 'm': // Memory Test
+				memtest();
+				break;
     		case 'u': // Upload programm
       			checksum = 0;
       			/* read size */
@@ -83,7 +97,6 @@ int main(int argc, char **argv)
     		case 'g': // go
     			start = readint(8, (uint8_t *) &checksum);
     			jump(start);
-    			uart_putstr("XX");		
     			break;   
     		case 'v': // view memory 
     		  start = readint(8, (uint8_t *) &checksum);

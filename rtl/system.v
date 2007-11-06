@@ -1,17 +1,39 @@
-////////////////////////////////////////////////////////////////////
-//
+//---------------------------------------------------------------------------
 // LatticeMico 32 System
-//
+//---------------------------------------------------------------------------
+`include "ddr_include.v"
 
-module system(
-	input        clk, 
+module system
+#(
+	parameter   uart_baud_rate  = 115200,
+	parameter   phase_shift     = 0,
+	parameter   clk_multiply    = 13,
+	parameter   clk_divide      = 5,
+	parameter   wait200_init    = 26
+) (
+	input                   clk, 
+	// DDR connection
+	output                  ddr_clk,
+	output                  ddr_clk_n,
+	input                   ddr_clk_fb,
+	output                  ddr_ras_n,
+	output                  ddr_cas_n,
+	output                  ddr_we_n,
+	output                  ddr_cke,
+	output                  ddr_cs_n,
+	output [  `A_RNG]       ddr_a,
+	output [ `BA_RNG]       ddr_ba,
+	inout  [ `DQ_RNG]       ddr_dq,
+	inout  [`DQS_RNG]       ddr_dqs,
+	output [ `DM_RNG]       ddr_dm,
 	// Debug 
-	output [7:0] led,
-	input  [3:0] btn,
-	input  [3:0] sw,
+	output [7:0]            led,
+	input  [3:0]            btn,
+	input  [3:0]            sw,
+	input  [2:0]            rot,
 	// Uart
-	input        uart_rxd, 
-	output       uart_txd
+	input                   uart_rxd, 
+	output                  uart_txd
 );
 	
 //------------------------------------------------------------------
@@ -27,7 +49,9 @@ wire  [31:0] gnd32 = 32'h00000000;
 wire [31:0]  lm32i_adr,
              lm32d_adr,
              uart0_adr,
-             bram0_adr;
+             bram0_adr,
+             ddr0_adr;
+
 
 wire [31:0]  lm32i_dat_r,
              lm32i_dat_w,
@@ -36,32 +60,39 @@ wire [31:0]  lm32i_dat_r,
              uart0_dat_r,
              uart0_dat_w,
              bram0_dat_r,
-             bram0_dat_w;
+             bram0_dat_w,
+             ddr0_dat_w,
+             ddr0_dat_r;
 
 wire [3:0]   lm32i_sel,
              lm32d_sel,
              uart0_sel,
-             bram0_sel;
+             bram0_sel,
+             ddr0_sel;
 
 wire         lm32i_i_we,
              lm32d_i_we,
              uart0_i_we,
-             bram0_i_we;
+             bram0_i_we,
+             ddr0_i_we;
 
 wire         lm32i_cyc,
              lm32d_cyc,
              uart0_cyc,
-             bram0_cyc;
+             bram0_cyc,
+             ddr0_cyc;
 
 wire         lm32i_stb,
              lm32d_stb,
              uart0_stb,
-             bram0_stb;
+             bram0_stb,
+             ddr0_stb;
 
 wire         lm32i_ack,
              lm32d_ack,
              uart0_ack,
-             bram0_ack;
+             bram0_ack,
+             ddr0_ack;
 
 wire         lm32i_rty,
              lm32d_rty,
@@ -169,8 +200,14 @@ wb_conbus_top #(
 	.m7_stb_i(  gnd    ),
 
 	// Slave0
-	.s0_dat_i(  gnd32  ),
-	.s0_ack_i(  gnd    ),
+	.s0_dat_i(  ddr0_dat_r   ),
+	.s0_dat_o(  ddr0_dat_w   ),
+	.s0_adr_o(  ddr0_adr     ),
+	.s0_sel_o(  ddr0_sel     ),
+	.s0_we_o(   ddr0_we      ),
+	.s0_cyc_o(  ddr0_cyc     ),
+	.s0_stb_o(  ddr0_stb     ),
+	.s0_ack_i(  ddr0_ack     ),
 	.s0_err_i(  gnd    ),
 	.s0_rty_i(  gnd    ),
 	// Slave1
@@ -264,6 +301,7 @@ lm32_cpu lm0 (
 // Block RAM
 //------------------------------------------------------------------
 wb_bram #(
+	.adr_width( 12 ),
 	.mem_file_name( "../rtl/bram0.ram" )
 ) bram0 (
 	.clk_i(  clk  ),
@@ -279,6 +317,44 @@ wb_bram #(
 	.wb_we_i(   bram0_we     )
 );
 
+//------------------------------------------------------------------
+// ddr0
+//------------------------------------------------------------------
+wb_ddr #(
+	.phase_shift(  phase_shift  ),
+	.clk_multiply( clk_multiply ),
+	.clk_divide(   clk_divide   ),
+	.wait200_init( wait200_init )
+) ddr0 (
+	.clk(     clk    ),
+	.reset(   rst  ),
+	// DDR Ports
+	.ddr_clk(      ddr_clk     ),
+	.ddr_clk_n(    ddr_clk_n   ),
+	.ddr_clk_fb(   ddr_clk_fb  ),
+	.ddr_ras_n(    ddr_ras_n   ),
+	.ddr_cas_n(    ddr_cas_n   ),
+	.ddr_we_n(     ddr_we_n    ),
+	.ddr_cke(      ddr_cke     ),
+	.ddr_cs_n(     ddr_cs_n    ),
+	.ddr_a(        ddr_a       ),
+	.ddr_ba(       ddr_ba      ),
+	.ddr_dq(       ddr_dq      ),
+	.ddr_dqs(      ddr_dqs     ),
+	.ddr_dm(       ddr_dm      ),
+	// FML (FastMemoryLink)
+	.wb_cyc_i(    ddr0_cyc     ),
+	.wb_stb_i(    ddr0_stb     ),
+	.wb_we_i(     ddr0_we      ),
+	.wb_adr_i(    ddr0_adr     ),
+	.wb_dat_o(    ddr0_dat_r   ),
+	.wb_dat_i(    ddr0_dat_w   ),
+	.wb_sel_i(    ddr0_sel     ),
+	.wb_ack_o(    ddr0_ack     ),
+	// phase shifting
+	.rot(          rot       )
+);
+
 
 //------------------------------------------------------------------
 // uart0
@@ -287,8 +363,8 @@ wire uart0_rxd;
 wire uart0_txd;
 
 uart_core #(
-	.CLK_IN_MHZ( 50 ),
-	.BAUD_RATE( 115200 )
+	.CLK_IN_MHZ(    50 ),
+	.BAUD_RATE( uart_baud_rate )
 ) uart0 (
 	.CLK( clk ),
 	.RESET( rst ),
@@ -321,14 +397,15 @@ wire        lac_txd;
 wire        lac_cts;
 wire        lac_rts;
 assign      lac_rts = 1;
-wire [7:0]  probe;
 wire [7:0]  select;
+wire [7:0]  probe;
+reg  [7:0]  probe_r;
 
 lac #(
-	.uart_freq_hz(   50000000   ),
-	.uart_baud(        115200   ),
-	.adr_width(            14   ),
-	.width(                 8   )
+	.uart_freq_hz(     50000000 ),
+	.uart_baud(  uart_baud_rate ),
+	.adr_width(              11 ),
+	.width(                   8 )
 ) lac0 (
 	.reset(        btn[0]  ),
 	.uart_clk(        clk  ),
@@ -338,9 +415,17 @@ lac #(
 	.uart_rts(    lac_rts  ),
 	//
 	.probe_clk(  clk       ),
-	.probe(      probe     ),
+	.probe(      probe_r   ),
 	.select(     select    )
 );
+
+always @(posedge clk)
+begin
+	if (rst)
+		probe_r <= 0;
+	else
+		probe_r <= probe;
+end
 
 assign probe = (select[3:0] == 'h0) ? { rst, lm32i_stb, lm32i_cyc, lm32i_ack, lm32d_stb, lm32d_cyc, lm32d_we, lm32d_ack } :
                (select[3:0] == 'h1) ? lm32i_adr[31:24] :
