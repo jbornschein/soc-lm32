@@ -36,7 +36,7 @@ system-routed.twr: system-routed.ncd
 timing: system-routed.twr
 
 usage: system-routed.xdl
-	xdlanalyze.pl system-routed.xdl 1
+	xdlanalyze.pl system-routed.xdl 0
 
 clean: 
 	rm -Rf $(XSTCLEAN)

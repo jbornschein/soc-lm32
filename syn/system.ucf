@@ -1,6 +1,8 @@
 # ==== Clock inputs (CLK) ====
 NET "clk" LOC = "AJ15" | IOSTANDARD = LVCMOS25 ;
-NET "clk" PERIOD = 10 HIGH 40%;
+NET "clk" PERIOD = 8 HIGH 50%;
+
+NET "reset_n" LOC = "AH5" | IOSTANDARD = LVTTL;
 
 # ==== LED output ===
 NET "led<3>"  LOC = "AC4" | IOSTANDARD = LVTTL | SLEW = SLOW | DRIVE = 8 ;
@@ -12,4 +14,10 @@ NET "btn<0>"  LOC = "AH4" | IOSTANDARD = LVTTL | PULLDOWN ;
 NET "btn<1>"  LOC = "AH1" | IOSTANDARD = LVTTL | PULLDOWN ;
 NET "btn<2>"  LOC = "AG3" | IOSTANDARD = LVTTL | PULLDOWN ;
 NET "btn<3>"  LOC = "AH2" | IOSTANDARD = LVTTL | PULLDOWN ;
+NET "btn<4>"  LOC = "AG5" | IOSTANDARD = LVTTL | PULLDOWN ;
 
+# ==== UART ====
+NET "uart_txd" LOC = "AE7" | IOSTANDARD = LVCMOS25 | SLEW = SLOW | DRIVE = 8 ;
+NET "uart_rts" LOC = "AK8" | IOSTANDARD = LVCMOS25;
+NET "uart_rxd" LOC = "AJ8" | IOSTANDARD = LVCMOS25;
+NET "uart_cts" LOC = "AE8" | IOSTANDARD = LVCMOS25 | SLEW = SLOW | DRIVE = 8 ;

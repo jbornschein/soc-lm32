@@ -5,20 +5,24 @@
 
 module system(
 	input        clk, 
+	input        reset_n,
 	// Debug 
-	output [7:0] led,
-	input  [3:0] btn,
+	output [3:0] led,
+	input  [4:0] btn,
 	// Uart
 	input        uart_rxd, 
-	output       uart_txd
+	output       uart_cts,
+	output       uart_txd,
+	input        uart_rts
 );
 	
+assign uart_cts = 1;
+
 /////////////////////////////////////////////////////////////////////
 //
 // Local wires
 //
-
-wire         rst   = btn[0];
+wire         rst   = ~reset_n;
 wire         gnd   = 1'b0;
 wire   [3:0] gnd4  = 4'h0;
 wire  [31:0] gnd32 = 32'h00000000;
@@ -89,8 +93,7 @@ wire [31:0]  intr_n;
 wire         uart0_intr;
 
 assign intr_n = { 24'hFFFFFF, 7'b1111111, ~uart0_intr };
-assign led    = lm32i_adr[7:0];
-
+assign led    = { ~clk, ~rst, ~lm32i_stb, ~lm32i_ack };
 
 /////////////////////////////////////////////////////////////////////
 //
@@ -98,10 +101,10 @@ assign led    = lm32i_adr[7:0];
 //
 
 wb_conbus_top #(
-        .s0_addr_w ( 4 ),
-        .s0_addr   ( 4'h8 ),        // ddr0
+	.s0_addr_w ( 4 ),
+	.s0_addr   ( 4'h8 ),        // ddr0
 	.s1_addr_w ( 4 ),
-        .s1_addr   ( 4'h9 ),        // flash0
+	.s1_addr   ( 4'h9 ),        // flash0
 	.s27_addr_w( 16 ),
 	.s2_addr   ( 16'h0000 ),    // bram0 
 	.s3_addr   ( 16'hF000 ),    // uart0
@@ -285,9 +288,8 @@ wb_bram #(
 
 /////////////////////////////////////////////////////////////////////
 // uart0
-
 uart_core #(
-	.CLK_IN_MHZ( 50 ),
+	.CLK_IN_MHZ( 100 ),
 	.BAUD_RATE( 576000 )
 ) uart0 (
 	.CLK( clk ),

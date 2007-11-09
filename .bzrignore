@@ -40,3 +40,4 @@ Software/Bootloader/srectovhdl
 
 system_tb.vvp
 system_tb.vvp.list
+syn/system-routed.xdl

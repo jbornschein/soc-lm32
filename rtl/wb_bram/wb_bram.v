@@ -35,12 +35,12 @@ output        wb_ack_o;
 
 ///////////////////////////////////////////////////////////////////
 // Local 
-reg  [31:0] ram [2047:0];    // actual RAM
+reg  [31:0] ram [16383:0];    // actual RAM
 reg         ack;
-wire [10:0] addr;
+wire [13:0] addr;
 
 
-assign addr = wb_adr_i[12:2];       // 0..2047
+assign addr     = wb_adr_i[15:2];       // 0x0000 - 0xFFFF
 assign wb_ack_o = wb_stb_i & ack;
 
 
@@ -67,3 +67,4 @@ begin
 end
 
 endmodule
+
