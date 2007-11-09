@@ -25,6 +25,8 @@ syn/system_usage.xml
 syn/timing.twr
 syn/xst/
 sim/verilog.log
+sim/system_tb.vvp
+sim/system_tb.vvp.list
 sim/system_tb.vcd
 Toolchain/srec2vram/srec2vram
 Toolchain/srec2vhdl/srec2vhdl
@@ -36,7 +38,10 @@ Software/Bootloader/image.map
 Software/Bootloader/image.srec
 Software/Bootloader/main.d
 Software/Bootloader/spike_hw.d
-Software/Bootloader/srectovhdl
-
-system_tb.vvp
-system_tb.vvp.list
+Software/TestFirmware/crt0ram.d
+Software/TestFirmware/image
+Software/TestFirmware/image.lst
+Software/TestFirmware/image.map
+Software/TestFirmware/image.srec
+Software/TestFirmware/main.d
+Software/TestFirmware/spike_hw.d

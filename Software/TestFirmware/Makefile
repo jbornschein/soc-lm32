@@ -6,8 +6,8 @@ LM32_OBJDUMP=lm32-elf-objdump
 VHDLFILE=../../wb_bram.vhd
 
 CFLAGS=-MMD -O1 -Wall -g -s -fomit-frame-pointer -mbarrel-shift-enabled -mmultiply-enabled -mdivide-enabled -msign-extend-enabled
-LDFLAGS=-Tlinkcmd
-SEGMENTS = -j .text -j .data
+LDFLAGS=-Tlinker.ld
+SEGMENTS = -j .text -j .data -j .rodata
 
 all: image.bin image.lst image.srec
 
@@ -20,7 +20,7 @@ main.o: main.c
 spike_hw.o: spike_hw.c
 	$(LM32_CC) $(CFLAGS) -c spike_hw.c
 
-image: crt0ram.o main.o spike_hw.o linkcmd Makefile
+image: crt0ram.o main.o spike_hw.o linker.ld Makefile
 	$(LM32_LD) $(LDFLAGS) -Map image.map -N -o image crt0ram.o main.o spike_hw.o
 
 image.lst: image
