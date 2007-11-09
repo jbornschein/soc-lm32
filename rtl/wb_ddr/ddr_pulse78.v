@@ -17,9 +17,9 @@ module ddr_pulse78 #(
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
-`define PULSE78_RNG  8:0
+`define PULSE78_RNG  10:0
 
-parameter pulse78_init = 78 * (clk_freq/100000);
+parameter pulse78_init = 78 * (clk_freq/10000000);
 
 reg [`PULSE78_RNG] counter;
 

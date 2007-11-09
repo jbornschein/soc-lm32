@@ -1,6 +1,6 @@
 [size] 1280 955
 [pos] -1 -1
-*-23.000000 9980000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-27.000000 388330000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 @28
 system_tb.dut.clk
 system_tb.dut.rst
@@ -27,14 +27,6 @@ system_tb.dut.uart0_rxd
 -WB_DDR
 -DDR
 @28
-system_tb.dut.lm0.instruction_unit.icache_refill_request
-@22
-system_tb.dut.lm0.instruction_unit.first_address[31:2]
-@28
-system_tb.dut.lm0.instruction_unit.icache.refill_offset[3:2]
-@22
-load_store_unit.load_store_address_m[31:0]
-load_store_unit.load_store_address_x[31:0]
-@28
-load_store_unit.load_q_m
-load_store_unit.load_q_x
+system_tb.dut.ddr_clk
+system_tb.dut.ddr_ras_n
+system_tb.dut.ddr_cas_n

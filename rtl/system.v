@@ -365,8 +365,8 @@ wire uart0_rxd;
 wire uart0_txd;
 
 uart_core #(
-	.CLK_IN_MHZ(    50 ),
-	.BAUD_RATE( uart_baud_rate )
+	.CLK_IN_MHZ( clk_freq / 1000000  ),
+	.BAUD_RATE(  uart_baud_rate      )
 ) uart0 (
 	.CLK( clk ),
 	.RESET( rst ),
