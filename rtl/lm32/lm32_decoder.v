@@ -371,8 +371,8 @@ wire   shift = op_sl | op_sr | op_sru;
 wire   shift = op_sr | op_sru;
 `endif
 `ifdef CFG_MC_BARREL_SHIFT_ENABLED
-wire   shift_left = op_sl;
-wire   shift_right = op_sr | op_sru;
+assign shift_left = op_sl;
+assign shift_right = op_sr | op_sru;
 `endif
 `ifdef CFG_SIGN_EXTEND_ENABLED
 wire   sext = op_sextb | op_sexth;

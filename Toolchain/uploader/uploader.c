@@ -55,6 +55,8 @@ int main(int argc, char **argv)
 	filesize = ftell( infile );
 	fseek( infile, 0, SEEK_SET );
 
+	printf( "Hallo" );
+
 	blockstart = 0;
 	while(blockstart <= filesize) {
 		char buf[101];
@@ -63,7 +65,7 @@ int main(int argc, char **argv)
 		// Upload single block
 		fseek( infile, blockstart, SEEK_SET );
 		fputc( 'u', tty );
-		writeint( tty, 0xb0000000 + blockstart);
+		writeint( tty, 0x80000000 + blockstart);
 		writeint( tty, BLOCKSIZE );
 		checksum = 0;
 		for( i=0; i<BLOCKSIZE; i++ ) {

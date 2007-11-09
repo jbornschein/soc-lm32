@@ -116,7 +116,7 @@ parameter limit = 0;                                    // Limit (highest addres
 
 // For bytes_per_line == 4, we set 1 so part-select range isn't reversed, even though not really used 
 //localparam addr_offset_width = (bytes_per_line == 4 ? 1 : clogb2(bytes_per_line)-1-2);
-localparam addr_offset_width = 1;
+localparam addr_offset_width = 2;
 localparam addr_offset_lsb = 2;
 localparam addr_offset_msb = (addr_offset_lsb+addr_offset_width-1);
 
@@ -434,31 +434,31 @@ assign i_bte_o = `LM32_BTYPE_LINEAR;
 
 `ifdef CFG_ICACHE_ENABLED
 // Determine parameters for next cache refill Wishbone access                
-generate
-    case (bytes_per_line)
-    4:
-    begin
-assign first_cycle_type = `LM32_CTYPE_END;
-assign next_cycle_type = `LM32_CTYPE_END;
-assign last_word = `TRUE;
-assign first_address = icache_refill_address;
-    end
-    8:
-    begin
-assign first_cycle_type = `LM32_CTYPE_INCREMENTING;
-assign next_cycle_type = `LM32_CTYPE_END;
-assign last_word = i_adr_o[addr_offset_msb:addr_offset_lsb] == 1'b1;
-assign first_address = {icache_refill_address[`LM32_PC_WIDTH+2-1:addr_offset_msb+1], {addr_offset_width{1'b0}}};
-    end
-    16:
-    begin
+// generate
+//     case (bytes_per_line)
+//     4:
+//     begin
+// assign first_cycle_type = `LM32_CTYPE_END;
+// assign next_cycle_type = `LM32_CTYPE_END;
+// assign last_word = `TRUE;
+// assign first_address = icache_refill_address;
+//     end
+//     8:
+//     begin
+// assign first_cycle_type = `LM32_CTYPE_INCREMENTING;
+// assign next_cycle_type = `LM32_CTYPE_END;
+// assign last_word = i_adr_o[addr_offset_msb:addr_offset_lsb] == 1'b1;
+// assign first_address = {icache_refill_address[`LM32_PC_WIDTH+2-1:addr_offset_msb+1], {addr_offset_width{1'b0}}};
+//     end
+//     16:
+//     begin
 assign first_cycle_type = `LM32_CTYPE_INCREMENTING;
 assign next_cycle_type = i_adr_o[addr_offset_msb] == 1'b1 ? `LM32_CTYPE_END : `LM32_CTYPE_INCREMENTING;
 assign last_word = i_adr_o[addr_offset_msb:addr_offset_lsb] == 2'b11;
 assign first_address = {icache_refill_address[`LM32_PC_WIDTH+2-1:addr_offset_msb+1], {addr_offset_width{1'b0}}};
-    end
-    endcase
-endgenerate
+//     end
+//     endcase
+// endgenerate
 `endif
                      
 /////////////////////////////////////////////////////

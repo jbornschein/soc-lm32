@@ -23,8 +23,6 @@
 					  
 `include "lm32_include.v"
 
-`ifdef CFG_ICACHE_ENABLED
-
 `define LM32_IC_ADDR_OFFSET_RNG          addr_offset_msb:addr_offset_lsb
 `define LM32_IC_ADDR_SET_RNG             addr_set_msb:addr_set_lsb
 `define LM32_IC_ADDR_TAG_RNG             addr_tag_msb:addr_tag_lsb
@@ -81,8 +79,8 @@ parameter bytes_per_line = 16;                          // Number of bytes per c
 parameter base_address = 0;                             // Base address of cachable memory
 parameter limit = 0;                                    // Limit (highest address) of cachable memory
 
-localparam addr_offset_width = 1;
-localparam addr_set_width = 8;
+localparam addr_offset_width = 2;
+localparam addr_set_width = 9;
 localparam addr_offset_lsb = 2;
 localparam addr_offset_msb = (addr_offset_lsb+addr_offset_width-1);
 localparam addr_set_lsb = (addr_offset_msb+1);
@@ -420,5 +418,3 @@ end
 endgenerate
    
 endmodule
-
-`endif

@@ -1,7 +1,9 @@
 #ifndef SPIKEHW_H
 #define SPIKEHW_H
 
-#define FCPU         25000000
+#define RAM_START 0x80000000
+#define RAM_SIZE  0x04000000
+#define FCPU      50000000
 
 // 32 Bit
 typedef unsigned int  uint32_t;
@@ -17,6 +19,7 @@ extern void irq_disable();
 extern void irq_mask();
 extern void halt();
 extern void jump(uint32_t addr);
+
 extern uint32_t get_r0();
 extern uint32_t get_sp();
 extern uint32_t get_gp();

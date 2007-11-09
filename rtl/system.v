@@ -1,28 +1,49 @@
-////////////////////////////////////////////////////////////////////
-//
+//---------------------------------------------------------------------------
 // LatticeMico 32 System
-//
+//---------------------------------------------------------------------------
+`include "ddr_include.v"
 
-module system(
-	input        clk, 
-	input        reset_n,
+module system
+#(
+	parameter   uart_baud_rate  = 115200,
+	parameter   phase_shift     = 0,
+	parameter   clk_multiply    = 12,
+	parameter   clk_divide      = 10,
+	parameter   wait200_init    = 26
+) (
+	input                   clk, 
+	input                   reset_n,
+	// DDR connection
+	output                  ddr_clk,
+	output                  ddr_clk_n,
+	input                   ddr_clk_fb,
+	output                  ddr_ras_n,
+	output                  ddr_cas_n,
+	output                  ddr_we_n,
+	output                  ddr_cke,
+	output                  ddr_cs_n,
+	output [  `A_RNG]       ddr_a,
+	output [ `BA_RNG]       ddr_ba,
+	inout  [ `DQ_RNG]       ddr_dq,
+	inout  [`DQS_RNG]       ddr_dqs,
+	output [ `DM_RNG]       ddr_dm,
 	// Debug 
-	output [3:0] led,
-	input  [4:0] btn,
+	output            [3:0] led,
+	input             [4:0] btn,
 	// Uart
-	input        uart_rxd, 
-	output       uart_cts,
-	output       uart_txd,
-	input        uart_rts
+	input                   uart_rxd, 
+	output                  uart_cts,
+	output                  uart_txd,
+	input                   uart_rts
 );
 	
 assign uart_cts = 1;
 
-/////////////////////////////////////////////////////////////////////
-//
+//------------------------------------------------------------------
 // Local wires
-//
+//------------------------------------------------------------------
 wire         rst   = ~reset_n;
+
 wire         gnd   = 1'b0;
 wire   [3:0] gnd4  = 4'h0;
 wire  [31:0] gnd32 = 32'h00000000;
@@ -31,7 +52,9 @@ wire  [31:0] gnd32 = 32'h00000000;
 wire [31:0]  lm32i_adr,
              lm32d_adr,
              uart0_adr,
-             bram0_adr;
+             bram0_adr,
+             ddr0_adr;
+
 
 wire [31:0]  lm32i_dat_r,
              lm32i_dat_w,
@@ -40,32 +63,39 @@ wire [31:0]  lm32i_dat_r,
              uart0_dat_r,
              uart0_dat_w,
              bram0_dat_r,
-             bram0_dat_w;
+             bram0_dat_w,
+             ddr0_dat_w,
+             ddr0_dat_r;
 
 wire [3:0]   lm32i_sel,
              lm32d_sel,
              uart0_sel,
-             bram0_sel;
+             bram0_sel,
+             ddr0_sel;
 
 wire         lm32i_i_we,
              lm32d_i_we,
              uart0_i_we,
-             bram0_i_we;
+             bram0_i_we,
+             ddr0_i_we;
 
 wire         lm32i_cyc,
              lm32d_cyc,
              uart0_cyc,
-             bram0_cyc;
+             bram0_cyc,
+             ddr0_cyc;
 
 wire         lm32i_stb,
              lm32d_stb,
              uart0_stb,
-             bram0_stb;
+             bram0_stb,
+             ddr0_stb;
 
 wire         lm32i_ack,
              lm32d_ack,
              uart0_ack,
-             bram0_ack;
+             bram0_ack,
+             ddr0_ack;
 
 wire         lm32i_rty,
              lm32d_rty,
@@ -95,23 +125,23 @@ wire         uart0_intr;
 assign intr_n = { 24'hFFFFFF, 7'b1111111, ~uart0_intr };
 assign led    = { ~clk, ~rst, ~lm32i_stb, ~lm32i_ack };
 
-/////////////////////////////////////////////////////////////////////
-//
-// Wishbone Interconnect
-//
 
+
+//------------------------------------------------------------------
+// Wishbone Interconnect
+//------------------------------------------------------------------
 wb_conbus_top #(
 	.s0_addr_w ( 4 ),
-	.s0_addr   ( 4'h8 ),        // ddr0
+	.s0_addr   ( 4'h4 ),        // ddr0
 	.s1_addr_w ( 4 ),
-	.s1_addr   ( 4'h9 ),        // flash0
+	.s1_addr   ( 4'h5 ),        // flash0
 	.s27_addr_w( 16 ),
 	.s2_addr   ( 16'h0000 ),    // bram0 
 	.s3_addr   ( 16'hF000 ),    // uart0
-	.s4_addr   ( 16'hF002 ),    // timer
-	.s5_addr   ( 16'hF003 ),
-	.s6_addr   ( 16'hF004 ),
-	.s7_addr   ( 16'hF005 )
+	.s4_addr   ( 16'hF001 ),    // timer
+	.s5_addr   ( 16'hF002 ),
+	.s6_addr   ( 16'hF003 ),
+	.s7_addr   ( 16'hF004 )
 ) conmax0 (
 	.clk_i( clk ),
 	.rst_i( rst ),
@@ -175,8 +205,14 @@ wb_conbus_top #(
 	.m7_stb_i(  gnd    ),
 
 	// Slave0
-	.s0_dat_i(  gnd32  ),
-	.s0_ack_i(  gnd    ),
+	.s0_dat_i(  ddr0_dat_r   ),
+	.s0_dat_o(  ddr0_dat_w   ),
+	.s0_adr_o(  ddr0_adr     ),
+	.s0_sel_o(  ddr0_sel     ),
+	.s0_we_o(   ddr0_we      ),
+	.s0_cyc_o(  ddr0_cyc     ),
+	.s0_stb_o(  ddr0_stb     ),
+	.s0_ack_i(  ddr0_ack     ),
 	.s0_err_i(  gnd    ),
 	.s0_rty_i(  gnd    ),
 	// Slave1
@@ -229,9 +265,9 @@ wb_conbus_top #(
 );
 
 
-/////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------
 // LM32 CPU 
-
+//------------------------------------------------------------------
 lm32_cpu lm0 (
 	.clk_i(  clk  ),
 	.rst_i(  rst  ),
@@ -266,10 +302,11 @@ lm32_cpu lm0 (
 	.D_RTY_I(  lm32d_rty    )
 );
 	
-/////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------
 // Block RAM
-
+//------------------------------------------------------------------
 wb_bram #(
+	.adr_width( 16 ),
 	.mem_file_name( "../rtl/bram0.ram" )
 ) bram0 (
 	.clk_i(  clk  ),
@@ -285,12 +322,56 @@ wb_bram #(
 	.wb_we_i(   bram0_we     )
 );
 
+//------------------------------------------------------------------
+// ddr0
+//------------------------------------------------------------------
+wire [2:0] rot = 3'b000;
 
-/////////////////////////////////////////////////////////////////////
+wb_ddr #(
+	.phase_shift(  phase_shift  ),
+	.clk_multiply( clk_multiply ),
+	.clk_divide(   clk_divide   ),
+	.wait200_init( wait200_init )
+) ddr0 (
+	.clk(     clk    ),
+	.reset(   rst  ),
+	// DDR Ports
+	.ddr_clk(      ddr_clk     ),
+	.ddr_clk_n(    ddr_clk_n   ),
+	.ddr_clk_fb(   ddr_clk_fb  ),
+	.ddr_ras_n(    ddr_ras_n   ),
+	.ddr_cas_n(    ddr_cas_n   ),
+	.ddr_we_n(     ddr_we_n    ),
+	.ddr_cke(      ddr_cke     ),
+	.ddr_cs_n(     ddr_cs_n    ),
+	.ddr_a(        ddr_a       ),
+	.ddr_ba(       ddr_ba      ),
+	.ddr_dq(       ddr_dq      ),
+	.ddr_dqs(      ddr_dqs     ),
+	.ddr_dm(       ddr_dm      ),
+	// FML (FastMemoryLink)
+	.wb_cyc_i(    ddr0_cyc     ),
+	.wb_stb_i(    ddr0_stb     ),
+	.wb_we_i(     ddr0_we      ),
+	.wb_adr_i(    ddr0_adr     ),
+	.wb_dat_o(    ddr0_dat_r   ),
+	.wb_dat_i(    ddr0_dat_w   ),
+	.wb_sel_i(    ddr0_sel     ),
+	.wb_ack_o(    ddr0_ack     ),
+	// phase shifting
+	.rot(          rot         )
+);
+
+
+//------------------------------------------------------------------
 // uart0
+//------------------------------------------------------------------
+wire uart0_rxd;
+wire uart0_txd;
+
 uart_core #(
 	.CLK_IN_MHZ( 100 ),
-	.BAUD_RATE( 576000 )
+	.BAUD_RATE( uart_baud_rate )
 ) uart0 (
 	.CLK( clk ),
 	.RESET( rst ),
@@ -309,10 +390,70 @@ uart_core #(
 	.UART_RTY_O( uart0_rty ),
 	.UART_ERR_O( uart0_err ),
 	.INTR(       uart0_intr ),
-	.SIN(        uart_rxd ),
+	.SIN(        uart0_rxd ),
 	.RXRDY_N(    uart0_rxrdy_n ),
-	.SOUT(       uart_txd ),
+	.SOUT(       uart0_txd ),
 	.TXRDY_N(    uart0_txrdy_n )
 );
+
+//------------------------------------------------------------------
+// LogicAnalyzerComponent
+//------------------------------------------------------------------
+wire        lac_rxd;
+wire        lac_txd;
+wire        lac_cts;
+wire        lac_rts;
+assign      lac_rts = 1;
+wire [7:0]  select;
+wire [7:0]  probe;
+reg  [7:0]  probe_r;
+
+lac #(
+	.uart_freq_hz(    100000000 ),
+	.uart_baud(  uart_baud_rate ),
+	.adr_width(              11 ),
+	.width(                   8 )
+) lac0 (
+	.reset(           rst  ),
+	.uart_clk(        clk  ),
+	.uart_rxd(    lac_rxd  ),
+	.uart_cts(    lac_cts  ),
+	.uart_txd(    lac_txd  ),
+	.uart_rts(    lac_rts  ),
+	//
+	.probe_clk(  clk       ),
+	.probe(      probe_r   ),
+	.select(     select    )
+);
+
+always @(posedge clk)
+begin
+	if (rst)
+		probe_r <= 0;
+	else
+		probe_r <= probe;
+end
+
+assign probe = (select[3:0] == 'h0) ? { rst, lm32i_stb, lm32i_cyc, lm32i_ack, lm32d_stb, lm32d_cyc, lm32d_we, lm32d_ack } :
+               (select[3:0] == 'h1) ? lm32i_adr[31:24] :
+               (select[3:0] == 'h2) ? lm32i_adr[23:16] :
+               (select[3:0] == 'h3) ? lm32i_adr[15: 8] :
+               (select[3:0] == 'h4) ? lm32i_adr[ 7: 0] :
+               (select[3:0] == 'h5) ? lm32i_dat_r[31:24] :
+               (select[3:0] == 'h6) ? lm32i_dat_r[23:16] :
+               (select[3:0] == 'h7) ? lm32i_dat_r[15: 8] :
+               (select[3:0] == 'h8) ? lm32i_dat_r[ 7: 0] :
+               (select[3:0] == 'h9) ? lm32d_adr[31:24] :
+               (select[3:0] == 'ha) ? lm32d_adr[23:16] :
+               (select[3:0] == 'hb) ? lm32d_adr[15: 8] :
+                                      lm32d_adr[ 7: 0] ;
+
+assign uart_txd  = uart0_txd;
+assign uart0_rxd = uart_rxd;
+
+assign lac_rxd = 0;
+// assign uart_txd  = (sw[0]) ? uart0_txd : lac_txd;
+// assign lac_rxd   = (sw[0]) ?         1 : uart_rxd;
+// assign uart0_rxd = (sw[0]) ? uart_rxd  : 1;
 
 endmodule 

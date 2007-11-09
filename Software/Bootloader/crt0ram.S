@@ -23,10 +23,6 @@
  * SUCH DAMAGE.
  */
 
-#define _fstack _RAM_END
-#define _gp     _RAM_START
-
-
 /* Exception handlers - Must be 32 bytes long. */
         .section    .text, "ax", @progbits        
         .global     _start  
@@ -42,22 +38,39 @@ _reset_handler:
 	nop
 	nop
 
-_crt0:
-	/* Clear r0 */
-	xor     r0, r0, r0
+_breakpoint_handler:
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
 
+_crt0:
 	/* Setup stack and global pointer */
 	mvhi    sp, hi(_fstack)
 	ori     sp, sp, lo(_fstack)
-	addi    sp, sp, -4
 	mvhi    gp, hi(_gp)
 	ori     gp, gp, lo(_gp)
 
+	/* Clear BSS */
+	mvhi    r1, hi(_fbss)
+	ori     r1, r1, lo(_fbss)
+	mvhi    r3, hi(_ebss)
+	ori     r3, r3, lo(_ebss)
+.clearBSS:
+	be      r1, r3, .callMain
+	sw      (r1+0), r0
+	addi    r1, r1, 4
+	bi      .clearBSS
+	
+.callMain:
 	mvi     r1, 0
 	mvi     r2, 0
 	mvi     r3, 0
 	calli   main
-
 
 irq_enable:
 	mvi     r1, 1

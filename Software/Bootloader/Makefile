@@ -6,11 +6,11 @@ LM32_OBJDUMP=lm32-elf-objdump
 SREC2VHDL ?= ../../Toolchain/srec2vhdl/srec2vhdl
 SREC2VRAM ?= ../../Toolchain/srec2vram/srec2vram
 
-VRAMFILE=../../RTL/bram0.ram
+VRAMFILE=../../rtl/bram0.ram
 
 CFLAGS=-MMD -O2 -Wall -g -s -fomit-frame-pointer -mbarrel-shift-enabled   -mmultiply-enabled -mdivide-enabled -msign-extend-enabled
-LDFLAGS=-Tlinkcmd
-SEGMENTS = -j .text -j .data
+LDFLAGS=-Tlinker.ld
+SEGMENTS = -j .text -j .rodata -j .data
 
 all: $(VRAMFILE) 
 

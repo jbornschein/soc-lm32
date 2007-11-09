@@ -9,7 +9,7 @@ def wait (msec)
     end    
 end
 
-sp = SerialPort.new(ARGV[0], 57600, 8, 1, SerialPort::NONE)
+sp = SerialPort.new(ARGV[0], 115200, 8, 1, SerialPort::NONE)
 checksum = 0
 upFileSize =  File.size(ARGV[1])
 uploadFile = File.open(ARGV[1], "r")

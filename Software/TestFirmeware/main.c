@@ -29,7 +29,7 @@ char glob[] = "Global";
 volatile uint32_t *p;
 volatile uint8_t *p2;
 
-void main()
+int main()
 {
     char test2[] = "Lokalerstr";
     char *str = test2;

@@ -5,5 +5,6 @@ run
 -opt_mode AREA
 -opt_level 2
 -ofn system.ngc
+-register_balancing yes
 -p xc2vp30-ff896-7
 
