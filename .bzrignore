@@ -45,3 +45,4 @@ Software/TestFirmware/image.map
 Software/TestFirmware/image.srec
 Software/TestFirmware/main.d
 Software/TestFirmware/spike_hw.d
+syn/system-routed.xdl

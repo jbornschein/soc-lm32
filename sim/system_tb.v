@@ -10,10 +10,11 @@ module system_tb;
 // Parameter (may differ for physical synthesis)
 //----------------------------------------------------------------------------
 parameter tck              = 20;       // clock period in ns
-parameter uart_baud_rate   = 900000;  // uart baud rate for simulation 
+parameter uart_baud_rate   = 900000;   // uart baud rate for simulation 
 parameter ddr_phase_shift  = 100;      //
 parameter ddr_wait200_init = 26;       //
 
+parameter clk_freq = 1000000000 / tck; // Frequenzy in HZ
 //----------------------------------------------------------------------------
 //
 //----------------------------------------------------------------------------
@@ -39,8 +40,8 @@ wire         rx_avail;
 reg          rx_ack;
 
 uart #(
-	.freq_hz(    50000000 ),
-	.baud( uart_baud_rate )
+	.freq_hz(  clk_freq       ),
+	.baud(     uart_baud_rate )
 ) tb_uart (
 	.reset(    reset     ),
 	.clk(      clk       ),
@@ -137,9 +138,10 @@ assign ddr_clk_fb = ddr_clk;
 // Decive Under Test 
 //------------------------------------------------------------------
 system #(
-	.uart_baud_rate( uart_baud_rate   ),
-	.phase_shift(    ddr_phase_shift  ),
-	.wait200_init(   ddr_wait200_init )
+	.clk_freq(           clk_freq         ),
+	.uart_baud_rate(     uart_baud_rate   ),
+	.ddr_phase_shift(    ddr_phase_shift  ),
+	.ddr_wait200_init(   ddr_wait200_init )
 ) dut  (
 	.clk(          clk    ),
 	// Debug

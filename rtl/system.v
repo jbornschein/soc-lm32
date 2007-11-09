@@ -1,15 +1,16 @@
 //---------------------------------------------------------------------------
-// LatticeMico 32 System
+// LatticeMico32 System On A Chip
 //---------------------------------------------------------------------------
 `include "ddr_include.v"
 
 module system
 #(
-	parameter   uart_baud_rate  = 115200,
-	parameter   phase_shift     = 0,
-	parameter   clk_multiply    = 12,
-	parameter   clk_divide      = 5,
-	parameter   wait200_init    = 26
+	parameter   clk_freq         = 50000000,
+	parameter   uart_baud_rate   = 115200,
+	parameter   ddr_clk_multiply = 12,
+	parameter   ddr_clk_divide   = 5,
+	parameter   ddr_phase_shift  = 0,
+	parameter   ddr_wait200_init = 26
 ) (
 	input                   clk, 
 	// DDR connection
@@ -21,16 +22,16 @@ module system
 	output                  ddr_we_n,
 	output                  ddr_cke,
 	output                  ddr_cs_n,
-	output [  `A_RNG]       ddr_a,
-	output [ `BA_RNG]       ddr_ba,
-	inout  [ `DQ_RNG]       ddr_dq,
-	inout  [`DQS_RNG]       ddr_dqs,
-	output [ `DM_RNG]       ddr_dm,
+	output       [  `A_RNG] ddr_a,
+	output       [ `BA_RNG] ddr_ba,
+	inout        [ `DQ_RNG] ddr_dq,
+	inout        [`DQS_RNG] ddr_dqs,
+	output       [ `DM_RNG] ddr_dm,
 	// Debug 
-	output [7:0]            led,
-	input  [3:0]            btn,
-	input  [3:0]            sw,
-	input  [2:0]            rot,
+	output            [7:0] led,
+	input             [3:0] btn,
+	input             [3:0] sw,
+	input             [2:0] rot,
 	// Uart
 	input                   uart_rxd, 
 	output                  uart_txd
@@ -321,10 +322,11 @@ wb_bram #(
 // ddr0
 //------------------------------------------------------------------
 wb_ddr #(
-	.phase_shift(  phase_shift  ),
-	.clk_multiply( clk_multiply ),
-	.clk_divide(   clk_divide   ),
-	.wait200_init( wait200_init )
+	.clk_freq(     clk_freq         ),
+	.clk_multiply( ddr_clk_multiply ),
+	.clk_divide(   ddr_clk_divide   ),
+	.phase_shift(  ddr_phase_shift  ),
+	.wait200_init( ddr_wait200_init )
 ) ddr0 (
 	.clk(     clk    ),
 	.reset(   rst  ),
@@ -402,7 +404,7 @@ wire [7:0]  probe;
 reg  [7:0]  probe_r;
 
 lac #(
-	.uart_freq_hz(     50000000 ),
+	.uart_freq_hz(     clk_freq ),
 	.uart_baud(  uart_baud_rate ),
 	.adr_width(              11 ),
 	.width(                   8 )
