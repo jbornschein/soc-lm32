@@ -40,18 +40,18 @@ void writeint(uint8_t nibbles, uint32_t val)
 
 void memtest()
 {
-	volatile int *p;
+	volatile uint32_t *p;
 
 	uart_putstr("\r\nMEMTEST...");
 
-	for (p=(int *)RAM_START; p<(int *)(RAM_START+RAM_SIZE); p++) {
-		*p = (int) p;  
+	for (p=(uint32_t *)RAM_START; p<(uint32_t *)(RAM_START+RAM_SIZE); p++) {
+		*p = (uint32_t) p;  
 	}
 	
 	uart_putstr("...");
 
-	for (p=(int *)RAM_START; p<(int *)(RAM_START+RAM_SIZE); p++) {
-		if (*p != (int)p) {
+	for (p=(uint32_t *)RAM_START; p<(uint32_t *)(RAM_START+RAM_SIZE); p++) {
+		if (*p != (uint32_t)p) {
 			uart_putstr("\r\nMEMTEST ERROR: ");
 			writeint(8, p);
 		}
@@ -61,8 +61,8 @@ void memtest()
 
 int main(int argc, char **argv)
 {
-	volatile int8_t  *p;
-	volatile int32_t *p32;
+	int8_t  *p;
+	int32_t *p32;
 	uint8_t checksum;
 
 	// Initialize stuff
@@ -70,6 +70,7 @@ int main(int argc, char **argv)
 	//irq_enable();
 
 	uart_putstr("\r\n\r\n** SPIKE BOOTLOADER **\n");
+	memtest();
 	for(;;) {
 		uint32_t start, size, checksum, help;
 		uart_putchar('>');

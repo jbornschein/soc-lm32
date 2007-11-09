@@ -77,7 +77,7 @@ wire                   wdata_avail = ~wdata_empty;
 
 async_fifo #(
 	.DATA_WIDTH( `WFIFO_WIDTH ),
-	.ADDRESS_WIDTH( 4 )
+	.ADDRESS_WIDTH( 3 )
 ) wdata_fifo (
 	.Data_out(   wdata_data  ),
 	.Empty_out(  wdata_empty ),
@@ -122,7 +122,7 @@ begin
 
 			case (cba_cmd)
 				`DDR_CMD_MRS   : delay_count <= 2;
-				`DDR_CMD_AR    : delay_count <= 15;
+				`DDR_CMD_AR    : delay_count <= 14;
 				`DDR_CMD_ACT   : delay_count <= 4;
 				`DDR_CMD_PRE   : delay_count <= 2;
 				`DDR_CMD_READ  : delay_count <= 6;   // XXX
@@ -146,7 +146,7 @@ begin
 		read_shr <= 'b0;
 	else begin
 		if (read_cmd)
- 			read_shr <= { 5'b00011111 };
+ 			read_shr <= { 8'b00011111 };
  		else
  			read_shr <= { read_shr[1:7], 1'b0 };
  	end

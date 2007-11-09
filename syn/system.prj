@@ -4,6 +4,8 @@ verilog work ../rtl/lac/uart.v
 verilog work ../rtl/lac/dp_ram.v
 verilog work ../rtl/lm32/lm32_cpu.v
 verilog work ../rtl/lm32/lm32_instruction_unit.v
+verilog work ../rtl/lm32/lm32_icache.v
+verilog work ../rtl/lm32/lm32_ram.v
 verilog work ../rtl/lm32/lm32_decoder.v
 verilog work ../rtl/lm32/lm32_load_store_unit.v
 verilog work ../rtl/lm32/lm32_adder.v

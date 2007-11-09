@@ -30,6 +30,7 @@ SYSTEM_TB_SRC=                         \
 	../rtl/lm32/lm32_mc_arithmetic.v   \
 	../rtl/lm32/lm32_interrupt.v       \
 	../rtl/lm32/lm32_icache.v          \
+	../rtl/lm32/lm32_dcache.v          \
 	../rtl/lm32/lm32_ram.v             \
 	../rtl/wb_bram/wb_bram.v           \
 	../rtl/wb_ddr/wb_ddr.v             \

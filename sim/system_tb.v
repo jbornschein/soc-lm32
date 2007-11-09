@@ -183,6 +183,9 @@ initial begin
 	#0  reset <= 1;
 	#80 reset <= 0;
 	
+
+	#(tck*2000) $finish;
+
 	#350000
 
 	// send 'g'

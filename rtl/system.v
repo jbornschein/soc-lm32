@@ -7,7 +7,7 @@ module system
 #(
 	parameter   uart_baud_rate  = 115200,
 	parameter   phase_shift     = 0,
-	parameter   clk_multiply    = 13,
+	parameter   clk_multiply    = 12,
 	parameter   clk_divide      = 5,
 	parameter   wait200_init    = 26
 ) (
@@ -127,16 +127,16 @@ assign intr_n = { 24'hFFFFFF, 7'b1111111, ~uart0_intr };
 //------------------------------------------------------------------
 wb_conbus_top #(
 	.s0_addr_w ( 4 ),
-	.s0_addr   ( 4'h8 ),        // ddr0
+	.s0_addr   ( 4'h4 ),        // ddr0
 	.s1_addr_w ( 4 ),
-	.s1_addr   ( 4'h9 ),        // flash0
+	.s1_addr   ( 4'h5 ),        // flash0
 	.s27_addr_w( 16 ),
 	.s2_addr   ( 16'h0000 ),    // bram0 
 	.s3_addr   ( 16'hF000 ),    // uart0
-	.s4_addr   ( 16'hF002 ),    // timer
-	.s5_addr   ( 16'hF003 ),
-	.s6_addr   ( 16'hF004 ),
-	.s7_addr   ( 16'hF005 )
+	.s4_addr   ( 16'hF001 ),    // timer
+	.s5_addr   ( 16'hF002 ),
+	.s6_addr   ( 16'hF003 ),
+	.s7_addr   ( 16'hF004 )
 ) conmax0 (
 	.clk_i( clk ),
 	.rst_i( rst ),

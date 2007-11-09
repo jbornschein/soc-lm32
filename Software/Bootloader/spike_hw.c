@@ -1,9 +1,9 @@
 #include "spike_hw.h"
 
-volatile timer_t  *timer0 = (volatile timer_t *)  0x80000000;
-volatile uart_t   *uart0  = (volatile uart_t *)   0xF0000000;
-volatile gpio_t   *gpio0  = (volatile gpio_t *)   0x80002000;
-volatile uint32_t *sram0  = (volatile uint32_t *) 0xB0000000;
+uart_t   *uart0  = (uart_t *)   0xF0000000;
+timer_t  *timer0 = (timer_t *)  0xF0001000;
+gpio_t   *gpio0  = (gpio_t *)   0xF0002000;
+uint32_t *sram0  = (uint32_t *) 0x40000000;
 
 uint32_t msec = 0;
 

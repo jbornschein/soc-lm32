@@ -1,6 +1,6 @@
 [size] 1280 955
 [pos] -1 -1
-*-26.000000 97900000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-23.000000 9980000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 @28
 system_tb.dut.clk
 system_tb.dut.rst
@@ -13,12 +13,10 @@ system_tb.dut.lm32i_ack
 system_tb.dut.lm32i_adr[31:0]
 @28
 system_tb.dut.lm32d_stb
+system_tb.dut.lm32d_we
 system_tb.dut.lm32d_ack
 @22
 system_tb.dut.lm32d_adr[31:0]
-@28
-system_tb.dut.lm32d_we
-@22
 system_tb.dut.lm32d_dat_r[31:0]
 system_tb.dut.lm32d_dat_w[31:0]
 system_tb.dut.intr_n[31:0]
@@ -27,26 +25,16 @@ system_tb.dut.uart0_txd
 system_tb.dut.uart0_rxd
 @200
 -WB_DDR
-@28
-system_tb.dut.ddr0.ctrl0.clk
-system_tb.dut.ddr0.wb_rd
-system_tb.dut.ddr0.wb_wr
-system_tb.dut.ddr0.wb_ack_o
-@22
-system_tb.dut.ddr0.wb_adr_tag[25:11]
-system_tb.dut.ddr0.wb_adr_set[10:4]
-@28
-system_tb.dut.ddr0.wb_adr_word[3:2]
-system_tb.dut.ddr0.ls_fill
-@29
-system_tb.dut.ddr0.ls_spill
-@200
 -DDR
 @28
-system_tb.dut.ddr0.ctrl0.reset_int
-system_tb.dut.ddr0.ctrl0.ddr_clk
-system_tb.dut.ddr0.ctrl0.init_done
-system_tb.dut.ddr0.ctrl0.fml_rd
-system_tb.dut.ddr0.ctrl0.fml_wr
-system_tb.dut.ddr0.ctrl0.fml_done
-system_tb.dut.ddr0.ls_adr_word[3:2]
+system_tb.dut.lm0.instruction_unit.icache_refill_request
+@22
+system_tb.dut.lm0.instruction_unit.first_address[31:2]
+@28
+system_tb.dut.lm0.instruction_unit.icache.refill_offset[3:2]
+@22
+load_store_unit.load_store_address_m[31:0]
+load_store_unit.load_store_address_x[31:0]
+@28
+load_store_unit.load_q_m
+load_store_unit.load_q_x

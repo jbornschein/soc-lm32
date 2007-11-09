@@ -6,7 +6,7 @@
 #define RAMSIZE   0x400
 #define RAMEND    (RAMSTART + RAMSIZE)
 
-#define RAM_START 0x80000000
+#define RAM_START 0x40000000
 #define RAM_SIZE  0x04000000
 
 #define FCPU      50000000
@@ -53,7 +53,6 @@ typedef struct {
 	volatile uint32_t tcr1;
 	volatile uint32_t compare1;
 	volatile uint32_t counter1;
-
 } timer_t;
 
 /***************************************************************************
@@ -82,18 +81,14 @@ typedef struct {
 /***************************************************************************
  * Spike peripheral components
  */
-extern volatile uart_t  *uart0;
-extern volatile timer_t *timer0;
-extern volatile gpio_t  *gpio0;
-
 void uart_init();
 void uart_putchar(char c);
 void uart_putstr(char *str);
 char uart_getchar();
 
-extern volatile timer_t  *timer0;
-extern volatile uart_t   *uart0; 
-extern volatile gpio_t   *gpio0; 
-extern volatile uint32_t *sram0; 
+extern timer_t  *timer0;
+extern uart_t   *uart0; 
+extern gpio_t   *gpio0; 
+extern uint32_t *sram0; 
 
 #endif // SPIKEHW_H

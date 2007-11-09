@@ -59,7 +59,8 @@
 
 // Range of Program Counter. Two LSBs are always 0. 
 `ifdef CFG_ICACHE_ENABLED
-`define LM32_PC_WIDTH                   (clogb2(`CFG_ICACHE_LIMIT-`CFG_ICACHE_BASE_ADDRESS)-2)
+// XXX `define LM32_PC_WIDTH                   (clogb2(`CFG_ICACHE_LIMIT-`CFG_ICACHE_BASE_ADDRESS)-2) XXX
+`define LM32_PC_WIDTH                   30
 `else
 `ifdef CFG_IWB_ENABLED
 `define LM32_PC_WIDTH                   (`LM32_WORD_WIDTH-2)

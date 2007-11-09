@@ -9,8 +9,8 @@ SREC2VRAM ?= ../../Toolchain/srec2vram/srec2vram
 VRAMFILE=../../rtl/bram0.ram
 
 CFLAGS=-MMD -O2 -Wall -g -s -fomit-frame-pointer -mbarrel-shift-enabled   -mmultiply-enabled -mdivide-enabled -msign-extend-enabled
-LDFLAGS=-Tlinkcmd
-SEGMENTS = -j .text -j .data
+LDFLAGS=-Tlinker.ld
+SEGMENTS = -j .text -j .rodata -j .data
 
 all: $(VRAMFILE) 
 
