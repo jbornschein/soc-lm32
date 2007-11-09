@@ -18,19 +18,19 @@ module ddr_ctrl
 	// Temporary DCM control input
 	input  [2:0]            rot,     // XXX
 	//  DDR ports
-	output                  ddr_clk,
-	output                  ddr_clk_n,
+	output            [2:0] ddr_clk,
+	output            [2:0] ddr_clk_n,
 	input                   ddr_clk_fb,
 	output                  ddr_ras_n,
 	output                  ddr_cas_n,
 	output                  ddr_we_n,
-	output                  ddr_cke,
-	output                  ddr_cs_n,
-	output [  `A_RNG]       ddr_a,
-	output [ `BA_RNG]       ddr_ba,
-	inout  [ `DQ_RNG]       ddr_dq,
-	inout  [`DQS_RNG]       ddr_dqs,
-	output [ `DM_RNG]       ddr_dm,
+	output            [1:0] ddr_cke,
+	output            [1:0] ddr_cs_n,
+	output       [  `A_RNG] ddr_a,
+	output       [ `BA_RNG] ddr_ba,
+	inout        [ `DQ_RNG] ddr_dq,
+	inout        [`DQS_RNG] ddr_dqs,
+	output       [ `DM_RNG] ddr_dm,
 	// FML (FastMemoryLink)
 	output reg              fml_done,
 	input  [`FML_ADR_RNG]   fml_adr,
@@ -327,7 +327,7 @@ end
 //----------------------------------------------------------------------------
 // Demux dqs and dq
 //----------------------------------------------------------------------------
-assign ddr_cke   = ~wait200;     // bring up CKE as soon 200us wait is finished
+assign ddr_cke   = { ~wait200, ~wait200 }; // bring up CKE as soon 200us wait is finished
 
 assign ddr_dqs = ddr_dqs_oe!=1'b0 ? ddr_dqs_o : 'bz;
 assign ddr_dq  = ddr_dqs_oe!=1'b0 ? ddr_dq_o  : 'bz;
@@ -335,7 +335,7 @@ assign ddr_dq  = ddr_dqs_oe!=1'b0 ? ddr_dq_o  : 'bz;
 assign ddr_dqs_i = ddr_dqs;
 assign ddr_dq_i  = ddr_dq;
 
-assign ddr_cs_n = 0;
+assign ddr_cs_n = 'b0;
 
 endmodule
 

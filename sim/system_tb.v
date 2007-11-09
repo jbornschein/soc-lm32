@@ -99,14 +99,14 @@ endtask
 //----------------------------------------------------------------------------
 // DDR connection
 //----------------------------------------------------------------------------
-wire            ddr_clk;
-wire            ddr_clk_n;
+wire      [2:0] ddr_clk;
+wire      [2:0] ddr_clk_n;
 wire            ddr_clk_fb;
 wire            ddr_ras_n;
 wire            ddr_cas_n;
 wire            ddr_we_n;
-wire            ddr_cke;
-wire            ddr_cs_n;
+wire      [1:0] ddr_cke;
+wire      [1:0] ddr_cs_n;
 wire [  `A_RNG] ddr_a;
 wire [ `BA_RNG] ddr_ba;
 wire [ `DQ_RNG] ddr_dq;
@@ -117,18 +117,18 @@ wire [ `DM_RNG] ddr_dm;
 // Micron DDR Memory
 //----------------------------------------------------------------------------
 ddr mt46v16m16 (
-	.Dq(     ddr_dq    ),
-	.Dqs(    ddr_dqs   ),
-	.Addr(   ddr_a     ),
-	.Ba(     ddr_ba    ),
-	.Clk(    ddr_clk   ),
-	.Clk_n(  ddr_clk_n ),
-	.Cke(    ddr_cke   ),
-	.Cs_n(   ddr_cs_n  ),
-	.Ras_n(  ddr_ras_n ),
-	.Cas_n(  ddr_cas_n ),
-	.We_n(   ddr_we_n  ),
-	.Dm(     ddr_dm    )
+	.Dq(     ddr_dq       ),
+	.Dqs(    ddr_dqs      ),
+	.Addr(   ddr_a        ),
+	.Ba(     ddr_ba       ),
+	.Clk(    ddr_clk[0]   ),
+	.Clk_n(  ddr_clk_n[0] ),
+	.Cke(    ddr_cke[0]   ),
+	.Cs_n(   ddr_cs_n[0]  ),
+	.Ras_n(  ddr_ras_n    ),
+	.Cas_n(  ddr_cas_n    ),
+	.We_n(   ddr_we_n     ),
+	.Dm(     ddr_dm       )
 );
 
 assign ddr_clk_fb = ddr_clk;

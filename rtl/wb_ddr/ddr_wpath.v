@@ -1,11 +1,8 @@
 //----------------------------------------------------------------------------
-//
 // Wishbone DDR Controller -- fast write data-path
 // 
 // (c) Joerg Bornschein (<jb@capsec.org>)
-//
 //----------------------------------------------------------------------------
-
 `include "ddr_include.v"
 
 module ddr_wpath (
@@ -25,16 +22,16 @@ module ddr_wpath (
 	// sample to rdata
 	output                 sample,
 	// DDR 
-	output                 ddr_clk,
-	output                 ddr_clk_n,
+	output           [2:0] ddr_clk,
+	output           [2:0] ddr_clk_n,
 	output                 ddr_ras_n,
 	output                 ddr_cas_n,
 	output                 ddr_we_n,
-	output [  `A_RNG]      ddr_a,
-	output [ `BA_RNG]      ddr_ba,
-	output [ `DM_RNG]      ddr_dm,
-	output [ `DQ_RNG]      ddr_dq,
-	output [`DQS_RNG]      ddr_dqs,
+	output      [  `A_RNG] ddr_a,
+	output      [ `BA_RNG] ddr_ba,
+	output      [ `DM_RNG] ddr_dm,
+	output      [ `DQ_RNG] ddr_dq,
+	output      [`DQS_RNG] ddr_dqs,
  	output                 ddr_dqs_oe
 );
 
@@ -184,28 +181,31 @@ begin
   ddr_dqs_oe_reg <= write_shr[0];
 end
 
-FDDRRSE ddr_clk_reg (
-	.Q(   ddr_clk      ),
-	.C0(  clk90        ),
-	.C1( ~clk90        ),
-	.CE(  vcc          ),
-	.D0(  vcc          ),
-	.D1(  gnd          ),
-	.R(   gnd          ),
-	.S(   gnd          )
-);
+generate 
+for (i=0; i<3; i=i+1) begin : CLK
+	FDDRRSE ddr_clk_reg (
+		.Q(   ddr_clk[i]   ),
+		.C0(  clk90        ),
+		.C1( ~clk90        ),
+		.CE(  vcc          ),
+		.D0(  vcc          ),
+		.D1(  gnd          ),
+		.R(   gnd          ),
+		.S(   gnd          )
+	);
 
-FDDRRSE ddr_clk_n_reg (
-	.Q(   ddr_clk_n    ),
-	.C0(  clk90        ),
-	.C1( ~clk90        ),
-	.CE(  vcc          ),
-	.D0(  gnd          ),
-	.D1(  vcc          ),
-	.R(   gnd          ),
-	.S(   gnd          )
-);
-
+	FDDRRSE ddr_clk_n_reg (
+		.Q(   ddr_clk_n[i] ),
+		.C0(  clk90        ),
+		.C1( ~clk90        ),
+		.CE(  vcc          ),
+		.D0(  gnd          ),
+		.D1(  vcc          ),
+		.R(   gnd          ),
+		.S(   gnd          )
+	);
+end
+endgenerate
 
 generate 
 for (i=0; i<`DQS_WIDTH; i=i+1) begin : DQS
