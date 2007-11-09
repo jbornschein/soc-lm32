@@ -7,6 +7,7 @@
 
 module wb_ddr
 #(
+	parameter clk_freq     = 50000000,
 	parameter phase_shift  = 0,
 	parameter clk_multiply = 12,
 	parameter clk_divide   = 5,
@@ -417,8 +418,6 @@ begin
 	endcase
 end
 
-	
-
 //----------------------------------------------------------------------------
 // DDR Controller Engine (including clkgen, [rw]-path)
 //----------------------------------------------------------------------------
@@ -435,6 +434,7 @@ reg                 fml_rnext;
 wire [`FML_DAT_RNG] fml_rdat;
 
 ddr_ctrl #(
+	.clk_freq(     clk_freq     ),
 	.phase_shift(  phase_shift  ),
 	.clk_multiply( clk_multiply ),
 	.clk_divide(   clk_divide   ),

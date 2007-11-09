@@ -7,9 +7,10 @@
 
 module ddr_ctrl 
 #(
-	parameter phase_shift  = 0,
+	parameter clk_freq     = 50000000,
 	parameter clk_multiply = 12,
 	parameter clk_divide   = 5,
+	parameter phase_shift  = 0,
 	parameter wait200_init = 26
 ) (
 	input                   clk, 
@@ -151,10 +152,12 @@ wire pulse78;
 reg  ar_req;
 reg  ar_done;
 
-ddr_pulse78 pulse79_gen (
-	.clk(     clk        ),
-	.reset(   reset_int  ),
-	.pulse78( pulse78    )
+ddr_pulse78 #(
+	.clk_freq( clk_freq )
+) pulse79_gen (
+	.clk(      clk        ),
+	.reset(    reset_int  ),
+	.pulse78(  pulse78    )
 );
 
 //----------------------------------------------------------------------------
