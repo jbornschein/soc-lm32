@@ -9,7 +9,7 @@ module system
 	parameter   uart_baud_rate   = 115200,
 	parameter   ddr_clk_multiply = 13,
 	parameter   ddr_clk_divide   = 10,
-	parameter   ddr_phase_shift  = 160,
+	parameter   ddr_phase_shift  = 180,
 	parameter   ddr_wait200_init = 52
 ) (
 	input                   clk, 
@@ -126,7 +126,7 @@ wire [1:0]   lm32i_bte,
              lm32d_bte;
 
 wire [31:0]  intr_n;
-wire         uart0_intr;
+wire         uart0_intr = 0;
 
 assign intr_n = { 24'hFFFFFF, 7'b1111111, ~uart0_intr };
 assign led    = { ~clk, ~rst, ~lm32i_stb, ~lm32i_ack };
@@ -379,31 +379,24 @@ wb_ddr #(
 wire uart0_rxd;
 wire uart0_txd;
 
-uart_core #(
-	.CLK_IN_MHZ( clk_freq / 1000000  ),
-	.BAUD_RATE(  uart_baud_rate      )
+wb_uart #(
+	.clk_freq( clk_freq        ),
+	.baud(     uart_baud_rate  )
 ) uart0 (
-	.CLK( clk ),
-	.RESET( rst ),
+	.clk( clk ),
+	.reset( rst ),
 	//
-	.UART_ADR_I( uart0_adr ),
-	.UART_DAT_I( uart0_dat_w ),
-	.UART_DAT_O( uart0_dat_r ),
-	.UART_STB_I( uart0_stb ),
-	.UART_CYC_I( uart0_cyc ),
-	.UART_WE_I(  uart0_we ),
-	.UART_SEL_I( uart0_sel ),
-	.UART_CTI_I( uart0_cti ),
-	.UART_BTE_I( uart0_bte ),
-	.UART_LOCK_I(uart0_lock ),
-	.UART_ACK_O( uart0_ack ), 
-	.UART_RTY_O( uart0_rty ),
-	.UART_ERR_O( uart0_err ),
-	.INTR(       uart0_intr ),
-	.SIN(        uart0_rxd ),
-	.RXRDY_N(    uart0_rxrdy_n ),
-	.SOUT(       uart0_txd ),
-	.TXRDY_N(    uart0_txrdy_n )
+	.wb_adr_i( uart0_adr ),
+	.wb_dat_i( uart0_dat_w ),
+	.wb_dat_o( uart0_dat_r ),
+	.wb_stb_i( uart0_stb ),
+	.wb_cyc_i( uart0_cyc ),
+	.wb_we_i(  uart0_we ),
+	.wb_sel_i( uart0_sel ),
+	.wb_ack_o( uart0_ack ), 
+//	.intr(       uart0_intr ),
+	.uart_rxd( uart0_rxd ),
+	.uart_txd( uart0_txd )
 );
 
 //------------------------------------------------------------------

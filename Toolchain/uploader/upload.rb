@@ -1,42 +1,88 @@
 #!/usr/bin/env ruby
-$0 = __FILE__
 
 require "serialport.so"
+require "optparse"
 
-def wait (msec)
-    t = Time.now    
-    while (Time.now - t)*1000 < msec do
-    end    
+port_baud = 115200
+port_path = "/dev/ttyUSB0"
+
+opts = OptionParser.new do |o|
+	o.banner = "Usage: upload.rb [options] <file.srec>"
+
+	o.on( "-b", "--baud BAUDRATE", Integer, 
+			"Serial port baudrate (default: #{port_baud})" ) do |baud|
+		port_baud = baud
+	end
+
+	o.on( "-s", "--serial SERIALPORT", 
+	         "Path to serial port (default: #{port_path})" ) do |port|
+		port_path = port
+	end
+
+	o.on_tail( "-h", "--help", "Display this help message" ) do
+		puts o
+		exit 0
+	end
 end
 
-sp = SerialPort.new(ARGV[0], 115200, 8, 1, SerialPort::NONE)
-checksum = 0
-upFileSize =  File.size(ARGV[1])
-uploadFile = File.open(ARGV[1], "r")
-puts "File loaded." if uploadFile
-puts upFileSize
+#############################################################################
+# Check arguments, open serial port and file
 begin
-    waitTime = 4    
+	opts.parse!(ARGV)
+
+	raise "SREC file argument missing" if ARGV.length != 1;
+
+	file_path = ARGV[0]
+
+	file = File.open( file_path, "r" )
+	raise "Could not SREC file." if not file;
+
+	fileSize = File.size( file_path )
+
+	port = SerialPort.new(port_path, port_baud, 8, 1, SerialPort::NONE)
+	raise "Could not open serial port." if not port;
+
+rescue => e
+	STDERR.puts "\nERROR: #{e.message}"
+	STDERR.puts
+	STDERR.puts opts
+	STDERR.puts
+	exit 1
+end
+
+
+#############################################################################
+# 
+begin
+    port.putc 'r'
+
+    begin
+        putc(ch = port.getc)
+    end while ch != 62
+    puts "Spike bootloader found"
+
+	#
+	#port.puts "v4000000040001000"
+    #begin
+    #    putc(ch = port.getc)
+    #end while ch != 62
+	#exit 0
+
+	uploadFile = file
+	sp = port
     
-    puts "Spike Upload Tool"
     ch = 0;
     # warte auf Eingabe
-    sp.putc 'r'
-    begin
-        putc(ch = sp.getc)
-    end while ch != 62
         
-    puts "Spike bootloader found"
     error = 0
-    puts "tansmitting"
+    puts "Transmitting..."
     uploadFile.each_line do |line|
-       b = 1
-       if line[0..1] == "S3"
+		b = 1
+		if line[0..1] == "S3"
             begin 
                 sp.putc 'u' 
                 sz = line[2..-5]
                 sz.each_byte do |b|
-                    wait(waitTime/4)
                     putc '.'
                     sp.putc b
                 end   
@@ -49,28 +95,19 @@ begin
                 end          
                 error += 1    
             end while c.hex != line[-4..-3].hex
-            wait(waitTime)
             begin
                 putc(ch = sp.getc)
             end while ch != 62
             puts " "
             error = 0
-        end
-    end	
+		end
+	end	
+	puts "Upload done."
     		
-    sp.printf("vB0000000");
-    wait(waitTime)
-    sp.printf("B0000700")
-    wait(waitTime)
-    begin
-        putc(ch = sp.getc)
-    end while ch != 62    #tty.puts "Checksum"
-    #STDIN.getc
-    
-    wait(waitTime)
-    puts "Run"
-    sp.printf("gB0000000")
+    puts "Run..."
+    sp.printf("g40000000")
     puts "Complete"
+
     begin
         putc(ch = sp.getc)
     end while ch != 62   
@@ -78,5 +115,4 @@ begin
 ensure 
     uploadFile.close unless uploadFile.nil?
     sp.close unless sp.nil?
-    puts "\n\rSerialport closed"
 end

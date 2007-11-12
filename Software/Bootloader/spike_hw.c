@@ -37,16 +37,19 @@ void irq_handler(uint32_t irl)
 void sleep(int msec)
 {
 	uint32_t tcr;
+	volatile int i;
+
+	for(i=0; i<1000; i++) ;
 
 	// Use timer0.1
-	timer0->compare1 = (FCPU/1000)*msec;
-	timer0->counter1 = 0;
-	timer0->tcr1 = TIMER_EN | TIMER_IRQEN;
+	// timer0->compare1 = (FCPU/1000)*msec;
+	// timer0->counter1 = 0;
+	// timer0->tcr1 = TIMER_EN | TIMER_IRQEN;
 
-	do {
+	// do {
 		//halt();
-		tcr = timer0->tcr1;
-	} while ( ! (tcr & TIMER_TRIG) );
+// 		tcr = timer0->tcr1;
+// 	} while ( ! (tcr & TIMER_TRIG) );
 }
 
 void tic_init()
@@ -62,9 +65,9 @@ void tic_init()
  */
 void uart_init()
 {
-	uart0->ier = 0x00;  // Interrupt Enable Register
-	uart0->lcr = 0x03;  // Line Control Register:    8N1
-	uart0->mcr = 0x00;  // Modem Control Register
+	//uart0->ier = 0x00;  // Interrupt Enable Register
+	//uart0->lcr = 0x03;  // Line Control Register:    8N1
+	//uart0->mcr = 0x00;  // Modem Control Register
 
 	// Setup Divisor register (Fclk / Baud)
 	//uart0->div = (FCPU/(57600*16));
@@ -72,15 +75,13 @@ void uart_init()
 
 char uart_getchar()
 {   
-	while (! (uart0->lsr & UART_DR)) {
-	}
+	while (! (uart0->ucr & UART_DR)) ;
 	return uart0->rxtx;
 }
 
 void uart_putchar(char c)
 {
-	while (! (uart0->lsr & UART_THRE)) {
-	}
+	while (uart0->ucr & UART_BUSY) ;
 	uart0->rxtx = c;
 }
 

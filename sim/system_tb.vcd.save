@@ -1,6 +1,6 @@
 [size] 1280 955
 [pos] -1 -1
-*-27.000000 388330000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-18.000000 510399000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 @28
 system_tb.dut.clk
 system_tb.dut.rst
@@ -27,6 +27,7 @@ system_tb.dut.uart0_rxd
 -WB_DDR
 -DDR
 @28
-system_tb.dut.ddr_clk
 system_tb.dut.ddr_ras_n
 system_tb.dut.ddr_cas_n
+ddr0.ls_fill
+ddr0.ls_spill

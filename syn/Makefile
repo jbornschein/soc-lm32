@@ -9,6 +9,8 @@ XSTCLEAN+=xst
 
 syn: system.bit
 
+SMARTGUIDE= 
+#-smartguide system-routed.ncd
 
 #############################################################################
 # Synthesis
@@ -19,10 +21,10 @@ system.ngd: system.ngc
 	ngdbuild -uc system.ucf system.ngc
 
 system.ncd: system.ngd
-	map system.ngd
+	map $(SMARTGUIDE) system.ngd
 
 system-routed.ncd: system.ncd
-	par -ol high -w system.ncd system-routed.ncd
+	par $(SMARTGUIDE) -ol high -w system.ncd system-routed.ncd
 
 system.bit: system-routed.ncd
 	bitgen -w system-routed.ncd system.bit
@@ -41,3 +43,4 @@ usage: system-routed.xdl
 clean: 
 	rm -Rf $(XSTCLEAN)
 
+.PHONY: system.ncd system-routed.ncd syn

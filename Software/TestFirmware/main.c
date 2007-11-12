@@ -70,8 +70,8 @@ int main()
 	uart_putchar('\n');    
 
 	uart_putstr( "Memory Dump: " );
-	uint32_t *start = (uint32_t *)0x80000000;
-	uint32_t *end   = (uint32_t *)0x81000000;
+	uint32_t *start = (uint32_t *)0x40000000;
+	uint32_t *end   = (uint32_t *)0x40001000;
 	uint32_t *p;
 	for (p=start; p<end; p++) {
 		if (((uint32_t)p & 12) == 0) {

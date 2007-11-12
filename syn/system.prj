@@ -27,10 +27,6 @@ verilog work ../rtl/wb_ddr/async_fifo.v
 verilog work ../rtl/wb_ddr/gray_counter.v
 verilog work ../rtl/wb_ddr/dpram.v
 verilog work ../rtl/wb_ddr/rotary.v
-verilog work ../rtl/uart_core/intface.v
-verilog work ../rtl/uart_core/modem.v
-verilog work ../rtl/uart_core/rxcver.v
-verilog work ../rtl/uart_core/txmitt.v
-verilog work ../rtl/uart_core/uart_core.v
+verilog work ../rtl/wb_uart/wb_uart.v
 verilog work ../rtl/wb_conbus/wb_conbus_top.v
 verilog work ../rtl/wb_conbus/wb_conbus_arb.v

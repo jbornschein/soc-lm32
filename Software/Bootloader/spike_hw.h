@@ -58,25 +58,14 @@ typedef struct {
 /***************************************************************************
  * UART0
  */
-#define UART_DR   0x01                    // Data Ready
-#define UART_OE   0x02                    // Overrun Error
-#define UART_PE   0x04                    // Parity Error
-#define UART_FE   0x08                    // Parity Error
-#define UART_BI   0x10                    // Break Interrupt
-#define UART_THRE 0x20                    // Transmit Holf Reg Empty
-#define UART_TEMT 0x40                    // Transmit 
+#define UART_DR   0x01                    // RX Data Ready
+#define UART_ERR  0x02                    // RX Error
+#define UART_BUSY 0x10                    // TX Busy
 
 typedef struct {
+   volatile uint32_t ucr;
    volatile uint32_t rxtx;
-   volatile uint32_t ier;
-   volatile uint32_t iir;
-   volatile uint32_t lcr;
-   volatile uint32_t mcr;
-   volatile uint32_t lsr;
-   volatile uint32_t msr;
-   volatile uint32_t div;
 } uart_t;
-
 
 /***************************************************************************
  * Spike peripheral components

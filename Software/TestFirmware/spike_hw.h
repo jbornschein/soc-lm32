@@ -1,9 +1,17 @@
 #ifndef SPIKEHW_H
 #define SPIKEHW_H
 
-#define RAM_START 0x80000000
+#define PROMSTART 0x00000000
+#define RAMSTART  0x00000800
+#define RAMSIZE   0x400
+#define RAMEND    (RAMSTART + RAMSIZE)
+
+#define RAM_START 0x40000000
 #define RAM_SIZE  0x04000000
+
 #define FCPU      50000000
+
+#define UART_RXBUFSIZE 32
 
 // 32 Bit
 typedef unsigned int  uint32_t;
@@ -13,19 +21,11 @@ typedef signed   int   int32_t;
 typedef unsigned char  uint8_t;
 typedef signed   char   int8_t;
 
-// Assembler-Helper-Functions
-extern void irq_enable();
-extern void irq_disable();
-extern void irq_mask();
-extern void halt();
-extern void jump(uint32_t addr);
-
-extern uint32_t get_r0();
-extern uint32_t get_sp();
-extern uint32_t get_gp();
-extern uint32_t get_cfg();
-extern uint32_t get_cycles();
-extern uint32_t test_sp(uint8_t* adr, uint32_t value);
+void irq_enable();
+void irq_disable();
+void irq_mask();
+void halt();
+void jump(uint32_t addr);
 
 void sleep();
 void tic_init();
@@ -53,47 +53,31 @@ typedef struct {
 	volatile uint32_t tcr1;
 	volatile uint32_t compare1;
 	volatile uint32_t counter1;
-
 } timer_t;
 
 /***************************************************************************
  * UART0
  */
-#define UART_DR   0x01                    // Data Ready
-#define UART_OE   0x02                    // Overrun Error
-#define UART_PE   0x04                    // Parity Error
-#define UART_FE   0x08                    // Parity Error
-#define UART_BI   0x10                    // Break Interrupt
-#define UART_THRE 0x20                    // Transmit Holf Reg Empty
-#define UART_TEMT 0x40                    // Transmit 
+#define UART_DR   0x01                    // RX Data Ready
+#define UART_ERR  0x02                    // RX Error
+#define UART_BUSY 0x10                    // TX Busy
 
 typedef struct {
+   volatile uint32_t ucr;
    volatile uint32_t rxtx;
-   volatile uint32_t ier;
-   volatile uint32_t iir;
-   volatile uint32_t lcr;
-   volatile uint32_t mcr;
-   volatile uint32_t lsr;
-   volatile uint32_t msr;
-   volatile uint32_t div;
 } uart_t;
-
 
 /***************************************************************************
  * Spike peripheral components
  */
-extern volatile uart_t  *uart0;
-extern volatile timer_t *timer0;
-extern volatile gpio_t  *gpio0;
-
 void uart_init();
 void uart_putchar(char c);
 void uart_putstr(char *str);
 char uart_getchar();
 
-extern volatile timer_t  *timer0;
-extern volatile uart_t   *uart0; 
-extern volatile gpio_t   *gpio0; 
-extern volatile uint32_t *sram0; 
+extern timer_t  *timer0;
+extern uart_t   *uart0; 
+extern gpio_t   *gpio0; 
+extern uint32_t *sram0; 
 
 #endif // SPIKEHW_H
