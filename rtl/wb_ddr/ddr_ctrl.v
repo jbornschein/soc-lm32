@@ -3,20 +3,16 @@
 //
 // (c) Joerg Bornschein (<jb@capsec.org>)
 //----------------------------------------------------------------------------
-`include "ddr_include.v"
-
 module ddr_ctrl 
 #(
-	parameter clk_freq     = 50000000,
+	parameter phase_shift  = 0,
+	parameter clk_freq     = 100000000,
 	parameter clk_multiply = 12,
 	parameter clk_divide   = 5,
-	parameter phase_shift  = 0,
 	parameter wait200_init = 26
 ) (
 	input                   clk, 
 	input                   reset,
-	// Temporary DCM control input
-	input  [2:0]            rot,     // XXX
 	//  DDR ports
 	output            [2:0] ddr_clk,
 	output            [2:0] ddr_clk_n,
@@ -41,7 +37,12 @@ module ddr_ctrl
 	input                   fml_wnext,
 	output                  fml_rempty,
 	input                   fml_rnext,
-	output [`FML_DAT_RNG]   fml_rdat
+	output [`FML_DAT_RNG]   fml_rdat,
+	// XXX Temporary DCM control input XXX
+	input             [2:0] rot,  
+	output                  probe_clk,
+	input             [7:0] probe_sel,
+	output reg        [7:0] probe
 );
 
 wire [ `DQ_RNG]       ddr_dq_i,  ddr_dq_o;
@@ -154,7 +155,7 @@ reg  ar_done;
 
 ddr_pulse78 #(
 	.clk_freq( clk_freq )
-) pulse79_gen (
+) pulse78_gen (
 	.clk(      clk        ),
 	.reset(    reset_int  ),
 	.pulse78(  pulse78    )
@@ -327,7 +328,7 @@ end
 //----------------------------------------------------------------------------
 // Demux dqs and dq
 //----------------------------------------------------------------------------
-assign ddr_cke   = { ~wait200, ~wait200 }; // bring up CKE as soon 200us wait is finished
+assign ddr_cke =  {~wait200, ~wait200}; // bring up CKE as soon 200us wait is finished
 
 assign ddr_dqs = ddr_dqs_oe!=1'b0 ? ddr_dqs_o : 'bz;
 assign ddr_dq  = ddr_dqs_oe!=1'b0 ? ddr_dq_o  : 'bz;
@@ -335,8 +336,32 @@ assign ddr_dq  = ddr_dqs_oe!=1'b0 ? ddr_dq_o  : 'bz;
 assign ddr_dqs_i = ddr_dqs;
 assign ddr_dq_i  = ddr_dq;
 
-assign ddr_cs_n = 'b0;
+assign ddr_cs_n  = 2'b00;
+
+//----------------------------------------------------------------------------
+// clock generator
+//----------------------------------------------------------------------------
+assign probe_clk = clk; 
+
+always @(*)
+begin
+	case (probe_sel)
+		8'h00: probe <= { cba_fifo_we, wfifo_we, rfifo_next, 1'b0, cba_fifo_full, wfifo_full, rfifo_empty, 1'b0 };
+		8'h01: probe <= { write_clk, write_clk90, read_clk, 3'b000, rot[1], rot[0] };
+		8'h10: probe <= { rfifo_empty, rfifo_next, rfifo_dout[ 5: 0] };
+		8'h11: probe <= { rfifo_empty, rfifo_next, rfifo_dout[13: 8] };
+		8'h12: probe <= { rfifo_empty, rfifo_next, rfifo_dout[21:16] };
+		8'h13: probe <= { rfifo_empty, rfifo_next, rfifo_dout[29:24] };
+		8'h20: probe <= wfifo_din[ 7:0];
+		8'h21: probe <= wfifo_din[15:8];
+		8'h20: probe <= wfifo_din[23:16];
+		8'h21: probe <= wfifo_din[31:24];
+		8'h30: probe <= cba_fifo_din[17:10];
+		8'h31: probe <= cba_fifo_din[ 9:2];
+	default: probe <= 0'b0;
+	endcase
+end
+
 
 endmodule
 
-// vim: set ts=4

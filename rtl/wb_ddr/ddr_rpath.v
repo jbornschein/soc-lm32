@@ -32,7 +32,7 @@ wire                   rfifo_full;
 
 async_fifo #(
 	.DATA_WIDTH( `RFIFO_WIDTH ),
-	.ADDRESS_WIDTH( 3 )
+	.ADDRESS_WIDTH( 4 )
 ) rfifo (
 	.Data_out(   rfifo_dout  ),
 	.Empty_out(  rfifo_empty ),

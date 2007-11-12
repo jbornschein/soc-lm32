@@ -49,7 +49,7 @@ wire                   cba_avail = ~cba_empty;
 
 async_fifo #(
 	.DATA_WIDTH( `CBA_WIDTH ),
-	.ADDRESS_WIDTH( 3 )
+	.ADDRESS_WIDTH( 4 )
 ) cba_fifo (
 	.Data_out(   cba_data  ),
 	.Empty_out(  cba_empty ),
@@ -74,7 +74,7 @@ wire                   wdata_avail = ~wdata_empty;
 
 async_fifo #(
 	.DATA_WIDTH( `WFIFO_WIDTH ),
-	.ADDRESS_WIDTH( 3 )
+	.ADDRESS_WIDTH( 4 )
 ) wdata_fifo (
 	.Data_out(   wdata_data  ),
 	.Empty_out(  wdata_empty ),
@@ -133,9 +133,9 @@ end
 //----------------------------------------------------------------------------
 // READ-SHIFT-REGISTER
 //----------------------------------------------------------------------------
-reg [0:7] read_shr;
+reg [7:0] read_shr;
 wire      read_cmd = (cba_cmd == `DDR_CMD_READ) & cba_ack;
-assign    sample   = read_shr[1];
+assign    sample   = read_shr[7];
 
 always @(posedge clk)
 begin
@@ -143,9 +143,9 @@ begin
 		read_shr <= 'b0;
 	else begin
 		if (read_cmd)
- 			read_shr <= { 8'b00011111 };
+ 			read_shr <= { 8'b00011000 };
  		else
- 			read_shr <= { read_shr[1:7], 1'b0 };
+ 			read_shr <= { read_shr[6:0], 1'b0 };
  	end
 end
 

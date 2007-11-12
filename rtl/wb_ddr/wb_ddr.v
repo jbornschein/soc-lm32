@@ -3,43 +3,47 @@
 // 
 // (c) Joerg Bornschein (<jb@capsec.org>)
 //----------------------------------------------------------------------------
+
 `include "ddr_include.v"
 
 module wb_ddr
 #(
-	parameter clk_freq     = 50000000,
-	parameter phase_shift  = 0,
+	parameter clk_freq     = 100000000,
 	parameter clk_multiply = 12,
 	parameter clk_divide   = 5,
+	parameter phase_shift  = 0,
 	parameter wait200_init = 26
 ) (
-	input                   clk, 
-	input                   reset,
-	// Temporary DCM control input
-	input  [2:0]            rot,     // XXX
+	input                    clk, 
+	input                    reset,
 	//  DDR ports
-	output            [2:0] ddr_clk,
-	output            [2:0] ddr_clk_n,
-	input                   ddr_clk_fb,
-	output                  ddr_ras_n,
-	output                  ddr_cas_n,
-	output                  ddr_we_n,
-	output            [1:0] ddr_cke,
-	output            [1:0] ddr_cs_n,
-	output       [  `A_RNG] ddr_a,
-	output       [ `BA_RNG] ddr_ba,
-	inout        [ `DQ_RNG] ddr_dq,
-	inout        [`DQS_RNG] ddr_dqs,
-	output       [ `DM_RNG] ddr_dm,
+	output             [2:0] ddr_clk,
+	output             [2:0] ddr_clk_n,
+	input                    ddr_clk_fb,
+	output                   ddr_ras_n,
+	output                   ddr_cas_n,
+	output                   ddr_we_n,
+	output             [1:0] ddr_cke,
+	output             [1:0] ddr_cs_n,
+	output        [  `A_RNG] ddr_a,
+	output        [ `BA_RNG] ddr_ba,
+	inout         [ `DQ_RNG] ddr_dq,
+	inout         [`DQS_RNG] ddr_dqs,
+	output        [ `DM_RNG] ddr_dm,
 	// Wishbone Slave Interface
-	input     [`WB_ADR_RNG] wb_adr_i,
-	input     [`WB_DAT_RNG] wb_dat_i,
+	input      [`WB_ADR_RNG] wb_adr_i,
+	input      [`WB_DAT_RNG] wb_dat_i,
 	output reg [`WB_DAT_RNG] wb_dat_o,
-	input     [`WB_SEL_RNG] wb_sel_i,
-	input                   wb_cyc_i,
-	input                   wb_stb_i,
-	input                   wb_we_i,
-	output reg              wb_ack_o
+	input      [`WB_SEL_RNG] wb_sel_i,
+	input                    wb_cyc_i,
+	input                    wb_stb_i,
+	input                    wb_we_i,
+	output reg               wb_ack_o,
+	// XXX Temporary DCM control input XXX
+	input              [2:0] rot,  
+	output                   probe_clk,
+	input              [7:0] probe_sel,
+	output reg         [7:0] probe
 );
 
 //----------------------------------------------------------------------------
@@ -418,6 +422,8 @@ begin
 	endcase
 end
 
+	
+
 //----------------------------------------------------------------------------
 // DDR Controller Engine (including clkgen, [rw]-path)
 //----------------------------------------------------------------------------
@@ -434,7 +440,6 @@ reg                 fml_rnext;
 wire [`FML_DAT_RNG] fml_rdat;
 
 ddr_ctrl #(
-	.clk_freq(     clk_freq     ),
 	.phase_shift(  phase_shift  ),
 	.clk_multiply( clk_multiply ),
 	.clk_divide(   clk_divide   ),
@@ -601,10 +606,10 @@ end
 always @(posedge clk)
 begin
 	if (ls_fill)
-		$display( "Filling %h", {ls_adr_set});
+		$display ("At time %t WB_DDR fill cacheline: TAG = %h, SET = %h)", $time, ls_adr_tag, ls_adr_set);
 
 	if (ls_spill)
-		$display( "Spilling %h", {ls_adr_set});
+		$display ("At time %t WB_DDR spill cacheline: TAG = %h, SET = %h)", $time, ls_adr_tag, ls_adr_set);
 end
 
 

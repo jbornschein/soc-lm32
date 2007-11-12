@@ -7,10 +7,10 @@ module system
 #(
 	parameter   clk_freq         = 100000000,
 	parameter   uart_baud_rate   = 115200,
-	parameter   ddr_clk_multiply = 12,
-	parameter   ddr_clk_divide   = 5,
-	parameter   ddr_phase_shift  = 0,
-	parameter   ddr_wait200_init = 26
+	parameter   ddr_clk_multiply = 13,
+	parameter   ddr_clk_divide   = 10,
+	parameter   ddr_phase_shift  = 140,
+	parameter   ddr_wait200_init = 52
 ) (
 	input                   clk, 
 	input                   reset_n,
@@ -49,6 +49,10 @@ wire         rst   = ~reset_n;
 wire         gnd   = 1'b0;
 wire   [3:0] gnd4  = 4'h0;
 wire  [31:0] gnd32 = 32'h00000000;
+
+wire         probe_clk;
+wire   [7:0] probe_sel;
+wire   [7:0] probe;
 
  
 wire [31:0]  lm32i_adr,
@@ -308,7 +312,7 @@ lm32_cpu lm0 (
 // Block RAM
 //------------------------------------------------------------------
 wb_bram #(
-	.adr_width( 16 ),
+	.adr_width( 12 ),
 	.mem_file_name( "../rtl/bram0.ram" )
 ) bram0 (
 	.clk_i(  clk  ),
@@ -336,8 +340,8 @@ wb_ddr #(
 	.phase_shift(  ddr_phase_shift  ),
 	.wait200_init( ddr_wait200_init )
 ) ddr0 (
-	.clk(     clk    ),
-	.reset(   rst  ),
+	.clk(          clk         ),
+	.reset(        rst         ),
 	// DDR Ports
 	.ddr_clk(      ddr_clk     ),
 	.ddr_clk_n(    ddr_clk_n   ),
@@ -362,7 +366,10 @@ wb_ddr #(
 	.wb_sel_i(    ddr0_sel     ),
 	.wb_ack_o(    ddr0_ack     ),
 	// phase shifting
-	.rot(          rot         )
+	.rot(          rot         ),
+	.probe_clk(    probe_clk   ),
+	.probe_sel(    probe_sel   ),
+	.probe(        probe       )
 );
 
 
@@ -407,9 +414,6 @@ wire        lac_txd;
 wire        lac_cts;
 wire        lac_rts;
 assign      lac_rts = 1;
-wire [7:0]  select;
-wire [7:0]  probe;
-reg  [7:0]  probe_r;
 
 lac #(
 	.uart_freq_hz(     clk_freq ),
@@ -424,19 +428,12 @@ lac #(
 	.uart_txd(    lac_txd  ),
 	.uart_rts(    lac_rts  ),
 	//
-	.probe_clk(  clk       ),
-	.probe(      probe_r   ),
-	.select(     select    )
+	.probe_clk(  probe_clk ),
+	.select(     probe_sel ),
+	.probe(      probe     )
 );
 
-always @(posedge clk)
-begin
-	if (rst)
-		probe_r <= 0;
-	else
-		probe_r <= probe;
-end
-
+/*
 assign probe = (select[3:0] == 'h0) ? { rst, lm32i_stb, lm32i_cyc, lm32i_ack, lm32d_stb, lm32d_cyc, lm32d_we, lm32d_ack } :
                (select[3:0] == 'h1) ? lm32i_adr[31:24] :
                (select[3:0] == 'h2) ? lm32i_adr[23:16] :
@@ -450,6 +447,7 @@ assign probe = (select[3:0] == 'h0) ? { rst, lm32i_stb, lm32i_cyc, lm32i_ack, lm
                (select[3:0] == 'ha) ? lm32d_adr[23:16] :
                (select[3:0] == 'hb) ? lm32d_adr[15: 8] :
                                       lm32d_adr[ 7: 0] ;
+*/
 
 assign uart_txd  = uart0_txd;
 assign uart0_rxd = uart_rxd;
