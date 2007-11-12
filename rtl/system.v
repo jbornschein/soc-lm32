@@ -9,7 +9,7 @@ module system
 	parameter   uart_baud_rate   = 115200,
 	parameter   ddr_clk_multiply = 13,
 	parameter   ddr_clk_divide   = 10,
-	parameter   ddr_phase_shift  = 140,
+	parameter   ddr_phase_shift  = 160,
 	parameter   ddr_wait200_init = 52
 ) (
 	input                   clk, 
@@ -331,7 +331,7 @@ wb_bram #(
 //------------------------------------------------------------------
 // ddr0
 //------------------------------------------------------------------
-wire [2:0] rot = 3'b000;
+wire [2:0] rot = { 1'b0, ~btn[1], ~btn[3] };
 
 wb_ddr #(
 	.clk_freq(     clk_freq         ),
