@@ -67,11 +67,9 @@ ddr_clkgen #(
 	.reset(           reset          ),
 	.locked(          clk_locked     ),
 	// ddr-clk 
+	.read_clk(        read_clk       ),
 	.write_clk(       write_clk      ),
 	.write_clk90(     write_clk90    ),
-	// ddr-read-clk
-	.ddr_clk_fb(      ddr_clk_fb     ),
-	.read_clk(        read_clk       ),
 	// phase shift control
 	.rot(             rot            )      // XXX
 );

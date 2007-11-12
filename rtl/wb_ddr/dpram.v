@@ -57,7 +57,7 @@ integer i;
 
 initial 
 begin
-	for(i=0; i<depth-1; i=i+1) 
+	for(i=0; i<depth; i=i+1) 
 		ram[i] <= 'b0;
 end
 
