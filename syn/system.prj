@@ -28,5 +28,6 @@ verilog work ../rtl/wb_ddr/gray_counter.v
 verilog work ../rtl/wb_ddr/dpram.v
 verilog work ../rtl/wb_ddr/rotary.v
 verilog work ../rtl/wb_uart/wb_uart.v
+verilog work ../rtl/wb_timer/wb_timer.v
 verilog work ../rtl/wb_conbus/wb_conbus_top.v
 verilog work ../rtl/wb_conbus/wb_conbus_arb.v

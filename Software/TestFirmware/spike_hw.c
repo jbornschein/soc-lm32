@@ -1,9 +1,9 @@
 #include "spike_hw.h"
 
 uart_t   *uart0  = (uart_t *)   0xF0000000;
-timer_t  *timer0 = (timer_t *)  0xF0001000;
-gpio_t   *gpio0  = (gpio_t *)   0xF0002000;
-uint32_t *sram0  = (uint32_t *) 0x40000000;
+timer_t  *timer0 = (timer_t *)  0xF0010000;
+// gpio_t   *gpio0  = (gpio_t *)   0xF0002000;
+// uint32_t *sram0  = (uint32_t *) 0x40000000;
 
 uint32_t msec = 0;
 
@@ -37,19 +37,16 @@ void irq_handler(uint32_t irl)
 void sleep(int msec)
 {
 	uint32_t tcr;
-	volatile int i;
-
-	for(i=0; i<1000; i++) ;
 
 	// Use timer0.1
-	// timer0->compare1 = (FCPU/1000)*msec;
-	// timer0->counter1 = 0;
-	// timer0->tcr1 = TIMER_EN | TIMER_IRQEN;
+	timer0->compare1 = (FCPU/1000)*msec;
+	timer0->counter1 = 0;
+	timer0->tcr1 = TIMER_EN | TIMER_IRQEN;
 
-	// do {
+	do {
 		//halt();
-// 		tcr = timer0->tcr1;
-// 	} while ( ! (tcr & TIMER_TRIG) );
+ 		tcr = timer0->tcr1;
+ 	} while ( ! (tcr & TIMER_TRIG) );
 }
 
 void tic_init()

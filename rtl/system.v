@@ -58,6 +58,7 @@ wire   [7:0] probe;
 wire [31:0]  lm32i_adr,
              lm32d_adr,
              uart0_adr,
+             timer0_adr,
              bram0_adr,
              ddr0_adr;
 
@@ -68,6 +69,8 @@ wire [31:0]  lm32i_dat_r,
              lm32d_dat_w,
              uart0_dat_r,
              uart0_dat_w,
+             timer0_dat_r,
+             timer0_dat_w,
              bram0_dat_r,
              bram0_dat_w,
              ddr0_dat_w,
@@ -76,61 +79,71 @@ wire [31:0]  lm32i_dat_r,
 wire [3:0]   lm32i_sel,
              lm32d_sel,
              uart0_sel,
+             timer0_sel,
              bram0_sel,
              ddr0_sel;
 
 wire         lm32i_i_we,
              lm32d_i_we,
              uart0_i_we,
+             timer0_i_we,
              bram0_i_we,
              ddr0_i_we;
 
 wire         lm32i_cyc,
              lm32d_cyc,
              uart0_cyc,
+             timer0_cyc,
              bram0_cyc,
              ddr0_cyc;
 
 wire         lm32i_stb,
              lm32d_stb,
              uart0_stb,
+             timer0_stb,
              bram0_stb,
              ddr0_stb;
 
 wire         lm32i_ack,
              lm32d_ack,
              uart0_ack,
+             timer0_ack,
              bram0_ack,
              ddr0_ack;
 
 wire         lm32i_rty,
              lm32d_rty,
              uart0_rty,
+             timer0_rty,
              bram0_rty;
 
 wire         lm32i_err,
              lm32d_err,
              uart0_err,
+             timer0_err,
              bram0_err;
 
 wire         lm32i_lock,
              uart0_lock,
+             timer0_lock,
              lm32d_lock;
 
 wire [2:0]   lm32i_cti,
              uart0_cti,
+             timer0_cti,
              lm32d_cti;
 
 wire [1:0]   lm32i_bte,
              uart0_bte,
+             timer0_bte,
              lm32d_bte;
 
 wire [31:0]  intr_n;
 wire         uart0_intr = 0;
+wire   [1:0] timer0_intr;
 
-assign intr_n = { 24'hFFFFFF, 7'b1111111, ~uart0_intr };
+assign intr_n = { 24'hFFFFFF, ~timer0_intr[1], 5'b11111, ~timer0_intr[0], ~uart0_intr };
 assign led    = { ~clk, ~rst, ~lm32i_stb, ~lm32i_ack };
-
 
 
 //------------------------------------------------------------------
@@ -144,7 +157,7 @@ wb_conbus_top #(
 	.s27_addr_w( 16 ),
 	.s2_addr   ( 16'h0000 ),    // bram0 
 	.s3_addr   ( 16'hF000 ),    // uart0
-	.s4_addr   ( 16'hF001 ),    // timer
+	.s4_addr   ( 16'hF001 ),    // timer0
 	.s5_addr   ( 16'hF002 ),
 	.s6_addr   ( 16'hF003 ),
 	.s7_addr   ( 16'hF004 )
@@ -249,10 +262,16 @@ wb_conbus_top #(
 	.s3_err_i(  uart0_err   ),
 	.s3_rty_i(  uart0_rty   ),
 	// Slave4
-	.s4_dat_i(  gnd32  ),
-	.s4_ack_i(  gnd    ),
-	.s4_err_i(  gnd    ),
-	.s4_rty_i(  gnd    ),
+	.s4_dat_i(  timer0_dat_r ),
+	.s4_dat_o(  timer0_dat_w ),
+	.s4_adr_o(  timer0_adr   ),
+	.s4_sel_o(  timer0_sel   ),
+	.s4_we_o(   timer0_we    ),
+	.s4_cyc_o(  timer0_cyc   ),
+	.s4_stb_o(  timer0_stb   ),
+	.s4_ack_i(  timer0_ack   ),
+	.s4_err_i(  timer0_err   ),
+	.s4_rty_i(  timer0_rty   ),
 	// Slave5
 	.s5_dat_i(  gnd32  ),
 	.s5_ack_i(  gnd    ),
@@ -397,6 +416,26 @@ wb_uart #(
 //	.intr(       uart0_intr ),
 	.uart_rxd( uart0_rxd ),
 	.uart_txd( uart0_txd )
+);
+
+//------------------------------------------------------------------
+// uart0
+//------------------------------------------------------------------
+wb_timer #(
+	.clk_freq(   clk_freq  )
+) timer0 (
+	.clk(      clk          ),
+	.reset(    rst          ),
+	//
+	.wb_adr_i( timer0_adr   ),
+	.wb_dat_i( timer0_dat_w ),
+	.wb_dat_o( timer0_dat_r ),
+	.wb_stb_i( timer0_stb   ),
+	.wb_cyc_i( timer0_cyc   ),
+	.wb_we_i(  timer0_we    ),
+	.wb_sel_i( timer0_sel   ),
+	.wb_ack_o( timer0_ack   ), 
+	.intr(     timer0_intr  )
 );
 
 //------------------------------------------------------------------

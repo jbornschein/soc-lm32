@@ -9,7 +9,7 @@
 #define RAM_START 0x40000000
 #define RAM_SIZE  0x04000000
 
-#define FCPU      50000000
+#define FCPU      100000000
 
 #define UART_RXBUFSIZE 32
 

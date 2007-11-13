@@ -43,4 +43,3 @@ usage: system-routed.xdl
 clean: 
 	rm -Rf $(XSTCLEAN)
 
-.PHONY: system.ncd system-routed.ncd syn

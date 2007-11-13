@@ -45,6 +45,7 @@ SYSTEM_TB_SRC=                         \
 	../rtl/wb_ddr/dpram.v              \
 	../rtl/wb_ddr/rotary.v             \
 	../rtl/wb_uart/wb_uart.v           \
+	../rtl/wb_timer/wb_timer.v         \
 	../rtl/wb_conbus/wb_conbus_top.v   \
 	../rtl/wb_conbus/wb_conbus_arb.v
 #	../rtl/wb_uart/uart.v              \
