@@ -1,0 +1,14 @@
+
+Each directory contains a design for a supported board:
+
+
+ xilinx-s3sk     Xilinx Spartan-3 Starter Board with a xc3s200 and 
+                 1 mbit SRAM.
+
+ xilinx-s3esk    Xilinx Spartan-3E Starter Kit with an xc3s500e and
+                 512 mbit DDR DRAM.
+
+ xilinx-xupv2p   
+                 
+
+
