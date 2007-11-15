@@ -11,7 +11,7 @@ uint8_t  *ram;
 
 void help()
 {
-	printf( "bramextract <srect-file> <bram-base> <bram-size>\n\n" );
+	printf( "\nUsage: srec2vram <srect-file> <bram-base> <bram-size>\n\n" );
 	printf( " <bram-base> \t \n" );
 	printf( " <bram-size> \t \n\n" );
 };

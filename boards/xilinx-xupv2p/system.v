@@ -332,7 +332,7 @@ lm32_cpu lm0 (
 //------------------------------------------------------------------
 wb_bram #(
 	.adr_width( 12 ),
-	.mem_file_name( "../rtl/bram0.ram" )
+	.mem_file_name( "../../software/Bootloader/image.ram" )
 ) bram0 (
 	.clk_i(  clk  ),
 	.rst_i(  rst  ),

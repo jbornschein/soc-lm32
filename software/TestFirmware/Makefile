@@ -3,8 +3,6 @@ LM32_LD=lm32-elf-ld
 LM32_OBJCOPY=lm32-elf-objcopy
 LM32_OBJDUMP=lm32-elf-objdump
 
-VHDLFILE=../../wb_bram.vhd
-
 CFLAGS=-MMD -O1 -Wall -g -s -fomit-frame-pointer -mbarrel-shift-enabled -mmultiply-enabled -mdivide-enabled -msign-extend-enabled
 LDFLAGS=-Tlinker.ld
 SEGMENTS = -j .text -j .data -j .rodata

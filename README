@@ -1,0 +1,14 @@
+//-------------------------------------------------------------------
+// LatticeMico32 based SoC platform 
+//-------------------------------------------------------------------
+
+Directory structure:
+
+ /rtl/      Actual Verilog components for simulation & synthesis
+ /sim/      Components only needed for simulation
+ /tools/    Various tools running on the developers machine 
+ /software/ Software running on the LM32 SoC
+ /boards/   Top-Level design files, constraint files and Makefiles 
+            for various development boards
+
+

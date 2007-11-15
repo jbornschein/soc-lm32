@@ -3,10 +3,10 @@ LM32_LD=lm32-elf-ld
 LM32_OBJCOPY=lm32-elf-objcopy
 LM32_OBJDUMP=lm32-elf-objdump
 
-SREC2VHDL ?= ../../Toolchain/srec2vhdl/srec2vhdl
-SREC2VRAM ?= ../../Toolchain/srec2vram/srec2vram
+SREC2VHDL ?= ../../tools/srec2vhdl/srec2vhdl
+SREC2VRAM ?= ../../tools/srec2vram/srec2vram
 
-VRAMFILE=../../rtl/bram0.ram
+VRAMFILE=image.ram
 
 CFLAGS=-MMD -O2 -Wall -g -s -fomit-frame-pointer -mbarrel-shift-enabled   -mmultiply-enabled -mdivide-enabled -msign-extend-enabled
 LDFLAGS=-Tlinker.ld
