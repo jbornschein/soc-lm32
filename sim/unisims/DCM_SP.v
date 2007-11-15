@@ -34,11 +34,11 @@ module DCM_SP (
 	CLKDV, CLKFX, CLKFX180, LOCKED, PSDONE, STATUS,
 	CLKFB, CLKIN, DSSEN, PSCLK, PSEN, PSINCDEC, RST);
 
-parameter real CLKDV_DIVIDE = 2.0;
+parameter CLKDV_DIVIDE = 2.0;
 parameter integer CLKFX_DIVIDE = 1;
 parameter integer CLKFX_MULTIPLY = 4;
 parameter CLKIN_DIVIDE_BY_2 = "FALSE";
-parameter real CLKIN_PERIOD = 10.0;			// non-simulatable
+parameter CLKIN_PERIOD = 10.0;			// non-simulatable
 parameter CLKOUT_PHASE_SHIFT = "NONE";
 parameter CLK_FEEDBACK = "1X";
 parameter DESKEW_ADJUST = "SYSTEM_SYNCHRONOUS";	// non-simulatable
@@ -47,11 +47,11 @@ parameter DLL_FREQUENCY_MODE = "LOW";
 parameter DSS_MODE = "NONE";			// non-simulatable
 parameter DUTY_CYCLE_CORRECTION = "TRUE";
 parameter FACTORY_JF = 16'hC080;		// non-simulatable
-localparam integer MAXPERCLKIN = 1000000;		// non-modifiable simulation parameter
-localparam integer MAXPERPSCLK = 100000000;		// non-modifiable simulation parameter
+parameter integer MAXPERCLKIN = 1000000;		// non-modifiable simulation parameter
+parameter integer MAXPERPSCLK = 100000000;		// non-modifiable simulation parameter
 parameter integer PHASE_SHIFT = 0;
-localparam integer SIM_CLKIN_CYCLE_JITTER = 300;		// non-modifiable simulation parameter
-localparam integer SIM_CLKIN_PERIOD_JITTER = 1000;	// non-modifiable simulation parameter
+parameter integer SIM_CLKIN_CYCLE_JITTER = 300;		// non-modifiable simulation parameter
+parameter integer SIM_CLKIN_PERIOD_JITTER = 1000;	// non-modifiable simulation parameter
 parameter STARTUP_WAIT = "FALSE";		// non-simulatable
 
 
@@ -148,7 +148,7 @@ initial begin
 end
 
 initial begin
-    case (CLKDV_DIVIDE)
+    case (2.0)
 	1.5  : divide_type = 'd3;
 	2.0  : divide_type = 'd4;
 	2.5  : divide_type = 'd5;

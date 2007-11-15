@@ -38,6 +38,7 @@ software/Bootloader/image
 software/Bootloader/image.lst
 software/Bootloader/image.map
 software/Bootloader/image.srec
+software/Bootloader/image.ram
 software/Bootloader/main.d
 software/Bootloader/spike_hw.d
 software/TestFirmware/crt0ram.d
@@ -47,4 +48,3 @@ software/TestFirmware/image.map
 software/TestFirmware/image.srec
 software/TestFirmware/main.d
 software/TestFirmware/spike_hw.d
-syn/system-routed.xdl

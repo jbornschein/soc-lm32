@@ -5,54 +5,47 @@
 
 module system
 #(
-	parameter   clk_freq         = 100000000,
+	parameter   bootram_file     = "../../software/Bootloader/image.ram",
+	parameter   clk_freq         = 50000000,
 	parameter   uart_baud_rate   = 115200,
-	parameter   ddr_clk_multiply = 13,
-	parameter   ddr_clk_divide   = 10,
-	parameter   ddr_phase_shift  = 180,
-	parameter   ddr_wait200_init = 52
+	parameter   ddr_clk_multiply = 12,
+	parameter   ddr_clk_divide   = 5,
+	parameter   ddr_phase_shift  = 0,
+	parameter   ddr_wait200_init = 26
 ) (
 	input                   clk, 
-	input                   reset_n,
 	// DDR connection
-	output            [2:0] ddr_clk,
-	output            [2:0] ddr_clk_n,
+	output                  ddr_clk,
+	output                  ddr_clk_n,
 	input                   ddr_clk_fb,
 	output                  ddr_ras_n,
 	output                  ddr_cas_n,
 	output                  ddr_we_n,
-	output            [1:0] ddr_cke,
-	output            [1:0] ddr_cs_n,
+	output                  ddr_cke,
+	output                  ddr_cs_n,
 	output       [  `A_RNG] ddr_a,
 	output       [ `BA_RNG] ddr_ba,
 	inout        [ `DQ_RNG] ddr_dq,
 	inout        [`DQS_RNG] ddr_dqs,
 	output       [ `DM_RNG] ddr_dm,
 	// Debug 
-	output            [3:0] led,
-	input             [4:0] btn,
+	output            [7:0] led,
+	input             [3:0] btn,
 	input             [3:0] sw,
+	input             [2:0] rot,
 	// Uart
 	input                   uart_rxd, 
-	output                  uart_cts,
-	output                  uart_txd,
-	input                   uart_rts
+	output                  uart_txd
 );
 	
-assign uart_cts = 1;
-
 //------------------------------------------------------------------
 // Local wires
 //------------------------------------------------------------------
-wire         rst   = ~reset_n;
+wire         rst;
 
 wire         gnd   = 1'b0;
 wire   [3:0] gnd4  = 4'h0;
 wire  [31:0] gnd32 = 32'h00000000;
-
-wire         probe_clk;
-wire   [7:0] probe_sel;
-wire   [7:0] probe;
 
  
 wire [31:0]  lm32i_adr,
@@ -143,8 +136,6 @@ wire         uart0_intr = 0;
 wire   [1:0] timer0_intr;
 
 assign intr_n = { 24'hFFFFFF, ~timer0_intr[1], 5'b11111, ~timer0_intr[0], ~uart0_intr };
-assign led    = { ~clk, ~rst, ~lm32i_stb, ~lm32i_ack };
-
 
 //------------------------------------------------------------------
 // Wishbone Interconnect
@@ -332,7 +323,7 @@ lm32_cpu lm0 (
 //------------------------------------------------------------------
 wb_bram #(
 	.adr_width( 12 ),
-	.mem_file_name( "../../software/Bootloader/image.ram" )
+	.mem_file_name( bootram_file )
 ) bram0 (
 	.clk_i(  clk  ),
 	.rst_i(  rst  ),
@@ -350,8 +341,6 @@ wb_bram #(
 //------------------------------------------------------------------
 // ddr0
 //------------------------------------------------------------------
-wire [2:0] rot = { 1'b0, ~btn[1], ~btn[3] };
-
 wb_ddr #(
 	.clk_freq(     clk_freq         ),
 	.clk_multiply( ddr_clk_multiply ),
@@ -359,8 +348,8 @@ wb_ddr #(
 	.phase_shift(  ddr_phase_shift  ),
 	.wait200_init( ddr_wait200_init )
 ) ddr0 (
-	.clk(          clk         ),
-	.reset(        rst         ),
+	.clk(     clk    ),
+	.reset(   rst  ),
 	// DDR Ports
 	.ddr_clk(      ddr_clk     ),
 	.ddr_clk_n(    ddr_clk_n   ),
@@ -385,10 +374,7 @@ wb_ddr #(
 	.wb_sel_i(    ddr0_sel     ),
 	.wb_ack_o(    ddr0_ack     ),
 	// phase shifting
-	.rot(          rot         ),
-	.probe_clk(    probe_clk   ),
-	.probe_sel(    probe_sel   ),
-	.probe(        probe       )
+	.rot(          rot       )
 );
 
 
@@ -446,6 +432,9 @@ wire        lac_txd;
 wire        lac_cts;
 wire        lac_rts;
 assign      lac_rts = 1;
+wire [7:0]  select;
+wire [7:0]  probe;
+reg  [7:0]  probe_r;
 
 lac #(
 	.uart_freq_hz(     clk_freq ),
@@ -453,19 +442,26 @@ lac #(
 	.adr_width(              11 ),
 	.width(                   8 )
 ) lac0 (
-	.reset(           rst  ),
+	.reset(        btn[0]  ),
 	.uart_clk(        clk  ),
 	.uart_rxd(    lac_rxd  ),
 	.uart_cts(    lac_cts  ),
 	.uart_txd(    lac_txd  ),
 	.uart_rts(    lac_rts  ),
 	//
-	.probe_clk(  probe_clk ),
-	.select(     probe_sel ),
-	.probe(      probe     )
+	.probe_clk(  clk       ),
+	.probe(      probe_r   ),
+	.select(     select    )
 );
 
-/*
+always @(posedge clk)
+begin
+	if (rst)
+		probe_r <= 0;
+	else
+		probe_r <= probe;
+end
+
 assign probe = (select[3:0] == 'h0) ? { rst, lm32i_stb, lm32i_cyc, lm32i_ack, lm32d_stb, lm32d_cyc, lm32d_we, lm32d_ack } :
                (select[3:0] == 'h1) ? lm32i_adr[31:24] :
                (select[3:0] == 'h2) ? lm32i_adr[23:16] :
@@ -479,14 +475,13 @@ assign probe = (select[3:0] == 'h0) ? { rst, lm32i_stb, lm32i_cyc, lm32i_ack, lm
                (select[3:0] == 'ha) ? lm32d_adr[23:16] :
                (select[3:0] == 'hb) ? lm32d_adr[15: 8] :
                                       lm32d_adr[ 7: 0] ;
-*/
 
-assign uart_txd  = uart0_txd;
-assign uart0_rxd = uart_rxd;
+assign uart_txd  = (sw[0]) ? uart0_txd : lac_txd;
+assign lac_rxd   = (sw[0]) ?         1 : uart_rxd;
+assign uart0_rxd = (sw[0]) ? uart_rxd  : 1;
 
-assign lac_rxd = 0;
-// assign uart_txd  = (sw[0]) ? uart0_txd : lac_txd;
-// assign lac_rxd   = (sw[0]) ?         1 : uart_rxd;
-// assign uart0_rxd = (sw[0]) ? uart_rxd  : 1;
+
+assign led = { clk, rst, ~uart_rxd, ~uart_txd, select[3:0] };
+assign rst = btn[0] | select[7];
 
 endmodule 
