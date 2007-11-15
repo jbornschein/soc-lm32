@@ -70,7 +70,6 @@ int main(int argc, char **argv)
 	//irq_enable();
 
 	uart_putstr("\r\n\r\n** SPIKE BOOTLOADER **\n");
-	memtest();
 	for(;;) {
 		uint32_t start, size, checksum, help;
 		uart_putchar('>');
