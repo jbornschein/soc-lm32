@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////
 ////                                                             ////
-////  WISHBONE Connection Bus Top Level		                 ////
+////  WISHBONE Connection Bus Top Level                          ////
 ////                                                             ////
 ////                                                             ////
-////  Author: Johny Chi			                         ////
+////  Author: Johny Chi                                          ////
 ////          chisuhua@yahoo.com.cn                              ////
 ////                                                             ////
 ////                                                             ////
@@ -58,11 +58,11 @@
 
 
 module wb_conbus_top #(
-	parameter		s0_addr_w = 4 ,			// slave 0 address decode width
+	parameter		s0_addr_w = 4 ,			// slave 0 address decode width -- bit 31 is always ignored!
 	parameter		s0_addr = 4'h0,			// slave 0 address
-	parameter		s1_addr_w = 4 ,			// slave 1 address decode width
+	parameter		s1_addr_w = 4 ,			// slave 1 address decode width -- bit 31 is always ignored!
 	parameter		s1_addr = 4'h1,			// slave 1 address 
-	parameter		s27_addr_w = 8 ,		// slave 2 to slave 7 address decode width
+	parameter		s27_addr_w = 8 ,		// slave 2 to slave 7 address decode width -- bit 31 is always ignored!
 	parameter		s2_addr = 8'h92,		// slave 2 address
 	parameter		s3_addr = 8'h93,		// slave 3 address
 	parameter		s4_addr = 8'h94,		// slave 4 address
@@ -569,77 +569,77 @@ endcase
 //
 //	decode all master address before arbitor for running faster
 //	
-assign m0_ssel_dec[0] = (m0_adr_i[`aw -1 : `aw - s0_addr_w ] == s0_addr);
-assign m0_ssel_dec[1] = (m0_adr_i[`aw -1 : `aw - s1_addr_w ] == s1_addr);
-assign m0_ssel_dec[2] = (m0_adr_i[`aw -1 : `aw - s27_addr_w ] == s2_addr);
-assign m0_ssel_dec[3] = (m0_adr_i[`aw -1 : `aw - s27_addr_w ] == s3_addr);
-assign m0_ssel_dec[4] = (m0_adr_i[`aw -1 : `aw - s27_addr_w ] == s4_addr);
-assign m0_ssel_dec[5] = (m0_adr_i[`aw -1 : `aw - s27_addr_w ] == s5_addr);
-assign m0_ssel_dec[6] = (m0_adr_i[`aw -1 : `aw - s27_addr_w ] == s6_addr);
-assign m0_ssel_dec[7] = (m0_adr_i[`aw -1 : `aw - s27_addr_w ] == s7_addr);
+assign m0_ssel_dec[0] = (m0_adr_i[`aw -2 : `aw -1 - s0_addr_w ] == s0_addr);
+assign m0_ssel_dec[1] = (m0_adr_i[`aw -2 : `aw -1 - s1_addr_w ] == s1_addr);
+assign m0_ssel_dec[2] = (m0_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s2_addr);
+assign m0_ssel_dec[3] = (m0_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s3_addr);
+assign m0_ssel_dec[4] = (m0_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s4_addr);
+assign m0_ssel_dec[5] = (m0_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s5_addr);
+assign m0_ssel_dec[6] = (m0_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s6_addr);
+assign m0_ssel_dec[7] = (m0_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s7_addr);
 
-assign m1_ssel_dec[0] = (m1_adr_i[`aw -1 : `aw - s0_addr_w ] == s0_addr);
-assign m1_ssel_dec[1] = (m1_adr_i[`aw -1 : `aw - s1_addr_w ] == s1_addr);
-assign m1_ssel_dec[2] = (m1_adr_i[`aw -1 : `aw - s27_addr_w ] == s2_addr);
-assign m1_ssel_dec[3] = (m1_adr_i[`aw -1 : `aw - s27_addr_w ] == s3_addr);
-assign m1_ssel_dec[4] = (m1_adr_i[`aw -1 : `aw - s27_addr_w ] == s4_addr);
-assign m1_ssel_dec[5] = (m1_adr_i[`aw -1 : `aw - s27_addr_w ] == s5_addr);
-assign m1_ssel_dec[6] = (m1_adr_i[`aw -1 : `aw - s27_addr_w ] == s6_addr);
-assign m1_ssel_dec[7] = (m1_adr_i[`aw -1 : `aw - s27_addr_w ] == s7_addr);
+assign m1_ssel_dec[0] = (m1_adr_i[`aw -2 : `aw -1 - s0_addr_w ] == s0_addr);
+assign m1_ssel_dec[1] = (m1_adr_i[`aw -2 : `aw -1 - s1_addr_w ] == s1_addr);
+assign m1_ssel_dec[2] = (m1_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s2_addr);
+assign m1_ssel_dec[3] = (m1_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s3_addr);
+assign m1_ssel_dec[4] = (m1_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s4_addr);
+assign m1_ssel_dec[5] = (m1_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s5_addr);
+assign m1_ssel_dec[6] = (m1_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s6_addr);
+assign m1_ssel_dec[7] = (m1_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s7_addr);
 
-assign m2_ssel_dec[0] = (m2_adr_i[`aw -1 : `aw - s0_addr_w ] == s0_addr);
-assign m2_ssel_dec[1] = (m2_adr_i[`aw -1 : `aw - s1_addr_w ] == s1_addr);
-assign m2_ssel_dec[2] = (m2_adr_i[`aw -1 : `aw - s27_addr_w ] == s2_addr);
-assign m2_ssel_dec[3] = (m2_adr_i[`aw -1 : `aw - s27_addr_w ] == s3_addr);
-assign m2_ssel_dec[4] = (m2_adr_i[`aw -1 : `aw - s27_addr_w ] == s4_addr);
-assign m2_ssel_dec[5] = (m2_adr_i[`aw -1 : `aw - s27_addr_w ] == s5_addr);
-assign m2_ssel_dec[6] = (m2_adr_i[`aw -1 : `aw - s27_addr_w ] == s6_addr);
-assign m2_ssel_dec[7] = (m2_adr_i[`aw -1 : `aw - s27_addr_w ] == s7_addr);
+assign m2_ssel_dec[0] = (m2_adr_i[`aw -2 : `aw -1 - s0_addr_w ] == s0_addr);
+assign m2_ssel_dec[1] = (m2_adr_i[`aw -2 : `aw -1 - s1_addr_w ] == s1_addr);
+assign m2_ssel_dec[2] = (m2_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s2_addr);
+assign m2_ssel_dec[3] = (m2_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s3_addr);
+assign m2_ssel_dec[4] = (m2_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s4_addr);
+assign m2_ssel_dec[5] = (m2_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s5_addr);
+assign m2_ssel_dec[6] = (m2_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s6_addr);
+assign m2_ssel_dec[7] = (m2_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s7_addr);
 
-assign m3_ssel_dec[0] = (m3_adr_i[`aw -1 : `aw - s0_addr_w ] == s0_addr);
-assign m3_ssel_dec[1] = (m3_adr_i[`aw -1 : `aw - s1_addr_w ] == s1_addr);
-assign m3_ssel_dec[2] = (m3_adr_i[`aw -1 : `aw - s27_addr_w ] == s2_addr);
-assign m3_ssel_dec[3] = (m3_adr_i[`aw -1 : `aw - s27_addr_w ] == s3_addr);
-assign m3_ssel_dec[4] = (m3_adr_i[`aw -1 : `aw - s27_addr_w ] == s4_addr);
-assign m3_ssel_dec[5] = (m3_adr_i[`aw -1 : `aw - s27_addr_w ] == s5_addr);
-assign m3_ssel_dec[6] = (m3_adr_i[`aw -1 : `aw - s27_addr_w ] == s6_addr);
-assign m3_ssel_dec[7] = (m3_adr_i[`aw -1 : `aw - s27_addr_w ] == s7_addr);
+assign m3_ssel_dec[0] = (m3_adr_i[`aw -2 : `aw -1 - s0_addr_w ] == s0_addr);
+assign m3_ssel_dec[1] = (m3_adr_i[`aw -2 : `aw -1 - s1_addr_w ] == s1_addr);
+assign m3_ssel_dec[2] = (m3_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s2_addr);
+assign m3_ssel_dec[3] = (m3_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s3_addr);
+assign m3_ssel_dec[4] = (m3_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s4_addr);
+assign m3_ssel_dec[5] = (m3_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s5_addr);
+assign m3_ssel_dec[6] = (m3_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s6_addr);
+assign m3_ssel_dec[7] = (m3_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s7_addr);
 
-assign m4_ssel_dec[0] = (m4_adr_i[`aw -1 : `aw - s0_addr_w ] == s0_addr);
-assign m4_ssel_dec[1] = (m4_adr_i[`aw -1 : `aw - s1_addr_w ] == s1_addr);
-assign m4_ssel_dec[2] = (m4_adr_i[`aw -1 : `aw - s27_addr_w ] == s2_addr);
-assign m4_ssel_dec[3] = (m4_adr_i[`aw -1 : `aw - s27_addr_w ] == s3_addr);
-assign m4_ssel_dec[4] = (m4_adr_i[`aw -1 : `aw - s27_addr_w ] == s4_addr);
-assign m4_ssel_dec[5] = (m4_adr_i[`aw -1 : `aw - s27_addr_w ] == s5_addr);
-assign m4_ssel_dec[6] = (m4_adr_i[`aw -1 : `aw - s27_addr_w ] == s6_addr);
-assign m4_ssel_dec[7] = (m4_adr_i[`aw -1 : `aw - s27_addr_w ] == s7_addr);
+assign m4_ssel_dec[0] = (m4_adr_i[`aw -2 : `aw -1 - s0_addr_w ] == s0_addr);
+assign m4_ssel_dec[1] = (m4_adr_i[`aw -2 : `aw -1 - s1_addr_w ] == s1_addr);
+assign m4_ssel_dec[2] = (m4_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s2_addr);
+assign m4_ssel_dec[3] = (m4_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s3_addr);
+assign m4_ssel_dec[4] = (m4_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s4_addr);
+assign m4_ssel_dec[5] = (m4_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s5_addr);
+assign m4_ssel_dec[6] = (m4_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s6_addr);
+assign m4_ssel_dec[7] = (m4_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s7_addr);
 
-assign m5_ssel_dec[0] = (m5_adr_i[`aw -1 : `aw - s0_addr_w ] == s0_addr);
-assign m5_ssel_dec[1] = (m5_adr_i[`aw -1 : `aw - s1_addr_w ] == s1_addr);
-assign m5_ssel_dec[2] = (m5_adr_i[`aw -1 : `aw - s27_addr_w ] == s2_addr);
-assign m5_ssel_dec[3] = (m5_adr_i[`aw -1 : `aw - s27_addr_w ] == s3_addr);
-assign m5_ssel_dec[4] = (m5_adr_i[`aw -1 : `aw - s27_addr_w ] == s4_addr);
-assign m5_ssel_dec[5] = (m5_adr_i[`aw -1 : `aw - s27_addr_w ] == s5_addr);
-assign m5_ssel_dec[6] = (m5_adr_i[`aw -1 : `aw - s27_addr_w ] == s6_addr);
-assign m5_ssel_dec[7] = (m5_adr_i[`aw -1 : `aw - s27_addr_w ] == s7_addr);
+assign m5_ssel_dec[0] = (m5_adr_i[`aw -2 : `aw -1 - s0_addr_w ] == s0_addr);
+assign m5_ssel_dec[1] = (m5_adr_i[`aw -2 : `aw -1 - s1_addr_w ] == s1_addr);
+assign m5_ssel_dec[2] = (m5_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s2_addr);
+assign m5_ssel_dec[3] = (m5_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s3_addr);
+assign m5_ssel_dec[4] = (m5_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s4_addr);
+assign m5_ssel_dec[5] = (m5_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s5_addr);
+assign m5_ssel_dec[6] = (m5_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s6_addr);
+assign m5_ssel_dec[7] = (m5_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s7_addr);
 
-assign m6_ssel_dec[0] = (m6_adr_i[`aw -1 : `aw - s0_addr_w ] == s0_addr);
-assign m6_ssel_dec[1] = (m6_adr_i[`aw -1 : `aw - s1_addr_w ] == s1_addr);
-assign m6_ssel_dec[2] = (m6_adr_i[`aw -1 : `aw - s27_addr_w ] == s2_addr);
-assign m6_ssel_dec[3] = (m6_adr_i[`aw -1 : `aw - s27_addr_w ] == s3_addr);
-assign m6_ssel_dec[4] = (m6_adr_i[`aw -1 : `aw - s27_addr_w ] == s4_addr);
-assign m6_ssel_dec[5] = (m6_adr_i[`aw -1 : `aw - s27_addr_w ] == s5_addr);
-assign m6_ssel_dec[6] = (m6_adr_i[`aw -1 : `aw - s27_addr_w ] == s6_addr);
-assign m6_ssel_dec[7] = (m6_adr_i[`aw -1 : `aw - s27_addr_w ] == s7_addr);
+assign m6_ssel_dec[0] = (m6_adr_i[`aw -2 : `aw -1 - s0_addr_w ] == s0_addr);
+assign m6_ssel_dec[1] = (m6_adr_i[`aw -2 : `aw -1 - s1_addr_w ] == s1_addr);
+assign m6_ssel_dec[2] = (m6_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s2_addr);
+assign m6_ssel_dec[3] = (m6_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s3_addr);
+assign m6_ssel_dec[4] = (m6_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s4_addr);
+assign m6_ssel_dec[5] = (m6_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s5_addr);
+assign m6_ssel_dec[6] = (m6_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s6_addr);
+assign m6_ssel_dec[7] = (m6_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s7_addr);
 
-assign m7_ssel_dec[0] = (m7_adr_i[`aw -1 : `aw - s0_addr_w ] == s0_addr);
-assign m7_ssel_dec[1] = (m7_adr_i[`aw -1 : `aw - s1_addr_w ] == s1_addr);
-assign m7_ssel_dec[2] = (m7_adr_i[`aw -1 : `aw - s27_addr_w ] == s2_addr);
-assign m7_ssel_dec[3] = (m7_adr_i[`aw -1 : `aw - s27_addr_w ] == s3_addr);
-assign m7_ssel_dec[4] = (m7_adr_i[`aw -1 : `aw - s27_addr_w ] == s4_addr);
-assign m7_ssel_dec[5] = (m7_adr_i[`aw -1 : `aw - s27_addr_w ] == s5_addr);
-assign m7_ssel_dec[6] = (m7_adr_i[`aw -1 : `aw - s27_addr_w ] == s6_addr);
-assign m7_ssel_dec[7] = (m7_adr_i[`aw -1 : `aw - s27_addr_w ] == s7_addr);
+assign m7_ssel_dec[0] = (m7_adr_i[`aw -2 : `aw -1 - s0_addr_w ] == s0_addr);
+assign m7_ssel_dec[1] = (m7_adr_i[`aw -2 : `aw -1 - s1_addr_w ] == s1_addr);
+assign m7_ssel_dec[2] = (m7_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s2_addr);
+assign m7_ssel_dec[3] = (m7_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s3_addr);
+assign m7_ssel_dec[4] = (m7_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s4_addr);
+assign m7_ssel_dec[5] = (m7_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s5_addr);
+assign m7_ssel_dec[6] = (m7_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s6_addr);
+assign m7_ssel_dec[7] = (m7_adr_i[`aw -2 : `aw -1 - s27_addr_w ] == s7_addr);
 
 //assign i_ssel_dec[0] = (i_bus_m[`mbusw -1 : `mbusw - s0_addr_w ] == s0_addr);
 //assign i_ssel_dec[1] = (i_bus_m[`mbusw -1 : `mbusw - s1_addr_w ] == s1_addr);
