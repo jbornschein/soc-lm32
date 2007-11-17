@@ -111,15 +111,15 @@ int main(int argc, char **argv)
 		case '0':
 			continue;
 		case '1':             // data, 2-byte address
-			addr = parsehex(line, 4, 4) - rambase;
+			addr = parsehex(line, 4, 4);
 			parseline(line, 8, len-3, addr);
 			break;
 		case '2':             // data, 3-byte address
-			addr = parsehex(line, 4, 6) - rambase;
+			addr = parsehex(line, 4, 6);
 			parseline(line, 10, len-4, addr);
 			break;
 		case '3':             // data, 4-byte address
-			addr = parsehex(line, 4, 8) - rambase;
+			addr = parsehex(line, 4, 8);
 			parseline(line, 12, len-5, addr);
 			break;
 		case '7':             // 4-byte start address
