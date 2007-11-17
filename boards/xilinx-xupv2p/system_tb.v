@@ -20,8 +20,8 @@ parameter clk_freq = 1000000000 / tck; // Frequenzy in HZ
 //----------------------------------------------------------------------------
 reg        clk;
 reg        reset;
-reg  [4:0] btn;
-wire [3:0] led;
+reg  [4:0] btn_n;
+wire [3:0] led_n;
 wire [3:0] sw;
 
 //------------------------------------------------------------------
@@ -142,11 +142,11 @@ system #(
 	.ddr_phase_shift(    ddr_phase_shift  ),
 	.ddr_wait200_init(   ddr_wait200_init )
 ) dut  (
-	.clk(       clk   ),
-	.reset_n(  ~reset ),
+	.clk(       clk       ),
+	.reset_n(  ~reset     ),
 	// Debug
-	.led(       led   ),
-	.btn(       btn   ),
+	.led_n(     led_n     ),
+	.btn_n(     btn_n     ),
 	// UART
 	.uart_rxd(  uart_rxd  ),
 	.uart_txd(  uart_txd  ),

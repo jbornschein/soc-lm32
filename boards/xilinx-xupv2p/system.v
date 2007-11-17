@@ -29,8 +29,8 @@ module system
 	inout        [`DQS_RNG] ddr_dqs,
 	output       [ `DM_RNG] ddr_dm,
 	// Debug 
-	output            [3:0] led,
-	input             [4:0] btn,
+	output            [3:0] led_n,
+	input             [4:0] btn_n,
 	input             [3:0] sw,
 	// Uart
 	input                   uart_rxd, 
@@ -143,7 +143,7 @@ wire         uart0_intr = 0;
 wire   [1:0] timer0_intr;
 
 assign intr_n = { 24'hFFFFFF, ~timer0_intr[1], 5'b11111, ~timer0_intr[0], ~uart0_intr };
-assign led    = { ~clk, ~rst, ~lm32i_stb, ~lm32i_ack };
+assign led_n  = { ~clk, ~rst, ~lm32i_stb, ~lm32i_ack };
 
 
 //------------------------------------------------------------------
@@ -350,7 +350,7 @@ wb_bram #(
 //------------------------------------------------------------------
 // ddr0
 //------------------------------------------------------------------
-wire [2:0] rot = { 1'b0, ~btn[1], ~btn[3] };
+wire [2:0] rot = { 1'b0, ~btn_n[1], ~btn_n[3] };
 
 wb_ddr #(
 	.clk_freq(     clk_freq         ),
