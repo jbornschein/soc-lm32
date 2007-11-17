@@ -3,8 +3,10 @@
 require "serialport.so"
 require "optparse"
 
-port_baud = 115200
-port_path = "/dev/ttyUSB0"
+port_baud     = 115200
+port_path     = "/dev/ttyUSB0"
+terminal_mode = false
+verose        = false
 
 opts = OptionParser.new do |o|
 	o.banner = "Usage: upload.rb [options] <file.srec>"
@@ -17,6 +19,16 @@ opts = OptionParser.new do |o|
 	o.on( "-s", "--serial SERIALPORT", 
 	         "Path to serial port (default: #{port_path})" ) do |port|
 		port_path = port
+	end
+
+	o.on( "-v", "--verbose", 
+	        "Be verbose and show serial I/O" ) do
+		verbose = true
+	end
+
+	o.on( "-t", "--terminal", 
+	        "Switch to terminal mode after upload" ) do 
+		temrinl_mode = true
 	end
 
 	o.on_tail( "-h", "--help", "Display this help message" ) do
@@ -61,7 +73,6 @@ begin
     end while ch != 62
     puts "Spike bootloader found"
 
-	#
 	#port.puts "v4000000040001000"
     #begin
     #    putc(ch = port.getc)
@@ -108,9 +119,14 @@ begin
     sp.printf("g40000000")
     puts "Complete"
 
-    begin
-        putc(ch = sp.getc)
-    end while ch != 62   
+	if terminal_mode 
+		while true do
+			a = select( [sp, STDIN], nil, nil );
+
+        	STDIN.putc(ch = sp.getc) if a[0].include?( sp )
+        	sp.putc(ch = STDIN.getc) if a[0].include?( STDIN )
+		end
+	end
    
 ensure 
     uploadFile.close unless uploadFile.nil?
