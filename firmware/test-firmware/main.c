@@ -1,3 +1,7 @@
+/**
+ * 
+ */
+
 #include "spike_hw.h"
 
 inline void writeint(uint32_t val)

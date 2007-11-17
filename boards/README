@@ -10,5 +10,6 @@ Each directory contains a design for a supported board:
 
  xilinx-xupv2p   
                  
-
+ simulation      Simulation only target which can be used to simulate 
+                 a programm running on soc-lm32
 

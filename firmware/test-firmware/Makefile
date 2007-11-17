@@ -3,11 +3,14 @@ LM32_LD=lm32-elf-ld
 LM32_OBJCOPY=lm32-elf-objcopy
 LM32_OBJDUMP=lm32-elf-objdump
 
-CFLAGS=-MMD -O1 -Wall -g -s -fomit-frame-pointer -mbarrel-shift-enabled -mmultiply-enabled -mdivide-enabled -msign-extend-enabled
-LDFLAGS=-Tlinker.ld
-SEGMENTS = -j .text -j .data -j .rodata
+SREC2VRAM ?= ../../tools/srec2vram/srec2vram
+VRAMFILE=image.ram
 
-all: image.bin image.lst image.srec
+CFLAGS=-MMD -O2 -Wall -g -s -fomit-frame-pointer -mbarrel-shift-enabled   -mmultiply-enabled -mdivide-enabled -msign-extend-enabled
+LDFLAGS=-Tlinker.ld
+SEGMENTS = -j .text -j .rodata -j .data
+
+all: image.srec $(VRAMFILE) 
 
 crt0ram.o: crt0ram.S
 	$(LM32_CC) $(CFLAGS) -c crt0ram.S
@@ -30,8 +33,11 @@ image.bin: image
 image.srec: image image.lst
 	$(LM32_OBJCOPY) $(SEGMENTS) -O srec image image.srec
 
+$(VRAMFILE): image.srec
+	$(SREC2VRAM) image.srec 0x40000000 0x10000 > $(VRAMFILE)
+
 clean:
-	rm -f srectovhdl image image.lst image.bin image.srec image.map  *.o *.d
+	rm -f image image.lst image.bin image.srec image.map  *.o *.d
 
 DEPS := $(wildcard *.d)
 ifneq ($(DEPS),)

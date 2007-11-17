@@ -3,7 +3,6 @@ LM32_LD=lm32-elf-ld
 LM32_OBJCOPY=lm32-elf-objcopy
 LM32_OBJDUMP=lm32-elf-objdump
 
-SREC2VHDL ?= ../../tools/srec2vhdl/srec2vhdl
 SREC2VRAM ?= ../../tools/srec2vram/srec2vram
 
 VRAMFILE=image.ram

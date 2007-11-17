@@ -1,3 +1,7 @@
+/**
+ * Bootloader for soc-lm32
+ */
+
 #include "spike_hw.h"
 
 
@@ -67,7 +71,6 @@ int main(int argc, char **argv)
 
 	// Initialize stuff
 	uart_init();
-	//irq_enable();
 
 	uart_putstr("\r\n\r\n** SPIKE BOOTLOADER **\n");
 	for(;;) {

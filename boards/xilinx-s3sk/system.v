@@ -4,7 +4,7 @@
 
 module system
 #(
-	parameter   bootram_file     = "../../software/Bootloader/image.ram",
+	parameter   bootram_file     = "../../firmware/bootloader/image.ram",
 	parameter   clk_freq         = 50000000,
 	parameter   uart_baud_rate   = 115200
 ) (

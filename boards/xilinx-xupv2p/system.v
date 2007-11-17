@@ -5,6 +5,7 @@
 
 module system
 #(
+	parameter   bootram_file     = "../../firmware/bootloader/image.ram",
 	parameter   clk_freq         = 100000000,
 	parameter   uart_baud_rate   = 115200,
 	parameter   ddr_clk_multiply = 13,
@@ -332,7 +333,7 @@ lm32_cpu lm0 (
 //------------------------------------------------------------------
 wb_bram #(
 	.adr_width( 12 ),
-	.mem_file_name( "../../software/Bootloader/image.ram" )
+	.mem_file_name( bootram_file )
 ) bram0 (
 	.clk_i(  clk  ),
 	.rst_i(  rst  ),
