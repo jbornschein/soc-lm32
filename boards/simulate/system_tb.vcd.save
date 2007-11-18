@@ -1,6 +1,6 @@
-[size] 1280 955
+[size] 1024 699
 [pos] -1 -1
-*-23.000000 19940000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-21.000000 213305000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 @28
 system_tb.dut.clk
 @200
@@ -29,6 +29,3 @@ system_tb.dut.bram1_ack
 system_tb.dut.bram1_we
 @22
 system_tb.dut.intr_n[31:0]
-@28
-system_tb.dut.uart0.wb_stb_i
-system_tb.dut.timer0.wb_stb_i

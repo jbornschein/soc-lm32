@@ -5,36 +5,46 @@ timer_t  *timer0 = (timer_t *)  0xF0010000;
 // gpio_t   *gpio0  = (gpio_t *)   0xF0002000;
 // uint32_t *sram0  = (uint32_t *) 0x40000000;
 
-uint32_t msec = 0;
+isr_ptr_t isr_table[32];
 
 /***************************************************************************
  * IRQ handling
  */
-void irq_handler(uint32_t irl)
+void isr_null()
 {
-	uint32_t tcr;
-	int diff;
+}
 
-	switch (irl) {
-	case 0:                                              /* uart0 tx */
-		break;
-	case 1:                                              /* uart0 rx */
-		break;
-	case 2:                                   /* timer0.0 (system tic) */
-		tcr = timer0->tcr0;  // reset trig0
-		msec++;
-		break;
-	case 3:                                               /* timer0.1 */
-		break;
-	};
+void irq_handler(uint32_t pending)
+{
+	int i;
 
-	return;
+	for(i=0; i<32; i++) {
+		if (pending & 0x01) (*isr_table[i])();
+		pending >>= 1;
+	}
+}
+
+void isr_init()
+{
+	int i;
+	for(i=0; i<32; i++)
+		isr_table[i] = &isr_null;
+}
+
+void isr_register(int irq, isr_ptr_t isr)
+{
+	isr_table[irq] = isr;
+}
+
+void isr_unregister(int irq)
+{
+	isr_table[irq] = &isr_null;
 }
 
 /***************************************************************************
- * General utility functions
+ * TIMER Functions
  */
-void sleep(int msec)
+void msleep(uint32_t msec)
 {
 	uint32_t tcr;
 
@@ -49,13 +59,40 @@ void sleep(int msec)
  	} while ( ! (tcr & TIMER_TRIG) );
 }
 
+void nsleep(uint32_t nsec)
+{
+	uint32_t tcr;
+
+	// Use timer0.1
+	timer0->compare1 = (FCPU/1000000)*nsec;
+	timer0->counter1 = 0;
+	timer0->tcr1 = TIMER_EN | TIMER_IRQEN;
+
+	do {
+		//halt();
+ 		tcr = timer0->tcr1;
+ 	} while ( ! (tcr & TIMER_TRIG) );
+}
+
+
+uint32_t tic_msec = 0;
+
+void tic_isr()
+{
+	tic_msec++;
+	timer0->tcr0     = TIMER_EN | TIMER_AR | TIMER_IRQEN;
+}
+
 void tic_init()
 {
 	// Setup timer0.0
 	timer0->compare0 = (FCPU/1000);
 	timer0->counter0 = 0;
 	timer0->tcr0     = TIMER_EN | TIMER_AR | TIMER_IRQEN;
+
+	isr_register(1, &tic_isr);
 }
+
 
 /***************************************************************************
  * UART Functions

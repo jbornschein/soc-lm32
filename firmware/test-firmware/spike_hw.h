@@ -13,38 +13,43 @@
 
 #define UART_RXBUFSIZE 32
 
-// 32 Bit
-typedef unsigned int  uint32_t;
-typedef signed   int   int32_t;
-
-// 8 Bit
-typedef unsigned char  uint8_t;
-typedef signed   char   int8_t;
-
-void irq_enable();
-void irq_disable();
-void irq_mask();
-void halt();
-void jump(uint32_t addr);
-
-void sleep();
-void tic_init();
-
-/***************************************************************************
- * GPIO0
+/****************************************************************************
+ * Types
  */
-typedef struct {
-	volatile uint32_t iport;
-	volatile uint32_t oport;
-} gpio_t;
+typedef unsigned int  uint32_t;    // 32 Bit
+typedef signed   int   int32_t;    // 32 Bit
 
-/***************************************************************************
- * TIMER0
+typedef unsigned char  uint8_t;    // 8 Bit
+typedef signed   char   int8_t;    // 8 Bit
+
+/****************************************************************************
+ * Interrupt handling
  */
-#define TIMER_EN     0x08
-#define TIMER_AR     0x04
-#define TIMER_IRQEN  0x02
-#define TIMER_TRIG   0x01
+typedef void(*isr_ptr_t)(void);
+
+void     irq_enable();
+void     irq_disable();
+void     irq_set_mask(uint32_t mask);
+uint32_t irq_get_mak();
+
+void     isr_init();
+void     isr_register(int irq, isr_ptr_t isr);
+void     isr_unregister(int irq);
+
+/****************************************************************************
+ * General Stuff
+ */
+void     halt();
+void     jump(uint32_t addr);
+
+
+/****************************************************************************
+ * Timer
+ */
+#define TIMER_EN     0x08    // Enable Timer
+#define TIMER_AR     0x04    // Auto-Reload
+#define TIMER_IRQEN  0x02    // IRQ Enable
+#define TIMER_TRIG   0x01    // Triggered (reset when writing to TCR)
 
 typedef struct {
 	volatile uint32_t tcr0;
@@ -54,6 +59,20 @@ typedef struct {
 	volatile uint32_t compare1;
 	volatile uint32_t counter1;
 } timer_t;
+
+void msleep(uint32_t msec);
+void nsleep(uint32_t nsec);
+
+void tic_init();
+
+
+/***************************************************************************
+ * GPIO0
+ */
+typedef struct {
+	volatile uint32_t iport;
+	volatile uint32_t oport;
+} gpio_t;
 
 /***************************************************************************
  * UART0
@@ -67,14 +86,15 @@ typedef struct {
    volatile uint32_t rxtx;
 } uart_t;
 
-/***************************************************************************
- * Spike peripheral components
- */
 void uart_init();
 void uart_putchar(char c);
 void uart_putstr(char *str);
 char uart_getchar();
 
+
+/***************************************************************************
+ * Pointer to actual components
+ */
 extern timer_t  *timer0;
 extern uart_t   *uart0; 
 extern gpio_t   *gpio0; 

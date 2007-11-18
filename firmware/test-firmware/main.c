@@ -45,6 +45,11 @@ int main()
     
  	// Initialize stuff
 	uart_init();
+	tic_init();
+	irq_set_mask( 0xffffffff );
+	irq_enable();
+
+	// Say Hello!
 	uart_putstr( "** Spike Test Firmware **\n" );
 
 	/* Test 1 */
@@ -76,10 +81,11 @@ int main()
 	uart_putstr( "Timer Test (2s): " );
 	for(i=0; i<5; i++) {
 		uart_putstr("tic...");    
-		sleep(2000);
+		msleep(2000);
 	}
 	uart_putchar('\n');    
 
+	msleep(10000);
 
 
 	uart_putstr( "Memory Dump: " );

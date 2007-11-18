@@ -26,7 +26,8 @@
 /* Exception handlers - Must be 32 bytes long. */
 	.section    .text, "ax", @progbits        
 	.global     _start  
-	.global     irq_enable, irq_disable, irq_mask, jump, halt
+	.global     irq_enable, irq_disable, irq_set_mask, irq_get_mask
+	.global     jump, halt
 	.global     get_sp, get_gp
 
 _start:    
@@ -41,6 +42,66 @@ _reset_handler:
 	nop
 
 _breakpoint_handler:
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+
+_ibuserror_handler:
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+
+_watchpoint_handler:
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+
+_dbuserror_handler:
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+
+_divzero_handler:
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+
+_interrupt_handler:
+	sw      (sp+0), ra
+	calli   _save_all
+	rcsr	r1, IP 
+	calli   irq_handler
+	mvhi    r1, 0xffff
+	ori     r1, r1, 0xffff
+	wcsr	IP, r1 
+	bi      _restore_all_and_eret
+
+_scall_handler:
 	nop
 	nop
 	nop
@@ -79,16 +140,19 @@ irq_enable:
 	wcsr	IE, r1
 	ret
 
-irq_mask:
-	mvi     r1, 0x0000000f
-	wcsr	IM, r1
-	ret
-	
 irq_disable:
 	mvi     r1, 0
 	wcsr	IE, r1
 	ret
 
+irq_set_mask:
+	wcsr	IM, r1
+	ret
+
+irq_get_mask:
+	rcsr    r1, IM
+	ret
+	
 jump:
 	b       r1 
 
@@ -138,7 +202,7 @@ _save_all:
 	ret
 
         /* Restore all registers and return from exception */
-_restore_all_and_return:
+_restore_all_and_eret:
         lw      r1, (sp+4)
         lw      r2, (sp+8) 
         lw      r3, (sp+12) 
@@ -174,7 +238,6 @@ _restore_all_and_return:
         /* Stack pointer must be restored last, in case it has been updated */
         lw      sp, (sp+112)
         eret
-
 
 get_sp:
 	mv      r1, sp
