@@ -125,76 +125,14 @@ initial begin
 	#0  reset <= 1;
 	#80 reset <= 0;
 
-	#350000
-
-	// send 'g'
-	uart_send( 'h67 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
 /*
 	// send select value
 	uart_send( 'h00 );
 	uart_wait_tx;
 	#(tck*5000)
-
-	// send trigger mask
-	uart_send( 'hFF );
-	uart_wait_tx;
-	#(tck*5000)
-
-	// send trigger comop
-	uart_send( 'h80 );
-	uart_wait_tx;
-	#(tck*5000)
-
-	// send pretrigger value
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*5000)
 */
 
-	#(tck*1000) $finish;
+	#(tck*25000) $finish;
 end
 
 //------------------------------------------------------------------
@@ -208,5 +146,15 @@ begin
 		            (dut.lm32d_we) ? dut.lm32d_dat_w : dut.lm32d_dat_r );
 	end
 end
+
+always @(posedge clk)
+begin
+	if (dut.lm32i_ack) begin
+		$display( "LM32I transaction: ADR=%x WE=%b DAT=%x", 
+		            dut.lm32i_adr, dut.lm32i_we, 
+		            (dut.lm32i_we) ? dut.lm32i_dat_w : dut.lm32i_dat_r );
+	end
+end
+
 
 endmodule
