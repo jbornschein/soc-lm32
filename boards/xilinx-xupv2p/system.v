@@ -151,17 +151,17 @@ assign led_n  = { ~clk, ~rst, ~lm32i_stb, ~lm32i_ack };
 // Wishbone Interconnect
 //------------------------------------------------------------------
 wb_conbus_top #(
-	.s0_addr_w ( 4 ),
-	.s0_addr   ( 4'h4 ),        // ddr0
-	.s1_addr_w ( 4 ),
-	.s1_addr   ( 4'h5 ),        // flash0
-	.s27_addr_w( 16 ),
-	.s2_addr   ( 16'h0000 ),    // bram0 
-	.s3_addr   ( 16'hF000 ),    // uart0
-	.s4_addr   ( 16'hF001 ),    // timer0
-	.s5_addr   ( 16'hF002 ),
-	.s6_addr   ( 16'hF003 ),
-	.s7_addr   ( 16'hF004 )
+	.s0_addr_w ( 3 ),
+	.s0_addr   ( 3'h4 ),        // ddr0
+	.s1_addr_w ( 3 ),
+	.s1_addr   ( 3'h5 ),        // flash0
+	.s27_addr_w( 15 ),
+	.s2_addr   ( 15'h0000 ),    // bram0 
+	.s3_addr   ( 15'h7000 ),    // uart0
+	.s4_addr   ( 15'h7001 ),    // timer0
+	.s5_addr   ( 15'h7002 ),
+	.s6_addr   ( 15'h7003 ),
+	.s7_addr   ( 15'h7004 )
 ) conmax0 (
 	.clk_i( clk ),
 	.rst_i( rst ),

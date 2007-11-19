@@ -124,9 +124,9 @@ assign led    = { clk, rst, lm32i_stb, lm32i_ack };
 //------------------------------------------------------------------
 wb_conbus_top #(
 	.s0_addr_w ( 3 ),
-	.s0_addr   ( 4'h4 ),        // bram1
+	.s0_addr   ( 3'h4 ),        // bram1
 	.s1_addr_w ( 3 ),
-	.s1_addr   ( 4'h5 ),        // flash0
+	.s1_addr   ( 3'h5 ),        // flash0
 	.s27_addr_w( 15 ),
 	.s2_addr   ( 15'h0000 ),    // bram0 
 	.s3_addr   ( 15'h7000 ),    // uart0

@@ -181,52 +181,7 @@ initial begin
 	#0  reset <= 1;
 	#80 reset <= 0;
 
-	#350000
-
-	// send 'g'
-	uart_send( 'h67 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
+	#(tck*50000) $finish;
 
 /*
 	// send select value
@@ -249,8 +204,6 @@ initial begin
 	uart_wait_tx;
 	#(tck*5000)
 */
-
-	#(tck*1000) $finish;
 end
 
 //------------------------------------------------------------------
