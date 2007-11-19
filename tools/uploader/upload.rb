@@ -28,7 +28,7 @@ opts = OptionParser.new do |o|
 
 	o.on( "-t", "--terminal", 
 	        "Switch to terminal mode after upload" ) do 
-		temrinl_mode = true
+		terminal_mode = true
 	end
 
 	o.on_tail( "-h", "--help", "Display this help message" ) do
@@ -115,6 +115,11 @@ begin
 	end	
 	puts "Upload done."
     		
+	port.puts "v4000000040001000"
+    begin
+        putc(ch = port.getc)
+    end while ch != 62
+
     puts "Run..."
     sp.printf("g40000000")
     puts "Complete"
@@ -123,8 +128,8 @@ begin
 		while true do
 			a = select( [sp, STDIN], nil, nil );
 
-        	STDIN.putc(ch = sp.getc) if a[0].include?( sp )
-        	sp.putc(ch = STDIN.getc) if a[0].include?( STDIN )
+        	STDOUT.putc(ch = sp.getc) if a[0].include?( sp )
+        	sp.putc(ch = STDIN.getc)  if a[0].include?( STDIN )
 		end
 	end
    
