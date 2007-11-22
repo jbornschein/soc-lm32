@@ -7,6 +7,7 @@ SYN_SRC=
 
 SIM_SRC=                                  \
 	system_tb.v                           \
+	../../sim/sram/sram16.v               \
 	../../sim/unisims/BUFG.v              \
 	../../sim/unisims/DCM.v
 
@@ -33,7 +34,8 @@ SRC=                                      \
 	../../rtl/wb_uart/wb_uart.v           \
 	../../rtl/wb_timer/wb_timer.v         \
 	../../rtl/wb_conbus/wb_conbus_top.v   \
-	../../rtl/wb_conbus/wb_conbus_arb.v
+	../../rtl/wb_conbus/wb_conbus_arb.v   \
+	../../rtl/wb_sram/wb_sram32.v
 #	../../rtl/wb_uart/uart.v              \
 
 #############################################################################
@@ -113,7 +115,7 @@ usage: system-routed.xdl
 ####################################################################
 # final targets
 
-%.view: %.vcd
+%.view:
 	$(GTKWAVE) $< $<.save
 
 clean:

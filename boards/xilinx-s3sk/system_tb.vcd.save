@@ -1,6 +1,6 @@
 [size] 1280 955
 [pos] -1 -1
-*-27.000000 388330000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-16.000000 1287430000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 @28
 system_tb.dut.clk
 system_tb.dut.rst
@@ -24,9 +24,12 @@ system_tb.dut.intr_n[31:0]
 system_tb.dut.uart0_txd
 system_tb.dut.uart0_rxd
 @200
--WB_DDR
--DDR
+-SRAM
 @28
-system_tb.dut.ddr_clk
-system_tb.dut.ddr_ras_n
-system_tb.dut.ddr_cas_n
+system_tb.dut.sram_ce_n
+system_tb.dut.sram_oe_n
+system_tb.dut.sram_we_n
+@22
+system_tb.dut.sram_adr[17:0]
+system_tb.dut.sram_dat[31:0]
+system_tb.dut.sram_be_n[3:0]

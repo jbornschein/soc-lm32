@@ -21,9 +21,9 @@ wire [3:0] btn;
 wire [7:0] sw;
 wire [7:0] led;
 
-//------------------------------------------------------------------
+//----------------------------------------------------------------------------
 // UART STUFF (testbench uart, simulating a comm. partner)
-//------------------------------------------------------------------
+//----------------------------------------------------------------------------
 wire         uart_rxd;
 wire         uart_txd;
 
@@ -54,9 +54,9 @@ uart #(
 	.tx_busy(  tx_busy   )
 );
 
-//------------------------------------------------------------------
-// uart helper function
-//------------------------------------------------------------------
+//----------------------------------------------------------------------------
+// UART helper functions
+//----------------------------------------------------------------------------
 always @(posedge clk)
 begin
 	if (rx_avail && ~rx_ack) begin
@@ -93,9 +93,43 @@ task uart_wait_tx;
 	end
 endtask
 
-//------------------------------------------------------------------
+//----------------------------------------------------------------------------
+// Static RAM
+//----------------------------------------------------------------------------
+wire   [17:0] sram_adr;
+wire   [31:0] sram_dat;
+wire    [3:0] sram_be_n;
+wire          sram_ce_n;
+wire          sram_oe_n;
+wire          sram_we_n;
+
+sram16 #(
+	.adr_width( 18 )
+) ram1 (
+	.adr(    sram_adr        ),
+	.dat(    sram_dat[31:16] ),
+	.ub_n(   sram_be_n[3]    ),
+	.lb_n(   sram_be_n[2]    ),
+	.cs_n(   sram_ce_n       ),
+	.oe_n(   sram_oe_n       ),
+	.we_n(   sram_we_n       )
+);
+
+sram16 #(
+	.adr_width( 18 )
+) ram0 (
+	.adr(    sram_adr        ),
+	.dat(    sram_dat[15:0]  ),
+	.ub_n(   sram_be_n[1]    ),
+	.lb_n(   sram_be_n[0]    ),
+	.cs_n(   sram_ce_n       ),
+	.oe_n(   sram_oe_n       ),
+	.we_n(   sram_we_n       )
+);
+
+//----------------------------------------------------------------------------
 // Decive Under Test 
-//------------------------------------------------------------------
+//----------------------------------------------------------------------------
 system #(
 	.clk_freq(           clk_freq         ),
 	.uart_baud_rate(     uart_baud_rate   )
@@ -107,7 +141,14 @@ system #(
 	.sw(           sw     ),
 	// Uart
 	.uart_rxd(  uart_rxd  ),
-	.uart_txd(  uart_txd  )
+	.uart_txd(  uart_txd  ),
+	// SRAM
+	.sram_adr(  sram_adr  ),
+	.sram_dat(  sram_dat  ),
+	.sram_be_n( sram_be_n ),
+	.sram_ce_n( sram_ce_n ),
+	.sram_oe_n( sram_oe_n ),
+	.sram_we_n( sram_we_n )
 );
 
 assign btn = { 3'b0, reset };
@@ -119,7 +160,7 @@ always #(tck/2) clk <= ~clk;
 
 /* Simulation setup */
 initial begin
-	$dumpvars(-1, dut);
+	$dumpvars(-1);
 	$dumpfile("system_tb.vcd");
 
 	// reset
