@@ -16,10 +16,19 @@ Directory structure:
 
  1.1 Memory Map
 
-    [0x00000000,0x00000800) Bootloader BlockRAM 
-    [0x40000000,0x40000000) Externam RAM (size depends on actual board)
-    [0x70000000,0x70010000) Uart
-    [0x70010000,0x70020000) Timer
+  [0x00000000,0x00000800) bram0      -- Bootloader BlockRAM 
+  [0x40000000,0x40000000) sram0/ddr0 -- Externam RAM (size depends on actual board)
+  [0x70000000,0x70010000) uart0      -- serial communication  component
+  [0x70010000,0x70020000) timer0     -- 32 bit dual timer engine
 
-    [0x80000000,0xFFFFFFFF] Non-Cached mirror of [0x00000000,0x800000000)
+  [0x80000000,0xFFFFFFFF] Non-Cached mirror of [0x00000000,0x7FFFFFFF]
+
+ 1.2 Interrupts
+
+   0      uart0
+   1      timer0.0
+   2-5    NONE
+   7      timer0.1
+   8-31   NONE
+
 

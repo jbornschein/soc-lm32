@@ -85,6 +85,9 @@ system_tb.vvp: $(SRC) $(SIM_SRC)
 	done
 	$(IVERILOG) -o $@ $(VINCDIR) -c $@.list -s $(@:.vvp=)
 
+%.vcd: %.vvp
+	$(VVP) $<
+
 #############################################################################
 # ISE Synthesis
 
@@ -123,10 +126,7 @@ usage: system-routed.xdl
 ####################################################################
 # final targets
 
-%.vcd: %.vvp
-	$(VVP) $<
-
-%.view: %.vcd
+%.view: 
 	$(GTKWAVE) $< $<.save
 
 clean:

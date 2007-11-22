@@ -1,6 +1,7 @@
 
 Each directory contains a design for a supported board:
 
+ altera-de1
 
  xilinx-s3sk     Xilinx Spartan-3 Starter Board with a xc3s200 and 
                  1 mbit SRAM.

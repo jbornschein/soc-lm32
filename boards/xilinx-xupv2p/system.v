@@ -387,9 +387,9 @@ wb_ddr #(
 	.wb_ack_o(    ddr0_ack     ),
 	// phase shifting
 	.rot(          rot         ),
-	.probe_clk(    probe_clk   ),
-	.probe_sel(    probe_sel   ),
-	.probe(        probe       )
+//	.probe_clk(    probe_clk   ),
+	.probe_sel(    'b0         )
+//	.probe(        probe       )
 );
 
 
@@ -466,28 +466,23 @@ lac #(
 	.probe(      probe     )
 );
 
-/*
-assign probe = (select[3:0] == 'h0) ? { rst, lm32i_stb, lm32i_cyc, lm32i_ack, lm32d_stb, lm32d_cyc, lm32d_we, lm32d_ack } :
-               (select[3:0] == 'h1) ? lm32i_adr[31:24] :
-               (select[3:0] == 'h2) ? lm32i_adr[23:16] :
-               (select[3:0] == 'h3) ? lm32i_adr[15: 8] :
-               (select[3:0] == 'h4) ? lm32i_adr[ 7: 0] :
-               (select[3:0] == 'h5) ? lm32i_dat_r[31:24] :
-               (select[3:0] == 'h6) ? lm32i_dat_r[23:16] :
-               (select[3:0] == 'h7) ? lm32i_dat_r[15: 8] :
-               (select[3:0] == 'h8) ? lm32i_dat_r[ 7: 0] :
-               (select[3:0] == 'h9) ? lm32d_adr[31:24] :
-               (select[3:0] == 'ha) ? lm32d_adr[23:16] :
-               (select[3:0] == 'hb) ? lm32d_adr[15: 8] :
-                                      lm32d_adr[ 7: 0] ;
-*/
+assign probe_clk = clk;
+assign probe = (probe_sel[3:0] == 'h0) ? { rst, intr_n[1], lm32i_stb, lm32i_ack, lm32d_stb, lm32d_cyc, lm32d_we, lm32d_ack } :
+               (probe_sel[3:0] == 'h1) ? lm32i_adr[31:24] :
+               (probe_sel[3:0] == 'h2) ? lm32i_adr[23:16] :
+               (probe_sel[3:0] == 'h3) ? lm32i_adr[15: 8] :
+               (probe_sel[3:0] == 'h4) ? lm32i_adr[ 7: 0] :
+               (probe_sel[3:0] == 'h5) ? lm32i_dat_r[31:24] :
+               (probe_sel[3:0] == 'h6) ? lm32i_dat_r[23:16] :
+               (probe_sel[3:0] == 'h7) ? lm32i_dat_r[15: 8] :
+               (probe_sel[3:0] == 'h8) ? lm32i_dat_r[ 7: 0] :
+               (probe_sel[3:0] == 'h9) ? lm32d_adr[31:24] :
+               (probe_sel[3:0] == 'ha) ? lm32d_adr[23:16] :
+               (probe_sel[3:0] == 'hb) ? lm32d_adr[15: 8] :
+                                         lm32d_adr[ 7: 0] ;
 
-assign uart_txd  = uart0_txd;
-assign uart0_rxd = uart_rxd;
-
-assign lac_rxd = 0;
-// assign uart_txd  = (sw[0]) ? uart0_txd : lac_txd;
-// assign lac_rxd   = (sw[0]) ?         1 : uart_rxd;
-// assign uart0_rxd = (sw[0]) ? uart_rxd  : 1;
+assign uart_txd  = (sw[0]) ? uart0_txd : lac_txd;
+assign lac_rxd   = (sw[0]) ?         1 : uart_rxd;
+assign uart0_rxd = (sw[0]) ? uart_rxd  : 1;
 
 endmodule 
