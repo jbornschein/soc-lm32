@@ -1,6 +1,6 @@
 # ==== Clock inputs (CLK) ====
 NET "clk" LOC = "T9" | IOSTANDARD = LVCMOS33 ;
-NET "clk" PERIOD = 14 HIGH 50%;
+NET "clk" PERIOD = 20 HIGH 50%;
 
 # ==== UART ====
 NET "uart_rxd" LOC = "T13" | IOSTANDARD = LVTTL ;
