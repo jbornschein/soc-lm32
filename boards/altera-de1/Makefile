@@ -4,9 +4,43 @@
 # Specify the name of the design (project) and compiler setting
 # (csf) and the list of source files used.
 ################################################################
-PROJECT = lm32
-SOURCE_FILES = system.v
-ASSIGNMENT_FILES = lm32.quartus lm32.psf lm32.csf
+PROJECT = system
+SOURCE_FILES =	                              \
+	system.v                              \
+	../../rtl/lac/lac.v                   \
+	../../rtl/lac/uart.v                  \
+	../../rtl/lac/dp_ram.v                \
+	../../rtl/lm32/lm32_cpu.v             \
+	../../rtl/lm32/lm32_instruction_unit.v	\
+	../../rtl/lm32/lm32_decoder.v         \
+	../../rtl/lm32/lm32_load_store_unit.v \
+	../../rtl/lm32/lm32_adder.v           \
+	../../rtl/lm32/lm32_addsub.v          \
+	../../rtl/lm32/lm32_logic_op.v        \
+	../../rtl/lm32/lm32_shifter.v         \
+	../../rtl/lm32/lm32_multiplier.v      \
+	../../rtl/lm32/lm32_mc_arithmetic.v   \
+	../../rtl/lm32/lm32_interrupt.v       \
+	../../rtl/lm32/lm32_icache.v          \
+	../../rtl/lm32/lm32_dcache.v          \
+	../../rtl/lm32/lm32_ram.v             \
+	../../rtl/wb_bram/wb_bram.v           \
+	../../rtl/wb_uart/wb_uart.v           \
+	../../rtl/wb_timer/wb_timer.v         \
+	../../rtl/wb_conbus/wb_conbus_top.v   \
+	../../rtl/wb_conbus/wb_conbus_arb.v   \
+	../../rtl/wb_sram/wb_sram32.v
+
+
+#ASSIGNMENT_FILES = system.quartus system.psf system.csf
+ASSIGNMENT_FILES = system.psf system.csf
+
+#system.prj: $(SOURCE_FILES) $(SYN_SRC)
+#	rm -f system.prj
+#	@for i in `echo $^`; do \
+#	    echo "set_global_assignment -name VERILOG_FILE $$i" >> system.prj; \
+#	done
+
 
 ################################################################
 # Main Targets
@@ -31,8 +65,8 @@ smart: smart.log
 ################################################################
 # Executable Configuration
 ################################################################
-MAP_ARGS = --family=Cyclone2
-FIT_ARGS = --part=EP1S20F484C6
+MAP_ARGS = --family="Cyclone II"
+FIT_ARGS = --part=EP2C20F484C7
 ASM_ARGS =
 TAN_ARGS =
 
@@ -63,7 +97,8 @@ smart.log: $(ASSIGNMENT_FILES)
 # Project initialization
 ################################################################
 $(ASSIGNMENT_FILES):
-	quartus_sh --tcl_eval project_new $(PROJECT) -overwrite
+	touch system.quartus
+#	quartus_sh --tcl_eval project_new $(PROJECT) -overwrite
 
 map.chg:
 	$(STAMP)   map.chg
