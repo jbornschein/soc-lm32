@@ -5,7 +5,12 @@
 # (csf) and the list of source files used.
 ################################################################
 PROJECT = system
-SOURCE_FILES =	                              \
+
+SYN_SRC=
+
+SIM_SRC=
+
+SRC=	                                  \
 	system.v                              \
 	../../rtl/lac/lac.v                   \
 	../../rtl/lac/uart.v                  \
@@ -35,7 +40,7 @@ SOURCE_FILES =	                              \
 #ASSIGNMENT_FILES = system.quartus system.psf system.csf
 ASSIGNMENT_FILES = system.psf system.csf
 
-#system.prj: $(SOURCE_FILES) $(SYN_SRC)
+#system.prj: $(SRC) $(SYN_SRC)
 #	rm -f system.prj
 #	@for i in `echo $^`; do \
 #	    echo "set_global_assignment -name VERILOG_FILE $$i" >> system.prj; \
@@ -75,7 +80,7 @@ TAN_ARGS =
 ################################################################
 STAMP = echo done >
 
-$(PROJECT).map.rpt: map.chg $(SOURCE_FILES)
+$(PROJECT).map.rpt: map.chg $(SRC)
 	quartus_map $(MAP_ARGS) $(PROJECT)
 	$(STAMP) fit.chg
 

@@ -4,15 +4,16 @@
 
 module system
 #(
-	parameter   bootram_file     = "../../firmware/bootloader/image.ram",
+	parameter   bootram_file     = "../../firmware/bootloader/image.ram", // XXX IGNORED XXX
 	parameter   clk_freq         = 50000000,
 	parameter   uart_baud_rate   = 115200
 ) (
 	input                   clk, 
 	// Debug 
-	output            [7:0] led,
-	input             [3:0] btn,
-	input             [7:0] sw,
+	output            [7:0] ledg,
+	output            [9:0] ledr,
+	input             [3:0] key_n,
+	input             [9:0] sw,
 	// UART
 	input                   uart_rxd, 
 	output                  uart_txd,
@@ -462,9 +463,11 @@ assign uart0_rxd = (sw[0]) ? uart_rxd  : 1'b1;
 
 
 //---------------------------------------------------------------------------
-// LEDs and switches
+// LEDs, buttons and switches
 //---------------------------------------------------------------------------
-assign led = { clk, rst, ~uart_rxd, ~uart_txd, select[3:0] };
-assign rst = btn[0] | select[7];
+assign rst  = ~key_n[0];
+
+assign ledg = { clk, rst, lm32i_stb, lm32i_ack, lm32d_stb, lm32d_ack, ~uart_rxd, ~uart_txd };
+assign ledr = 10'b0000000000;
 
 endmodule 
