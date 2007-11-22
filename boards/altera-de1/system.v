@@ -19,8 +19,8 @@ module system
 	output                  uart_txd,
 	// SRAM
 	output           [17:0] sram_adr,
-	inout            [31:0] sram_dat,
-	output            [3:0] sram_be_n,    // Byte   Enable
+	inout            [15:0] sram_dat,
+	output            [1:0] sram_be_n,    // Byte   Enable
 	output                  sram_ce_n,    // Chip   Enable
 	output                  sram_oe_n,    // Output Enable
 	output                  sram_we_n     // Write  Enable
@@ -332,7 +332,7 @@ wb_bram #(
 //---------------------------------------------------------------------------
 // sram0
 //---------------------------------------------------------------------------
-wb_sram32 #(
+wb_sram16 #(
 	.adr_width(  18  ),
 	.latency(    0   )
 ) sram0 (

@@ -1,16 +1,12 @@
-################################################################
-# Project Configuration:
-#
-# Specify the name of the design (project) and compiler setting
-# (csf) and the list of source files used.
-################################################################
 PROJECT = system
 
-SYN_SRC=
+SYN_SRC =	                              \
 
-SIM_SRC=
+SIM_SRC =	                              \
+	system_tb.v                           \
+	../../sim/sram/sram16.v
 
-SRC=	                                  \
+SRC =	                                  \
 	system.v                              \
 	../../rtl/lac/lac.v                   \
 	../../rtl/lac/uart.v                  \
@@ -34,9 +30,42 @@ SRC=	                                  \
 	../../rtl/wb_timer/wb_timer.v         \
 	../../rtl/wb_conbus/wb_conbus_top.v   \
 	../../rtl/wb_conbus/wb_conbus_arb.v   \
-	../../rtl/wb_sram/wb_sram32.v
+	../../rtl/wb_sram/wb_sram16.v
+
+#############################################################################
+# Syntheis constants
+SYNCLEAN     = *.rpt *.chg smart.log *.htm *.eqn *.pin *.sof *.pof db
+SYNCLEAN_ALL = *.ssf *.csf *.esf *.fsf *.psf *.quartus *.qws
+
+MAP_ARGS = --family="Cyclone II"
+FIT_ARGS = --part=EP2C20F484C7
+ASM_ARGS =
+TAN_ARGS =
+
+#############################################################################
+# Simulation constants
+SIMCLEAN=system_tb.vvp system_tb.vcd verilog.log system_tb.vvp.list
+
+CVER=cver
+GTKWAVE=gtkwave
+IVERILOG=iverilog
+VVP=vvp
+	
+#############################################################################
+# Ikarus verilog simulation
+system_tb.vvp: $(SRC) $(SIM_SRC)
+	rm -f $@.list
+	@for i in `echo $^`; do \
+	    echo $$i >> $@.list; \
+	done
+	$(IVERILOG) -o $@ $(VINCDIR) -c $@.list -s $(@:.vvp=)
+
+%.vcd: %.vvp
+	$(VVP) $<
 
 
+################################################################
+# Synthesis
 #ASSIGNMENT_FILES = system.quartus system.psf system.csf
 ASSIGNMENT_FILES = system.psf system.csf
 
@@ -50,30 +79,17 @@ ASSIGNMENT_FILES = system.psf system.csf
 ################################################################
 # Main Targets
 # 
-# all: build everything
+# syn: build everything
 # clean: remove output files and database
 # clean_all: removes settings files as well as clean.
 ################################################################
-all: smart.log $(PROJECT).asm.rpt $(PROJECT).tan.rpt
-
-clean:
-	rm -rf *.rpt *.chg smart.log *.htm *.eqn *.pin *.sof *.pof db
-clean_all: clean
-	rm -rf *.ssf *.csf *.esf *.fsf *.psf *.quartus *.qws
+syn: smart.log $(PROJECT).asm.rpt $(PROJECT).tan.rpt
 
 map: smart.log $(PROJECT).map.rpt
 fit: smart.log $(PROJECT).fit.rpt
 asm: smart.log $(PROJECT).asm.rpt
 tan: smart.log $(PROJECT).tan.rpt
 smart: smart.log
-
-################################################################
-# Executable Configuration
-################################################################
-MAP_ARGS = --family="Cyclone II"
-FIT_ARGS = --part=EP2C20F484C7
-ASM_ARGS =
-TAN_ARGS =
 
 ################################################################
 # Target implementations
@@ -98,13 +114,6 @@ $(PROJECT).tan.rpt: tan.chg $(PROJECT).fit.rpt
 smart.log: $(ASSIGNMENT_FILES)
 	quartus_sh --determine_smart_action $(PROJECT) > smart.log
 
-################################################################
-# Project initialization
-################################################################
-$(ASSIGNMENT_FILES):
-	touch system.quartus
-#	quartus_sh --tcl_eval project_new $(PROJECT) -overwrite
-
 map.chg:
 	$(STAMP)   map.chg
 
@@ -116,4 +125,14 @@ tan.chg:
 
 asm.chg:
 	$(STAMP)   asm.chg
+
+####################################################################
+# final targets
+
+%.view:
+	$(GTKWAVE) $< $<.save
+
+clean:
+	rm -Rf $(SYNCLEAN) $(SIMCLEAN)
+
 

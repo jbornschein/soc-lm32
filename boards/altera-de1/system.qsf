@@ -23,6 +23,7 @@
 # and any changes you make may be lost or overwritten.
 
 
+# General Settings
 set_global_assignment -name FAMILY "Cyclone II"
 set_global_assignment -name DEVICE EP2C20F484C7
 set_global_assignment -name TOP_LEVEL_ENTITY system
@@ -30,6 +31,7 @@ set_global_assignment -name ORIGINAL_QUARTUS_VERSION 7.2
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "19:15:23  NOVEMBER 22, 2007"
 set_global_assignment -name LAST_QUARTUS_VERSION 7.2
 
+# Files
 set_global_assignment -name VERILOG_FILE system.v
 set_global_assignment -name VERILOG_FILE ../../rtl/lac/lac.v
 set_global_assignment -name VERILOG_FILE ../../rtl/lac/uart.v
@@ -53,4 +55,4 @@ set_global_assignment -name VERILOG_FILE ../../rtl/wb_uart/wb_uart.v
 set_global_assignment -name VERILOG_FILE ../../rtl/wb_timer/wb_timer.v
 set_global_assignment -name VERILOG_FILE ../../rtl/wb_conbus/wb_conbus_top.v
 set_global_assignment -name VERILOG_FILE ../../rtl/wb_conbus/wb_conbus_arb.v
-set_global_assignment -name VERILOG_FILE ../../rtl/wb_sram/wb_sram32.v
+set_global_assignment -name VERILOG_FILE ../../rtl/wb_sram/wb_sram16.v
