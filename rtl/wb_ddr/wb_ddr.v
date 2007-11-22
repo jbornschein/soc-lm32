@@ -612,5 +612,4 @@ begin
 		$display ("At time %t WB_DDR spill cacheline: TAG = %h, SET = %h)", $time, ls_adr_tag, ls_adr_set);
 end
 
-
 endmodule
