@@ -7,7 +7,8 @@
 #define RAMEND    (RAMSTART + RAMSIZE)
 
 #define RAM_START 0x40000000
-#define RAM_SIZE  0x04000000
+#define RAM_SIZE  0x00001000
+// #define RAM_SIZE  0x04000000
 
 #define FCPU      100000000
 

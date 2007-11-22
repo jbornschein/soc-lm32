@@ -71,6 +71,7 @@ int main(int argc, char **argv)
 
 	// Initialize stuff
 	uart_init();
+	memtest();
 
 	uart_putstr("\r\n\r\n** SPIKE BOOTLOADER **\n");
 	for(;;) {

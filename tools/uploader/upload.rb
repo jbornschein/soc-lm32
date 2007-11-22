@@ -115,10 +115,10 @@ begin
 	end	
 	puts "Upload done."
     		
-	port.puts "v4000000040001000"
-    begin
-        putc(ch = port.getc)
-    end while ch != 62
+	#port.puts "v4000000040001000"
+    #begin
+    #    putc(ch = port.getc)
+    #end while ch != 62
 
     puts "Run..."
     sp.printf("g40000000")

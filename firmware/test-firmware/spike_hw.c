@@ -1,12 +1,14 @@
 #include "spike_hw.h"
 
-uart_t   *uart0  = (uart_t *)   0xF0000000;
-timer_t  *timer0 = (timer_t *)  0xF0010000;
+uart_t   *uart0  = (uart_t *)   0xf0000000;
+timer_t  *timer0 = (timer_t *)  0xf0010000;
 // gpio_t   *gpio0  = (gpio_t *)   0xF0002000;
 // uint32_t *sram0  = (uint32_t *) 0x40000000;
 
 isr_ptr_t isr_table[32];
 
+
+void tic_isr();
 /***************************************************************************
  * IRQ handling
  */
@@ -51,7 +53,7 @@ void msleep(uint32_t msec)
 	// Use timer0.1
 	timer0->compare1 = (FCPU/1000)*msec;
 	timer0->counter1 = 0;
-	timer0->tcr1 = TIMER_EN | TIMER_IRQEN;
+	timer0->tcr1 = TIMER_EN;
 
 	do {
 		//halt();
@@ -66,7 +68,7 @@ void nsleep(uint32_t nsec)
 	// Use timer0.1
 	timer0->compare1 = (FCPU/1000000)*nsec;
 	timer0->counter1 = 0;
-	timer0->tcr1 = TIMER_EN | TIMER_IRQEN;
+	timer0->tcr1 = TIMER_EN;
 
 	do {
 		//halt();
@@ -75,7 +77,7 @@ void nsleep(uint32_t nsec)
 }
 
 
-uint32_t tic_msec = 0;
+uint32_t tic_msec;
 
 void tic_isr()
 {
@@ -85,8 +87,10 @@ void tic_isr()
 
 void tic_init()
 {
+	tic_msec = 0;
+
 	// Setup timer0.0
-	timer0->compare0 = (FCPU/1000);
+	timer0->compare0 = (FCPU/10000);
 	timer0->counter0 = 0;
 	timer0->tcr0     = TIMER_EN | TIMER_AR | TIMER_IRQEN;
 

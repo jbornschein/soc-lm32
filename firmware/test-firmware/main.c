@@ -33,6 +33,8 @@ char glob[] = "Global";
 volatile uint32_t *p;
 volatile uint8_t *p2;
 
+extern uint32_t tic_msec;
+
 int main()
 {
     char test2[] = "Lokalerstr";
@@ -45,14 +47,21 @@ int main()
     
  	// Initialize stuff
 	uart_init();
-	tic_init();
-	irq_set_mask( 0xffffffff );
-	irq_enable();
 
 	// Say Hello!
 	uart_putstr( "** Spike Test Firmware **\n" );
+	msleep( 3000 );
 
-	/* Test 1 */
+	// Initialize TIC
+	isr_init();
+	tic_init();
+	irq_set_mask( 0x00000002 );
+	irq_enable();
+
+	// Say Hello!
+	uart_putstr( "Timer Interrupt instelled.\n" );
+
+	// Do some trivial tests
 	uart_putstr( "Subroutine-Return Test: " );
 	test();
 	uart_putchar('\n');    
@@ -85,9 +94,24 @@ int main()
 	}
 	uart_putchar('\n');    
 
-	msleep(10000);
+	uart_putstr( "Timer Interrupt counter: " );
+	writeint( tic_msec );
+	uart_putchar('\n');    
 
+	int val = tic_msec;
+	uart_putstr( "Shift and Check: " );
+	writeint( val );
+	uart_putchar('\n');    
+	for(i=0; i<32; i++) {
+		if (val & 0x01)
+			uart_putstr( " 1\n" );
+		else
+			uart_putstr( " 0\n" );
+			
+		val >>= 1;
+	}
 
+/*
 	uart_putstr( "Memory Dump: " );
 	uint32_t *start = (uint32_t *)0x40000000;
 	uint32_t *end   = (uint32_t *)0x40000100;
@@ -102,10 +126,11 @@ int main()
 		uart_putchar(' ');    
 		writeint(*p);
 	}
+*/
 
 	uart_putstr("Entering Echo Test...\n");
 	while (1) {
 	   uart_putchar(uart_getchar());
 	}
-
 }
+
