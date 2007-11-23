@@ -239,9 +239,13 @@ endgenerate
 // Compute address to use to index into the data memories
 generate 
     if (bytes_per_line > 4)
+	begin : wadr1
 assign dmem_write_address = {refill_address[`LM32_IC_ADDR_SET_RNG], refill_offset};
+	end
     else
+	begin : wadr2
 assign dmem_write_address = refill_address[`LM32_IC_ADDR_SET_RNG];
+	end
 endgenerate
     
 assign dmem_read_address = address_a[`LM32_IC_ADDR_IDX_RNG];
@@ -255,9 +259,13 @@ assign tmem_write_address = flushing
 // Compute signal to indicate when we are on the last refill accesses
 generate 
     if (bytes_per_line > 4)                            
+	begin : lrefil1
 assign last_refill = refill_offset == {addr_offset_width{1'b1}};
+	end
     else
+	begin : lrefil2
 assign last_refill = `TRUE;
+	end
 endgenerate
 
 // Compute data and tag memory access enable
@@ -385,7 +393,7 @@ end
 
 generate 
     if (bytes_per_line > 4)
-    begin
+    begin : refilof1
 // Refill offset
 always @(posedge clk_i `CFG_RESET_SENSITIVITY)
 begin
