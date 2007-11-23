@@ -55,6 +55,7 @@ parameter s_read1  = 1;
 parameter s_read2  = 2;
 parameter s_write1 = 3;
 parameter s_write2 = 4;
+parameter s_write3 = 5;
 
 reg [2:0] state;
 
@@ -127,16 +128,24 @@ begin
 			end else begin
 				sram_ce_n  <=  0;
 				sram_oe_n  <=  1;
+				sram_we_n  <=  1;
+				state      <=  s_write2;
+			end
+		end
+		s_write2: begin
+				sram_ce_n  <=  0;
+				sram_oe_n  <=  1;
 				sram_we_n  <=  0;
 				sram_adr   <=  adr2;
 				sram_be_n  <= ~wb_sel_i[3:2];
 				wdat       <=  wb_dat_i[31:16];
 				wdat_oe    <=  1;
 				lcount     <=  latency;
-				state      <=  s_write2;
-			end
+				wb_ack_o   <=  1;
+				state      <=  s_write3;
 		end
-		s_write2: begin
+		s_write3: begin
+			wb_ack_o   <=  0;
 			if (lcount != 0) begin
 				lcount     <= lcount - 1;
 			end else begin
@@ -144,8 +153,7 @@ begin
 				sram_oe_n  <=  1;
 				sram_we_n  <=  1;
 				wdat_oe    <=  0;
-				wb_ack_o   <=  1;      // XXX   We could acknoledge write  XXX
-				state      <=  s_idle; // XXX   requests 1 cycle ahead     XXX
+				state      <=  s_idle;
 			end
 		end
 		endcase
