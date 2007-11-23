@@ -8,30 +8,6 @@ timer_t  *timer0 = (timer_t *)  0xF0010000;
 uint32_t msec = 0;
 
 /***************************************************************************
- * IRQ handling
- */
-void irq_handler(uint32_t irl)
-{
-	uint32_t tcr;
-	int diff;
-
-	switch (irl) {
-	case 0:                                              /* uart0 tx */
-		break;
-	case 1:                                              /* uart0 rx */
-		break;
-	case 2:                                   /* timer0.0 (system tic) */
-		tcr = timer0->tcr0;  // reset trig0
-		msec++;
-		break;
-	case 3:                                               /* timer0.1 */
-		break;
-	};
-
-	return;
-}
-
-/***************************************************************************
  * General utility functions
  */
 void sleep(int msec)

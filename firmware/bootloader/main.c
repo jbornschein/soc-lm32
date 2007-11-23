@@ -57,7 +57,7 @@ void memtest()
 	for (p=(uint32_t *)RAM_START; p<(uint32_t *)(RAM_START+RAM_SIZE); p++) {
 		if (*p != (uint32_t)p) {
 			uart_putstr("\r\nMEMTEST ERROR: ");
-			writeint(8, p);
+			writeint(8,(uint32_t)p);
 		}
 	}
 	uart_putstr("OK\n\r");
@@ -67,7 +67,6 @@ int main(int argc, char **argv)
 {
 	int8_t  *p;
 	int32_t *p32;
-	uint8_t checksum;
 
 	// Initialize stuff
 	uart_init();
