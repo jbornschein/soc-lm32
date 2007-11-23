@@ -32,6 +32,12 @@ SRC =	                                  \
 	../../rtl/wb_conbus/wb_conbus_arb.v   \
 	../../rtl/wb_sram/wb_sram16.v
 
+
+#############################################################################
+# Main targets
+sim: system_tb.vcd
+view: system_tb.view
+
 #############################################################################
 # Syntheis constants
 SYNCLEAN     = *.rpt *.chg smart.log *.htm *.eqn *.pin *.sof *.pof db
@@ -129,7 +135,7 @@ asm.chg:
 ####################################################################
 # final targets
 
-%.view:
+%.view: %.vcd
 	$(GTKWAVE) $< $<.save
 
 clean:

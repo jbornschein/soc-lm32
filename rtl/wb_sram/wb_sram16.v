@@ -34,7 +34,8 @@ wire wb_rd = wb_stb_i & wb_cyc_i & ~wb_we_i & ~wb_ack_o;
 wire wb_wr = wb_stb_i & wb_cyc_i &  wb_we_i & ~wb_ack_o;
 
 // Translate wishbone address to sram address
-wire [adr_width-1:0] adr = wb_adr_i[adr_width+1:2];
+wire [adr_width-1:0] adr1 = { wb_adr_i[adr_width:2], 1'b0 };
+wire [adr_width-1:0] adr2 = { wb_adr_i[adr_width:2], 1'b1 };
 
 // Tri-State-Driver
 reg [15:0] wdat;
@@ -50,8 +51,10 @@ reg  [2:0] lcount;
 // State Machine
 //----------------------------------------------------------------------------
 parameter s_idle   = 0;
-parameter s_read   = 1;
-parameter s_write  = 2;
+parameter s_read1  = 1;
+parameter s_read2  = 2;
+parameter s_write1 = 3;
+parameter s_write2 = 4;
 
 reg [2:0] state;
 
@@ -70,42 +73,79 @@ begin
 				sram_ce_n  <=  0;
 				sram_oe_n  <=  0;
 				sram_we_n  <=  1;
-				sram_adr   <=  adr;
+				sram_adr   <=  adr1;
 				sram_be_n  <=  2'b00;
 				wdat_oe    <=  0;
 				lcount     <=  latency;
-				state      <=  s_read;
+				state      <=  s_read1;
 			end else if (wb_wr) begin
 				sram_ce_n  <=  0;
 				sram_oe_n  <=  1;
 				sram_we_n  <=  0;
-				sram_adr   <=  adr;
+				sram_adr   <=  adr1;
 				sram_be_n  <= ~wb_sel_i[1:0];
 				wdat       <=  wb_dat_i[15:0];
 				wdat_oe    <=  1;
 				lcount     <=  latency;
-				state      <=  s_write;
+				state      <=  s_write1;
 			end else begin
 				sram_ce_n  <=  1;
 				sram_oe_n  <=  1;
 				sram_we_n  <=  1;
 			end
 		end
-		s_read: begin
+		s_read1: begin
 			if (lcount != 0) begin
 				lcount     <= lcount - 1;
 			end else begin
-				wb_dat_o   <= { 16'b0, sram_dat };
-				wb_ack_o   <= 1;
-				state      <= s_idle;
+				wb_dat_o[15:0] <= sram_dat;
+				sram_ce_n  <=  0;
+				sram_oe_n  <=  0;
+				sram_we_n  <=  1;
+				sram_adr   <=  adr2;
+				sram_be_n  <=  2'b00;
+				wdat_oe    <=  0;
+				lcount     <=  latency;
+				state      <=  s_read2;
 			end
 		end
-		s_write: begin
+		s_read2: begin
 			if (lcount != 0) begin
 				lcount     <= lcount - 1;
 			end else begin
-				wb_ack_o   <= 1;       // XXX   We could acknoledge write  XXX
-				state      <= s_idle;  // XXX   requests 1 cycle ahead     XXX
+				wb_dat_o[31:16] <= sram_dat;
+				wb_ack_o   <=  1;
+				sram_ce_n  <=  1;
+				sram_oe_n  <=  1;
+				sram_we_n  <=  1;
+				state      <=  s_idle;
+			end
+		end
+		s_write1: begin
+			if (lcount != 0) begin
+				lcount     <= lcount - 1;
+			end else begin
+				sram_ce_n  <=  0;
+				sram_oe_n  <=  1;
+				sram_we_n  <=  0;
+				sram_adr   <=  adr2;
+				sram_be_n  <= ~wb_sel_i[3:2];
+				wdat       <=  wb_dat_i[31:16];
+				wdat_oe    <=  1;
+				lcount     <=  latency;
+				state      <=  s_write2;
+			end
+		end
+		s_write2: begin
+			if (lcount != 0) begin
+				lcount     <= lcount - 1;
+			end else begin
+				sram_ce_n  <=  1;
+				sram_oe_n  <=  1;
+				sram_we_n  <=  1;
+				wdat_oe    <=  0;
+				wb_ack_o   <=  1;      // XXX   We could acknoledge write  XXX
+				state      <=  s_idle; // XXX   requests 1 cycle ahead     XXX
 			end
 		end
 		endcase
