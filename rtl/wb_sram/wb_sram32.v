@@ -89,23 +89,30 @@ begin
 				sram_ce_n  <=  1;
 				sram_oe_n  <=  1;
 				sram_we_n  <=  1;
+				wdat_oe    <=  0;
 			end
 		end
 		s_read: begin
 			if (lcount != 0) begin
 				lcount     <= lcount - 1;
 			end else begin
-				wb_dat_o   <= sram_dat;
-				wb_ack_o   <= 1;
-				state      <= s_idle;
+				sram_ce_n  <=  1;
+				sram_oe_n  <=  1;
+				sram_we_n  <=  1;
+				wb_dat_o   <=  sram_dat;
+				wb_ack_o   <=  1;
+				state      <=  s_idle;
 			end
 		end
 		s_write: begin
 			if (lcount != 0) begin
 				lcount     <= lcount - 1;
 			end else begin
-				wb_ack_o   <= 1;       // XXX   We could acknoledge write  XXX
-				state      <= s_idle;  // XXX   requests 1 cycle ahead     XXX
+				sram_ce_n  <=  1;
+				sram_oe_n  <=  1;
+				sram_we_n  <=  1;
+				wb_ack_o   <=  1;       // XXX   We could acknoledge write  XXX
+				state      <=  s_idle;  // XXX   requests 1 cycle ahead     XXX
 			end
 		end
 		endcase
