@@ -10,7 +10,7 @@ module system_tb;
 // Parameter (may differ for physical synthesis)
 //----------------------------------------------------------------------------
 parameter tck              = 10;       // clock period in ns
-parameter uart_baud_rate   = 115200;  // uart baud rate for simulation 
+parameter uart_baud_rate   = 1152000;  // uart baud rate for simulation 
 parameter ddr_phase_shift  = 100;      //
 parameter ddr_wait200_init = 26;       //
 
@@ -181,8 +181,6 @@ initial begin
 	#0  reset <= 1;
 	#80 reset <= 0;
 
-	#(tck*50000) $finish;
-
 /*
 	// send select value
 	uart_send( 'h00 );
@@ -204,6 +202,8 @@ initial begin
 	uart_wait_tx;
 	#(tck*5000)
 */
+
+	#(tck*50000) $finish;
 end
 
 //------------------------------------------------------------------
