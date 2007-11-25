@@ -20,7 +20,7 @@ module system
 	output           [17:0] sram_adr,
 	inout            [31:0] sram_dat,
 	output            [3:0] sram_be_n,    // Byte   Enable
-	output                  sram_ce_n,    // Chip   Enable
+	output            [1:0] sram_ce_n,    // Chip   Enable
 	output                  sram_oe_n,    // Output Enable
 	output                  sram_we_n     // Write  Enable
 );
@@ -350,10 +350,12 @@ wb_sram32 #(
 	.sram_adr(    sram_adr      ),
 	.sram_dat(    sram_dat      ),
 	.sram_be_n(   sram_be_n     ),
-	.sram_ce_n(   sram_ce_n     ),
+	.sram_ce_n(   sram_ce_n[0]  ),
 	.sram_oe_n(   sram_oe_n     ),
 	.sram_we_n(   sram_we_n     )
 );
+
+assign sram_ce_n[1] = sram_ce_n[0];
 
 //---------------------------------------------------------------------------
 // uart0

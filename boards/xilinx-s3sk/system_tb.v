@@ -9,7 +9,7 @@ module system_tb;
 // Parameter (may differ for physical synthesis)
 //----------------------------------------------------------------------------
 parameter tck              = 20;       // clock period in ns
-parameter uart_baud_rate   = 115200;   // uart baud rate for simulation 
+parameter uart_baud_rate   = 1152000;  // uart baud rate for simulation 
 
 parameter clk_freq = 1000000000 / tck; // Frequenzy in HZ
 //----------------------------------------------------------------------------
@@ -99,7 +99,7 @@ endtask
 wire   [17:0] sram_adr;
 wire   [31:0] sram_dat;
 wire    [3:0] sram_be_n;
-wire          sram_ce_n;
+wire    [1:0] sram_ce_n;
 wire          sram_oe_n;
 wire          sram_we_n;
 
@@ -110,7 +110,7 @@ sram16 #(
 	.dat(    sram_dat[31:16] ),
 	.ub_n(   sram_be_n[3]    ),
 	.lb_n(   sram_be_n[2]    ),
-	.cs_n(   sram_ce_n       ),
+	.cs_n(   sram_ce_n[1]    ),
 	.oe_n(   sram_oe_n       ),
 	.we_n(   sram_we_n       )
 );
@@ -122,7 +122,7 @@ sram16 #(
 	.dat(    sram_dat[15:0]  ),
 	.ub_n(   sram_be_n[1]    ),
 	.lb_n(   sram_be_n[0]    ),
-	.cs_n(   sram_ce_n       ),
+	.cs_n(   sram_ce_n[0]    ),
 	.oe_n(   sram_oe_n       ),
 	.we_n(   sram_we_n       )
 );
@@ -167,53 +167,6 @@ initial begin
 	#0  reset <= 1;
 	#80 reset <= 0;
 
-	#350000
-
-	// send 'g'
-	uart_send( 'h67 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
-	// send '0'
-	uart_send( 'h00 );
-	uart_wait_tx;
-	#(tck*1000)
-
 /*
 	// send select value
 	uart_send( 'h00 );
@@ -236,7 +189,7 @@ initial begin
 	#(tck*5000)
 */
 
-	#(tck*10000) $finish;
+	#(tck*30000) $finish;
 end
 
 //------------------------------------------------------------------
