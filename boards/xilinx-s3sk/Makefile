@@ -47,6 +47,7 @@ SYNCLEAN+=system.map system_summary.xml timing.twr
 SYNCLEAN+=system-routed* system_usage* system.ngc param.opt netlist.lst
 SYNCLEAN+=xst system.prj
 
+USAGE_DEPTH=0
 SMARTGUIDE= 
 
 #############################################################################
@@ -110,7 +111,7 @@ system-routed.twr: system-routed.ncd
 timing: system-routed.twr
 
 usage: system-routed.xdl
-	xdlanalyze.pl system-routed.xdl 0
+	xdlanalyze.pl system-routed.xdl $(USAGE_DEPTH)
 
 ####################################################################
 # final targets
