@@ -55,7 +55,7 @@ initial
 begin
 	if (mem_file_name != "none")
 	begin
-		$readmemh("../../firmware/bootloader/image.ram", ram);
+		$readmemh(mem_file_name, ram);
 	end
 end
 
