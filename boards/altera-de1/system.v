@@ -8,7 +8,7 @@ module system
 	parameter   clk_freq         = 50000000,
 	parameter   uart_baud_rate   = 115200
 ) (
-	input                   clk, 
+	input                   clock_50, 
 	// Debug 
 	output            [7:0] ledg,
 	output            [9:0] ledr,
@@ -18,9 +18,10 @@ module system
 	input                   uart_rxd, 
 	output                  uart_txd,
 	// SRAM
-	output           [17:0] sram_adr,
-	inout            [15:0] sram_dat,
-	output            [1:0] sram_be_n,    // Byte   Enable
+	output           [17:0] sram_addr,
+	inout            [15:0] sram_dq,
+	output                  sram_ub_n,    // Byte   Enable Upper
+	output                  sram_lb_n,    // Byte   Enable Lower
 	output                  sram_ce_n,    // Chip   Enable
 	output                  sram_oe_n,    // Output Enable
 	output                  sram_we_n     // Write  Enable
@@ -30,7 +31,7 @@ module system
 // Local wires
 //---------------------------------------------------------------------------
 wire         rst;
-
+wire         clk = clock_50;
 wire         gnd   =  1'b0;
 wire   [3:0] gnd4  =  4'h0;
 wire  [31:0] gnd32 = 32'h00000000;
@@ -329,9 +330,11 @@ wb_bram #(
 	.wb_we_i(   bram0_we     )
 );
 
+
 //---------------------------------------------------------------------------
 // sram0
 //---------------------------------------------------------------------------
+wire [1:0] sram_be_n;
 wb_sram16 #(
 	.adr_width(  18  ),
 	.latency(    0   )
@@ -348,13 +351,16 @@ wb_sram16 #(
 	.wb_sel_i(    sram0_sel     ),
 	.wb_ack_o(    sram0_ack     ),
 	// SRAM
-	.sram_adr(    sram_adr      ),
-	.sram_dat(    sram_dat      ),
+	.sram_adr(    sram_addr      ),
+	.sram_dat(    sram_dq      ),
 	.sram_be_n(   sram_be_n     ),
 	.sram_ce_n(   sram_ce_n     ),
 	.sram_oe_n(   sram_oe_n     ),
 	.sram_we_n(   sram_we_n     )
 );
+
+assign sram_lb_n = sram_be_n[0];
+assign sram_ub_n = sram_be_n[1];
 
 //---------------------------------------------------------------------------
 // uart0

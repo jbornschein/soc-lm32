@@ -123,7 +123,7 @@ system #(
 	.clk_freq(           clk_freq         ),
 	.uart_baud_rate(     uart_baud_rate   )
 ) dut  (
-	.clk(          clk    ),
+	.clock_50(     clk    ),
 	// Debug
 	.key_n(        key_n  ),
 	.sw(           sw     ),
@@ -133,9 +133,10 @@ system #(
 	.uart_rxd(  uart_rxd  ),
 	.uart_txd(  uart_txd  ),
 	// SRAM
-	.sram_adr(  sram_adr  ),
-	.sram_dat(  sram_dat  ),
-	.sram_be_n( sram_be_n ),
+	.sram_addr(  sram_adr  ),
+	.sram_dq(  sram_dat  ),
+	.sram_ub_n( sram_be_n[1] ),
+	.sram_lb_n( sram_be_n[0] ),
 	.sram_ce_n( sram_ce_n ),
 	.sram_oe_n( sram_oe_n ),
 	.sram_we_n( sram_we_n )
