@@ -9,6 +9,15 @@ uint32_t rambase;
 uint32_t ramsize;
 uint8_t  *ram;
 
+#ifndef HAVE_STRNDUP
+char* strndup(const char* s, size_t n) {
+       char* ret = malloc(n + 1);
+       if (ret == NULL) return(ret);
+       ret[n] = '\0';
+       return(memcpy(ret, s, n));
+}
+#endif
+
 void help()
 {
 	printf( "\nUsage: srec2vram <srect-file> <bram-base> <bram-size>\n\n" );

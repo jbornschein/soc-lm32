@@ -15,9 +15,9 @@
 
 
 QUARTUS_VERSION = "7.2"
-DATE = "02:16:41  November 22, 2007"
+DATE = "19:15:23  November 22, 2007"
 
 
 # Revisions
 
-PROJECT_REVISION = "lm32"
+PROJECT_REVISION = "system"
