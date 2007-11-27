@@ -90,7 +90,7 @@ system.prj: $(SRC) $(SYN_SRC)
 system.ngc: system.prj
 	xst -ifn system.xst
 
-system.ngd: system.ngc
+system.ngd: system.ngc system.ucf
 	ngdbuild -uc system.ucf system.ngc
 
 system.ncd: system.ngd
