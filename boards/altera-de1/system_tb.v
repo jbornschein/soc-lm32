@@ -103,6 +103,7 @@ wire    [1:0] sram_be_n;
 wire          sram_ce_n;
 wire          sram_oe_n;
 wire          sram_we_n;
+wire   [35:0] gpio;
 
 sram16 #(
 	.adr_width( 18 )
@@ -133,13 +134,14 @@ system #(
 	.uart_rxd(  uart_rxd  ),
 	.uart_txd(  uart_txd  ),
 	// SRAM
-	.sram_addr(  sram_adr  ),
-	.sram_dq(  sram_dat  ),
+	.sram_addr( sram_adr  ),
+	.sram_dq(   sram_dat  ),
 	.sram_ub_n( sram_be_n[1] ),
 	.sram_lb_n( sram_be_n[0] ),
 	.sram_ce_n( sram_ce_n ),
 	.sram_oe_n( sram_oe_n ),
-	.sram_we_n( sram_we_n )
+	.sram_we_n( sram_we_n ),
+	.gpio_0(    gpio )
 );
 
 assign key_n = {  3'b1, ~reset };

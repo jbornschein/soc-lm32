@@ -28,9 +28,9 @@ input       clk;
 input       reset;
 
 // Wishbone bus
-input [12:0] wb_adr_i;
-input [ 7:0] wb_dat_i;
-output[ 7:0] wb_dat_o;
+input [31:0] wb_adr_i;
+input [31:0] wb_dat_i;
+output[31:0] wb_dat_o;
 input [ 3:0] wb_sel_i;
 input        wb_cyc_i;
 input        wb_stb_i;

@@ -24,7 +24,10 @@ module system
 	output                  sram_lb_n,    // Byte   Enable Lower
 	output                  sram_ce_n,    // Chip   Enable
 	output                  sram_oe_n,    // Output Enable
-	output                  sram_we_n     // Write  Enable
+	output                  sram_we_n,    // Write  Enable#
+	
+	output           [35:0] gpio_0
+	
 );
 	
 //---------------------------------------------------------------------------
@@ -42,7 +45,8 @@ wire [31:0]  lm32i_adr,
              uart0_adr,
              timer0_adr,
              bram0_adr,
-             sram0_adr;
+             sram0_adr,
+             farbborg0_adr;
 
 
 wire [31:0]  lm32i_dat_r,
@@ -56,42 +60,49 @@ wire [31:0]  lm32i_dat_r,
              bram0_dat_r,
              bram0_dat_w,
              sram0_dat_w,
-             sram0_dat_r;
+             sram0_dat_r,
+             farbborg0_dat_w,
+             farbborg0_dat_r;
 
 wire [3:0]   lm32i_sel,
              lm32d_sel,
              uart0_sel,
              timer0_sel,
              bram0_sel,
-             sram0_sel;
+             sram0_sel,
+             farbborg0_sel;
 
 wire         lm32i_i_we,
              lm32d_i_we,
              uart0_i_we,
              timer0_i_we,
              bram0_i_we,
-             sram0_i_we;
+             sram0_i_we,
+             farbborg0_i_we;
 
 wire         lm32i_cyc,
              lm32d_cyc,
              uart0_cyc,
              timer0_cyc,
              bram0_cyc,
-             sram0_cyc;
+             sram0_cyc,
+             farbborg0_cyc;
 
 wire         lm32i_stb,
              lm32d_stb,
              uart0_stb,
              timer0_stb,
              bram0_stb,
-             sram0_stb;
+             sram0_stb,
+             farbborg0_stb;
 
 wire         lm32i_ack,
              lm32d_ack,
              uart0_ack,
              timer0_ack,
              bram0_ack,
-             sram0_ack;
+             sram0_ack,
+             farbborg0_ack;
 
 wire         lm32i_rty,
              lm32d_rty,
@@ -141,7 +152,7 @@ wb_conbus_top #(
 	.s2_addr   ( 15'h0000 ),    // bram0 
 	.s3_addr   ( 15'h7000 ),    // uart0
 	.s4_addr   ( 15'h7001 ),    // timer0
-	.s5_addr   ( 15'h7002 ),
+	.s5_addr   ( 15'h7002 ),    // farbborg0
 	.s6_addr   ( 15'h7003 ),
 	.s7_addr   ( 15'h7004 )
 ) conmax0 (
@@ -256,10 +267,16 @@ wb_conbus_top #(
 	.s4_err_i(  timer0_err   ),
 	.s4_rty_i(  timer0_rty   ),
 	// Slave5
-	.s5_dat_i(  gnd32  ),
-	.s5_ack_i(  gnd    ),
-	.s5_err_i(  gnd    ),
-	.s5_rty_i(  gnd    ),
+	.s5_dat_i(  farbborg0_dat_r ),
+	.s5_dat_o(  farbborg0_dat_w ),
+	.s5_adr_o(  farbborg0_adr   ),
+	.s5_sel_o(  farbborg0_sel   ),
+	.s5_we_o(   farbborg0_we    ),
+	.s5_cyc_o(  farbborg0_cyc   ),
+	.s5_stb_o(  farbborg0_stb   ),
+	.s5_ack_i(  farbborg0_ack   ),
+	.s5_err_i(  gnd         ),
+	.s5_rty_i(  gnd         ),
 	// Slave6
 	.s6_dat_i(  gnd32  ),
 	.s6_ack_i(  gnd    ),
@@ -407,6 +424,31 @@ wb_timer #(
 	.wb_ack_o( timer0_ack   ), 
 	.intr(     timer0_intr  )
 );
+
+//---------------------------------------------------------------------------
+// farbborg0
+//---------------------------------------------------------------------------
+wb_farbborg farbborg0 (
+	.clk(      clk          ),
+	.reset(    rst          ),
+	//
+	.wb_adr_i( farbborg0_adr   ),
+	.wb_dat_i( farbborg0_dat_w ),
+	.wb_dat_o( farbborg0_dat_r ),
+	.wb_stb_i( farbborg0_stb   ),
+	.wb_cyc_i( farbborg0_cyc   ),
+	.wb_we_i(  farbborg0_we    ),
+	.wb_sel_i( farbborg0_sel   ),
+	.wb_ack_o( farbborg0_ack   ), 
+	.clk_pwm(  clk             ),
+	.lsr_clr(  gpio_0[2]         ),
+	.lsr_d(    gpio_0[1]         ),
+	.lsr_c(    gpio_0[3]         ),
+	.latch_data(gpio_0[19:12]    ),
+	.psr_c(    gpio_0[4]         ),
+	.psr_d(    gpio_0[5]         )
+);
+
 
 //---------------------------------------------------------------------------
 // LogicAnalyzerComponent
