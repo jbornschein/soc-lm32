@@ -477,6 +477,8 @@ wire        lac_cts;
 wire        lac_rts;
 assign      lac_rts = 1;
 
+/* Diabled LAC
+
 lac #(
 	.uart_freq_hz(     clk_freq ),
 	.uart_baud(  uart_baud_rate ),
@@ -509,6 +511,8 @@ assign probe = (probe_sel[3:0] == 'h0) ? { rst, intr_n[1], lm32i_stb, lm32i_ack,
                (probe_sel[3:0] == 'ha) ? lm32d_adr[23:16] :
                (probe_sel[3:0] == 'hb) ? lm32d_adr[15: 8] :
                                          lm32d_adr[ 7: 0] ;
+
+*/
 
 //----------------------------------------------------------------------------
 // Mux UART wires according to sw[0]

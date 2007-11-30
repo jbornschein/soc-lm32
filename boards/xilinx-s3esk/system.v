@@ -466,8 +466,9 @@ wire        lac_cts;
 wire        lac_rts;
 assign      lac_rts = 1;
 wire [7:0]  select;
-wire [7:0]  probe;
-reg  [7:0]  probe_r;
+reg  [7:0]  probe;
+
+/* Diabled LAC
 
 lac #(
 	.uart_freq_hz(     clk_freq ),
@@ -483,17 +484,9 @@ lac #(
 	.uart_rts(    lac_rts  ),
 	//
 	.probe_clk(  clk       ),
-	.probe(      probe_r   ),
+	.probe(      probe     ),
 	.select(     select    )
 );
-
-always @(posedge clk)
-begin
-	if (rst)
-		probe_r <= 0;
-	else
-		probe_r <= probe;
-end
 
 assign probe = (select[3:0] == 'h0) ? { rst, lm32i_stb, lm32i_cyc, lm32i_ack, lm32d_stb, lm32d_cyc, lm32d_we, lm32d_ack } :
                (select[3:0] == 'h1) ? lm32i_adr[31:24] :
@@ -508,6 +501,7 @@ assign probe = (select[3:0] == 'h0) ? { rst, lm32i_stb, lm32i_cyc, lm32i_ack, lm
                (select[3:0] == 'ha) ? lm32d_adr[23:16] :
                (select[3:0] == 'hb) ? lm32d_adr[15: 8] :
                                       lm32d_adr[ 7: 0] ;
+*/
 
 //----------------------------------------------------------------------------
 // Mux UART wires according to sw[0]
