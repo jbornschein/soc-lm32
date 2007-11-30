@@ -127,7 +127,7 @@ usage: system-routed.xdl
 ####################################################################
 # final targets
 
-%.view: 
+%.view: %.vcd
 	$(GTKWAVE) $< $<.save
 
 clean:

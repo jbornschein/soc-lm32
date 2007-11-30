@@ -56,12 +56,12 @@ wire [3:0]   lm32i_sel,
              bram0_sel,
              bram1_sel;
 
-wire         lm32i_i_we,
-             lm32d_i_we,
-             uart0_i_we,
-             timer0_i_we,
-             bram0_i_we,
-             bram1_i_we;
+wire         lm32i_we,
+             lm32d_we,
+             uart0_we,
+             timer0_we,
+             bram0_we,
+             bram1_we;
 
 wire         lm32i_cyc,
              lm32d_cyc,
@@ -85,30 +85,18 @@ wire         lm32i_ack,
              bram1_ack;
 
 wire         lm32i_rty,
-             lm32d_rty,
-             uart0_rty,
-             timer0_rty,
-             bram0_rty;
+             lm32d_rty;
 
 wire         lm32i_err,
-             lm32d_err,
-             uart0_err,
-             timer0_err,
-             bram0_err;
+             lm32d_err;
 
 wire         lm32i_lock,
-             uart0_lock,
-             timer0_lock,
              lm32d_lock;
 
 wire [2:0]   lm32i_cti,
-             uart0_cti,
-             timer0_cti,
              lm32d_cti;
 
 wire [1:0]   lm32i_bte,
-             uart0_bte,
-             timer0_bte,
              lm32d_bte;
 
 wire [31:0]  intr_n;
