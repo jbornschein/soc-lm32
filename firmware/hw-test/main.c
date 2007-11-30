@@ -50,7 +50,6 @@ int main()
 
 	// Say Hello!
 	uart_putstr( "** Spike Test Firmware **\n" );
-	msleep( 3000 );
 
 	// Initialize TIC
 	isr_init();
@@ -88,9 +87,9 @@ int main()
 	uart_putchar('\n');    
 
 	uart_putstr( "Timer Test (2s): " );
-	for(i=0; i<5; i++) {
+	for(i=0; i<4; i++) {
 		uart_putstr("tic...");    
-		msleep(2000);
+		msleep(1000);
 	}
 	uart_putchar('\n');    
 
@@ -103,13 +102,29 @@ int main()
 	writeint( val );
 	uart_putchar('\n');    
 	for(i=0; i<32; i++) {
-		if (val & 0x01)
-			uart_putstr( " 1\n" );
+		if (val & 0x80)
+			uart_putchar( '1' );
 		else
-			uart_putstr( " 0\n" );
+			uart_putchar( '0' );
 			
-		val >>= 1;
+		val <<= 1;
 	}
+	uart_putstr("\r\n");
+	
+	uart_putstr( "GPIO Test..." );
+	gpio0->oe = 0x000000ff;
+	for(;;) {
+		for(i=0; i<8; i++) {
+			uint32_t out1, out2;
+
+			out1 = 0x01 << i;
+			out2 = 0x80 >> i;
+			gpio0->out = out1 | out2;
+
+			msleep(200);
+		}
+	}
+
 
 /*
 	uart_putstr( "Memory Dump: " );

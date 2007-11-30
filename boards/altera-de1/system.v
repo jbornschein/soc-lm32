@@ -1,5 +1,7 @@
 //---------------------------------------------------------------------------
 // LatticeMico32 System On A Chip
+//
+// Top Level Design for the Altera DE-1 Board
 //---------------------------------------------------------------------------
 
 module system
@@ -27,20 +29,21 @@ module system
 	output                  sram_we_n     // Write  Enable
 );
 	
-//---------------------------------------------------------------------------
-// Local wires
-//---------------------------------------------------------------------------
 wire         rst;
 wire         clk = clock_50;
+
+//---------------------------------------------------------------------------
+// Wishbine Wires
+//---------------------------------------------------------------------------
 wire         gnd   =  1'b0;
 wire   [3:0] gnd4  =  4'h0;
 wire  [31:0] gnd32 = 32'h00000000;
-
  
 wire [31:0]  lm32i_adr,
              lm32d_adr,
              uart0_adr,
              timer0_adr,
+             gpio0_adr,
              bram0_adr,
              sram0_adr;
 
@@ -53,6 +56,8 @@ wire [31:0]  lm32i_dat_r,
              uart0_dat_w,
              timer0_dat_r,
              timer0_dat_w,
+             gpio0_dat_r,
+             gpio0_dat_w,
              bram0_dat_r,
              bram0_dat_w,
              sram0_dat_w,
@@ -62,6 +67,7 @@ wire [3:0]   lm32i_sel,
              lm32d_sel,
              uart0_sel,
              timer0_sel,
+             gpio0_sel,
              bram0_sel,
              sram0_sel;
 
@@ -69,6 +75,7 @@ wire         lm32i_we,
              lm32d_we,
              uart0_we,
              timer0_we,
+             gpio0_we,
              bram0_we,
              sram0_we;
 
@@ -76,6 +83,7 @@ wire         lm32i_cyc,
              lm32d_cyc,
              uart0_cyc,
              timer0_cyc,
+             gpio0_cyc,
              bram0_cyc,
              sram0_cyc;
 
@@ -83,6 +91,7 @@ wire         lm32i_stb,
              lm32d_stb,
              uart0_stb,
              timer0_stb,
+             gpio0_stb,
              bram0_stb,
              sram0_stb;
 
@@ -90,6 +99,7 @@ wire         lm32i_ack,
              lm32d_ack,
              uart0_ack,
              timer0_ack,
+             gpio0_ack,
              bram0_ack,
              sram0_ack;
 
@@ -111,11 +121,12 @@ wire [1:0]   lm32i_bte,
 //---------------------------------------------------------------------------
 // Interrupts
 //---------------------------------------------------------------------------
-wire [31:0]  intr_n;
+wire  [31:0] intr_n;
 wire         uart0_intr = 0;
+wire         gpio0_intr;
 wire   [1:0] timer0_intr;
 
-assign intr_n = { 24'hFFFFFF, ~timer0_intr[1], 5'b11111, ~timer0_intr[0], ~uart0_intr };
+assign intr_n = { 28'hFFFFFFF, ~timer0_intr[1], ~gpio0_intr, ~timer0_intr[0], ~uart0_intr };
 
 //---------------------------------------------------------------------------
 // Wishbone Interconnect
@@ -129,7 +140,7 @@ wb_conbus_top #(
 	.s2_addr   ( 15'h0000 ),    // bram0 
 	.s3_addr   ( 15'h7000 ),    // uart0
 	.s4_addr   ( 15'h7001 ),    // timer0
-	.s5_addr   ( 15'h7002 ),
+	.s5_addr   ( 15'h7002 ),    // gpio0
 	.s6_addr   ( 15'h7003 ),
 	.s7_addr   ( 15'h7004 )
 ) conmax0 (
@@ -244,10 +255,16 @@ wb_conbus_top #(
 	.s4_err_i(  timer0_err   ),
 	.s4_rty_i(  timer0_rty   ),
 	// Slave5
-	.s5_dat_i(  gnd32  ),
-	.s5_ack_i(  gnd    ),
-	.s5_err_i(  gnd    ),
-	.s5_rty_i(  gnd    ),
+	.s5_dat_i(  gpio0_dat_r  ),
+	.s5_dat_o(  gpio0_dat_w  ),
+	.s5_adr_o(  gpio0_adr    ),
+	.s5_sel_o(  gpio0_sel    ),
+	.s5_we_o(   gpio0_we     ),
+	.s5_cyc_o(  gpio0_cyc    ),
+	.s5_stb_o(  gpio0_stb    ),
+	.s5_ack_i(  gpio0_ack    ),
+	.s5_err_i(  gnd          ),
+	.s5_rty_i(  gnd          ),
 	// Slave6
 	.s6_dat_i(  gnd32  ),
 	.s6_ack_i(  gnd    ),
@@ -317,7 +334,6 @@ wb_bram #(
 	.wb_ack_o(  bram0_ack    ),
 	.wb_we_i(   bram0_we     )
 );
-
 
 //---------------------------------------------------------------------------
 // sram0
@@ -396,6 +412,32 @@ wb_timer #(
 	.intr(     timer0_intr  )
 );
 
+//------------------------------------------------------------------
+// General Purpose IO
+//------------------------------------------------------------------
+wire [31:0] gpio0_in;
+wire [31:0] gpio0_out;
+wire [31:0] gpio0_oe;
+
+wb_gpio gpio0 (
+	.clk(      clk          ),
+	.reset(    rst          ),
+	//
+	.wb_adr_i( gpio0_adr    ),
+	.wb_dat_i( gpio0_dat_w  ),
+	.wb_dat_o( gpio0_dat_r  ),
+	.wb_stb_i( gpio0_stb    ),
+	.wb_cyc_i( gpio0_cyc    ),
+	.wb_we_i(  gpio0_we     ),
+	.wb_sel_i( gpio0_sel    ),
+	.wb_ack_o( gpio0_ack    ), 
+	.intr(     gpio0_intr   ),
+	// GPIO
+	.gpio_in(  gpio0_in     ),
+	.gpio_out( gpio0_out    ),
+	.gpio_oe(  gpio0_oe     )
+);
+
 //---------------------------------------------------------------------------
 // LogicAnalyzerComponent
 //---------------------------------------------------------------------------
@@ -450,18 +492,19 @@ assign probe = (select[3:0] == 'h0) ? { rst, lm32i_stb, lm32i_cyc, lm32i_ack, lm
                (select[3:0] == 'hb) ? lm32d_adr[15: 8] :
                                       lm32d_adr[ 7: 0] ;
 
-// MUX uart lines
+//----------------------------------------------------------------------------
+// Mux UART wires according to sw[0]
+//----------------------------------------------------------------------------
 assign uart_txd  = (sw[0]) ? uart0_txd : lac_txd;
 assign lac_rxd   = (sw[0]) ?      1'b1 : uart_rxd;
 assign uart0_rxd = (sw[0]) ? uart_rxd  : 1'b1;
-
 
 //---------------------------------------------------------------------------
 // LEDs, buttons and switches
 //---------------------------------------------------------------------------
 assign rst  = ~key_n[0];
 
-assign ledg = { clk, rst, lm32i_stb, lm32i_ack, lm32d_stb, lm32d_ack, ~uart_rxd, ~uart_txd };
-assign ledr = 10'b0000000000;
+assign ledr = { clk, rst, 2'b0, lm32i_stb, lm32i_ack, lm32d_stb, lm32d_ack, ~uart_rxd, ~uart_txd };
+assign ledg = gpio0_out[7:0];
 
 endmodule 

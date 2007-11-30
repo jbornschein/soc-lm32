@@ -19,19 +19,20 @@ module system
 	output                  uart_txd
 );
 	
-//------------------------------------------------------------------
-// Local wires
-//------------------------------------------------------------------
 wire         rst   = reset;
 
-wire         gnd   = 1'b0;
-wire   [3:0] gnd4  = 4'h0;
+//---------------------------------------------------------------------------
+// Wishbone Wires
+//---------------------------------------------------------------------------
+wire         gnd   =  1'b0;
+wire   [3:0] gnd4  =  4'h0;
 wire  [31:0] gnd32 = 32'h00000000;
 
 wire [31:0]  lm32i_adr,
              lm32d_adr,
              uart0_adr,
              timer0_adr,
+             gpio0_adr,
              bram0_adr,
              bram1_adr;
 
@@ -44,6 +45,8 @@ wire [31:0]  lm32i_dat_r,
              uart0_dat_w,
              timer0_dat_r,
              timer0_dat_w,
+             gpio0_dat_r,
+             gpio0_dat_w,
              bram0_dat_r,
              bram0_dat_w,
              bram1_dat_w,
@@ -53,6 +56,7 @@ wire [3:0]   lm32i_sel,
              lm32d_sel,
              uart0_sel,
              timer0_sel,
+             gpio0_sel,
              bram0_sel,
              bram1_sel;
 
@@ -60,6 +64,7 @@ wire         lm32i_we,
              lm32d_we,
              uart0_we,
              timer0_we,
+             gpio0_we,
              bram0_we,
              bram1_we;
 
@@ -67,6 +72,7 @@ wire         lm32i_cyc,
              lm32d_cyc,
              uart0_cyc,
              timer0_cyc,
+             gpio0_cyc,
              bram0_cyc,
              bram1_cyc;
 
@@ -74,6 +80,7 @@ wire         lm32i_stb,
              lm32d_stb,
              uart0_stb,
              timer0_stb,
+             gpio0_stb,
              bram0_stb,
              bram1_stb;
 
@@ -81,6 +88,7 @@ wire         lm32i_ack,
              lm32d_ack,
              uart0_ack,
              timer0_ack,
+             gpio0_ack,
              bram0_ack,
              bram1_ack;
 
@@ -99,17 +107,19 @@ wire [2:0]   lm32i_cti,
 wire [1:0]   lm32i_bte,
              lm32d_bte;
 
-wire [31:0]  intr_n;
+//---------------------------------------------------------------------------
+// Interrupts
+//---------------------------------------------------------------------------
+wire  [31:0] intr_n;
 wire         uart0_intr = 0;
+wire         gpio0_intr;
 wire   [1:0] timer0_intr;
 
-assign intr_n = { 24'hFFFFFF, ~timer0_intr[1], 5'b11111, ~timer0_intr[0], ~uart0_intr };
-assign led    = { clk, rst, lm32i_stb, lm32i_ack };
+assign intr_n = { 28'hFFFFFFF, ~timer0_intr[1], ~gpio0_intr, ~timer0_intr[0], ~uart0_intr };
 
-
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 // Wishbone Interconnect
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 wb_conbus_top #(
 	.s0_addr_w ( 3 ),
 	.s0_addr   ( 3'h4 ),        // bram1
@@ -119,7 +129,7 @@ wb_conbus_top #(
 	.s2_addr   ( 15'h0000 ),    // bram0 
 	.s3_addr   ( 15'h7000 ),    // uart0
 	.s4_addr   ( 15'h7001 ),    // timer0
-	.s5_addr   ( 15'h7002 ),
+	.s5_addr   ( 15'h7002 ),    // gpio0
 	.s6_addr   ( 15'h7003 ),
 	.s7_addr   ( 15'h7004 )
 ) conmax0 (
@@ -228,10 +238,16 @@ wb_conbus_top #(
 	.s4_err_i(  timer0_err   ),
 	.s4_rty_i(  timer0_rty   ),
 	// Slave5
-	.s5_dat_i(  gnd32  ),
-	.s5_ack_i(  gnd    ),
-	.s5_err_i(  gnd    ),
-	.s5_rty_i(  gnd    ),
+	.s5_dat_i(  gpio0_dat_r  ),
+	.s5_dat_o(  gpio0_dat_w  ),
+	.s5_adr_o(  gpio0_adr    ),
+	.s5_sel_o(  gpio0_sel    ),
+	.s5_we_o(   gpio0_we     ),
+	.s5_cyc_o(  gpio0_cyc    ),
+	.s5_stb_o(  gpio0_stb    ),
+	.s5_ack_i(  gpio0_ack    ),
+	.s5_err_i(  gnd          ),
+	.s5_rty_i(  gnd          ),
 	// Slave6
 	.s6_dat_i(  gnd32  ),
 	.s6_ack_i(  gnd    ),
@@ -245,9 +261,9 @@ wb_conbus_top #(
 );
 
 
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 // LM32 CPU 
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 lm32_cpu lm0 (
 	.clk_i(  clk  ),
 	.rst_i(  rst  ),
@@ -282,9 +298,9 @@ lm32_cpu lm0 (
 	.D_RTY_I(  lm32d_rty    )
 );
 	
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 // Block RAM (0x40000000 - 0x40010000)
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 wb_bram #(
 	.adr_width( 20 ),
 	.mem_file_name( ram_file )
@@ -302,9 +318,9 @@ wb_bram #(
 	.wb_we_i(   bram1_we     )
 );
 
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 // uart0
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 wire uart0_rxd;
 wire uart0_txd;
 
@@ -331,9 +347,9 @@ wb_uart #(
 	.uart_txd( uart0_txd )
 );
 
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 // timer0
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 wb_timer #(
 	.clk_freq(   clk_freq  )
 ) timer0 (
@@ -349,6 +365,32 @@ wb_timer #(
 	.wb_sel_i( timer0_sel   ),
 	.wb_ack_o( timer0_ack   ), 
 	.intr(     timer0_intr  )
+);
+
+//---------------------------------------------------------------------------
+// General Purpose IO
+//---------------------------------------------------------------------------
+wire [31:0] gpio0_in;
+wire [31:0] gpio0_out;
+wire [31:0] gpio0_oe;
+
+wb_gpio gpio0 (
+	.clk(      clk          ),
+	.reset(    rst          ),
+	//
+	.wb_adr_i( gpio0_adr    ),
+	.wb_dat_i( gpio0_dat_w  ),
+	.wb_dat_o( gpio0_dat_r  ),
+	.wb_stb_i( gpio0_stb    ),
+	.wb_cyc_i( gpio0_cyc    ),
+	.wb_we_i(  gpio0_we     ),
+	.wb_sel_i( gpio0_sel    ),
+	.wb_ack_o( gpio0_ack    ), 
+	.intr(     gpio0_intr   ),
+	// GPIO
+	.gpio_in(  gpio0_in     ),
+	.gpio_out( gpio0_out    ),
+	.gpio_oe(  gpio0_oe     )
 );
 
 endmodule 
