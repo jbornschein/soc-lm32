@@ -499,8 +499,8 @@ assign uart0_rxd = (sw[0]) ? uart_rxd  : 1;
 //----------------------------------------------------------------------------
 // Mux LEDs and Push Buttons according to sw[1]
 //----------------------------------------------------------------------------
-wire debug_leds = { clk, rst, ~uart_rxd, ~uart_txd, lm32i_stb, lm32i_ack, lm32d_stb, lm32d_ack };
-wire gpio_leds  = gpio0_out[7:0];
+wire [7:0] debug_leds = { clk, rst, ~uart_rxd, ~uart_txd, lm32i_stb, lm32i_ack, lm32d_stb, lm32d_ack };
+wire [7:0] gpio_leds  = gpio0_out[7:0];
 
 assign led             = (sw[1]) ? gpio_leds : debug_leds;
 assign rst             = (sw[1]) ?      1'b0 : btn[0];
