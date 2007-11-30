@@ -70,8 +70,13 @@ void tic_init();
  * GPIO0
  */
 typedef struct {
-	volatile uint32_t iport;
-	volatile uint32_t oport;
+	volatile uint32_t ctrl;
+	volatile uint32_t dummy1;
+	volatile uint32_t dummy2;
+	volatile uint32_t dummy3;
+	volatile uint32_t in;
+	volatile uint32_t out;
+	volatile uint32_t oe;
 } gpio_t;
 
 /***************************************************************************

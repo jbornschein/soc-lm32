@@ -1,5 +1,7 @@
 //---------------------------------------------------------------------------
 // LatticeMico32 System On A Chip
+//
+// Top Level Design for the Xilinx Spartan 3E-500 Starter Kit
 //---------------------------------------------------------------------------
 `include "ddr_include.v"
 
@@ -38,23 +40,22 @@ module system
 	output                  uart_txd
 );
 	
-//------------------------------------------------------------------
-// Local wires
-//------------------------------------------------------------------
 wire         rst;
 
-wire         gnd   = 1'b0;
-wire   [3:0] gnd4  = 4'h0;
+//------------------------------------------------------------------
+// Whishbone Wires
+//------------------------------------------------------------------
+wire         gnd   =  1'b0;
+wire   [3:0] gnd4  =  4'h0;
 wire  [31:0] gnd32 = 32'h00000000;
-
  
 wire [31:0]  lm32i_adr,
              lm32d_adr,
              uart0_adr,
              timer0_adr,
+             gpio0_adr,
              bram0_adr,
              ddr0_adr;
-
 
 wire [31:0]  lm32i_dat_r,
              lm32i_dat_w,
@@ -64,6 +65,8 @@ wire [31:0]  lm32i_dat_r,
              uart0_dat_w,
              timer0_dat_r,
              timer0_dat_w,
+             gpio0_dat_r,
+             gpio0_dat_w,
              bram0_dat_r,
              bram0_dat_w,
              ddr0_dat_w,
@@ -73,20 +76,23 @@ wire [3:0]   lm32i_sel,
              lm32d_sel,
              uart0_sel,
              timer0_sel,
+             gpio0_sel,
              bram0_sel,
              ddr0_sel;
 
-wire         lm32i_i_we,
-             lm32d_i_we,
-             uart0_i_we,
-             timer0_i_we,
-             bram0_i_we,
-             ddr0_i_we;
+wire         lm32i_we,
+             lm32d_we,
+             uart0_we,
+             timer0_we,
+             gpio0_we,
+             bram0_we,
+             ddr0_we;
 
 wire         lm32i_cyc,
              lm32d_cyc,
              uart0_cyc,
              timer0_cyc,
+             gpio0_cyc,
              bram0_cyc,
              ddr0_cyc;
 
@@ -94,6 +100,7 @@ wire         lm32i_stb,
              lm32d_stb,
              uart0_stb,
              timer0_stb,
+             gpio0_stb,
              bram0_stb,
              ddr0_stb;
 
@@ -101,45 +108,38 @@ wire         lm32i_ack,
              lm32d_ack,
              uart0_ack,
              timer0_ack,
+             gpio0_ack,
              bram0_ack,
              ddr0_ack;
 
 wire         lm32i_rty,
-             lm32d_rty,
-             uart0_rty,
-             timer0_rty,
-             bram0_rty;
+             lm32d_rty;
 
 wire         lm32i_err,
-             lm32d_err,
-             uart0_err,
-             timer0_err,
-             bram0_err;
+             lm32d_err;
 
 wire         lm32i_lock,
-             uart0_lock,
-             timer0_lock,
              lm32d_lock;
 
 wire [2:0]   lm32i_cti,
-             uart0_cti,
-             timer0_cti,
              lm32d_cti;
 
 wire [1:0]   lm32i_bte,
-             uart0_bte,
-             timer0_bte,
              lm32d_bte;
 
-wire [31:0]  intr_n;
+//---------------------------------------------------------------------------
+// Interrupts
+//---------------------------------------------------------------------------
+wire  [31:0] intr_n;
 wire         uart0_intr = 0;
+wire         gpio0_intr;
 wire   [1:0] timer0_intr;
 
-assign intr_n = { 24'hFFFFFF, ~timer0_intr[1], 5'b11111, ~timer0_intr[0], ~uart0_intr };
+assign intr_n = { 28'hFFFFFFF, ~timer0_intr[1], ~gpio0_intr, ~timer0_intr[0], ~uart0_intr };
 
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 // Wishbone Interconnect
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 wb_conbus_top #(
 	.s0_addr_w ( 3 ),
 	.s0_addr   ( 3'h4 ),        // ddr0
@@ -149,7 +149,7 @@ wb_conbus_top #(
 	.s2_addr   ( 15'h0000 ),    // bram0 
 	.s3_addr   ( 15'h7000 ),    // uart0
 	.s4_addr   ( 15'h7001 ),    // timer0
-	.s5_addr   ( 15'h7002 ),
+	.s5_addr   ( 15'h7002 ),    // gpio0
 	.s6_addr   ( 15'h7003 ),
 	.s7_addr   ( 15'h7004 )
 ) conmax0 (
@@ -250,8 +250,8 @@ wb_conbus_top #(
 	.s3_cyc_o(  uart0_cyc   ),
 	.s3_stb_o(  uart0_stb   ),
 	.s3_ack_i(  uart0_ack   ),
-	.s3_err_i(  uart0_err   ),
-	.s3_rty_i(  uart0_rty   ),
+	.s3_err_i(  gnd         ),
+	.s3_rty_i(  gnd         ),
 	// Slave4
 	.s4_dat_i(  timer0_dat_r ),
 	.s4_dat_o(  timer0_dat_w ),
@@ -261,13 +261,19 @@ wb_conbus_top #(
 	.s4_cyc_o(  timer0_cyc   ),
 	.s4_stb_o(  timer0_stb   ),
 	.s4_ack_i(  timer0_ack   ),
-	.s4_err_i(  timer0_err   ),
-	.s4_rty_i(  timer0_rty   ),
+	.s4_err_i(  gnd          ),
+	.s4_rty_i(  gnd          ),
 	// Slave5
-	.s5_dat_i(  gnd32  ),
-	.s5_ack_i(  gnd    ),
-	.s5_err_i(  gnd    ),
-	.s5_rty_i(  gnd    ),
+	.s5_dat_i(  gpio0_dat_r  ),
+	.s5_dat_o(  gpio0_dat_w  ),
+	.s5_adr_o(  gpio0_adr    ),
+	.s5_sel_o(  gpio0_sel    ),
+	.s5_we_o(   gpio0_we     ),
+	.s5_cyc_o(  gpio0_cyc    ),
+	.s5_stb_o(  gpio0_stb    ),
+	.s5_ack_i(  gpio0_ack    ),
+	.s5_err_i(  gnd          ),
+	.s5_rty_i(  gnd          ),
 	// Slave6
 	.s6_dat_i(  gnd32  ),
 	.s6_ack_i(  gnd    ),
@@ -280,10 +286,9 @@ wb_conbus_top #(
 	.s7_rty_i(  gnd    )
 );
 
-
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 // LM32 CPU 
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 lm32_cpu lm0 (
 	.clk_i(  clk  ),
 	.rst_i(  rst  ),
@@ -318,9 +323,9 @@ lm32_cpu lm0 (
 	.D_RTY_I(  lm32d_rty    )
 );
 	
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 // Block RAM
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 wb_bram #(
 	.adr_width( 12 ),
 	.mem_file_name( bootram_file )
@@ -338,9 +343,11 @@ wb_bram #(
 	.wb_we_i(   bram0_we     )
 );
 
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 // ddr0
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
+wire [2:0] ddr0_rot;
+
 wb_ddr #(
 	.clk_freq(     clk_freq         ),
 	.clk_multiply( ddr_clk_multiply ),
@@ -374,13 +381,13 @@ wb_ddr #(
 	.wb_sel_i(    ddr0_sel     ),
 	.wb_ack_o(    ddr0_ack     ),
 	// phase shifting
-	.rot(          rot       )
+	.rot(         ddr0_rot       )
 );
 
 
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 // uart0
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 wire uart0_rxd;
 wire uart0_txd;
 
@@ -404,9 +411,9 @@ wb_uart #(
 	.uart_txd( uart0_txd )
 );
 
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 // timer0
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 wb_timer #(
 	.clk_freq(   clk_freq  )
 ) timer0 (
@@ -422,6 +429,32 @@ wb_timer #(
 	.wb_sel_i( timer0_sel   ),
 	.wb_ack_o( timer0_ack   ), 
 	.intr(     timer0_intr  )
+);
+
+//---------------------------------------------------------------------------
+// General Purpose IO
+//---------------------------------------------------------------------------
+wire [31:0] gpio0_in;
+wire [31:0] gpio0_out;
+wire [31:0] gpio0_oe;
+
+wb_gpio gpio0 (
+	.clk(      clk          ),
+	.reset(    rst          ),
+	//
+	.wb_adr_i( gpio0_adr    ),
+	.wb_dat_i( gpio0_dat_w  ),
+	.wb_dat_o( gpio0_dat_r  ),
+	.wb_stb_i( gpio0_stb    ),
+	.wb_cyc_i( gpio0_cyc    ),
+	.wb_we_i(  gpio0_we     ),
+	.wb_sel_i( gpio0_sel    ),
+	.wb_ack_o( gpio0_ack    ), 
+	.intr(     gpio0_intr   ),
+	// GPIO
+	.gpio_in(  gpio0_in     ),
+	.gpio_out( gpio0_out    ),
+	.gpio_oe(  gpio0_oe     )
 );
 
 //------------------------------------------------------------------
@@ -476,12 +509,27 @@ assign probe = (select[3:0] == 'h0) ? { rst, lm32i_stb, lm32i_cyc, lm32i_ack, lm
                (select[3:0] == 'hb) ? lm32d_adr[15: 8] :
                                       lm32d_adr[ 7: 0] ;
 
+//----------------------------------------------------------------------------
+// Mux UART wires according to sw[0]
+//----------------------------------------------------------------------------
 assign uart_txd  = (sw[0]) ? uart0_txd : lac_txd;
 assign lac_rxd   = (sw[0]) ?         1 : uart_rxd;
 assign uart0_rxd = (sw[0]) ? uart_rxd  : 1;
 
+//----------------------------------------------------------------------------
+// Mux LEDs and Push Buttons according to sw[1]
+//----------------------------------------------------------------------------
+wire [7:0] debug_leds = { clk, rst, ~uart_rxd, ~uart_txd, lm32i_stb, lm32i_ack, lm32d_stb, lm32d_ack };
+wire [7:0] gpio_leds  = gpio0_out[7:0];
 
-assign led = { clk, rst, ~uart_rxd, ~uart_txd, select[3:0] };
-assign rst = btn[0] | select[7];
+assign led             = (sw[1]) ? gpio_leds : debug_leds;
+assign rst             = (sw[1]) ?      1'b0 : btn[0];
+
+assign gpio0_in[15: 8] = (sw[1]) ? {rot,btn} : 8'b0;
+assign gpio0_in[31:16] = 16'b0;
+assign gpio0_in[ 7: 0] =  8'b0;
+
+assign ddr0_rot        = (sw[1]) ?      3'b0 : rot;  // connect rotary encoder
+                                                     // ddr controller?
 
 endmodule 

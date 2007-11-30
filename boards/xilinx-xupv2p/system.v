@@ -1,5 +1,7 @@
 //---------------------------------------------------------------------------
 // LatticeMico32 System On A Chip
+//
+// Top Level Design for the Xilinx XUP Virtex II Pro Board
 //---------------------------------------------------------------------------
 `include "ddr_include.v"
 
@@ -41,25 +43,24 @@ module system
 );
 	
 assign uart_cts = 1;
-
-//------------------------------------------------------------------
-// Local wires
-//------------------------------------------------------------------
-wire         rst   = ~reset_n;
-
-wire         gnd   = 1'b0;
-wire   [3:0] gnd4  = 4'h0;
-wire  [31:0] gnd32 = 32'h00000000;
+wire   rst      = ~reset_n;
 
 wire         probe_clk;
 wire   [7:0] probe_sel;
 wire   [7:0] probe;
 
+//------------------------------------------------------------------
+// Wishbone Wires
+//------------------------------------------------------------------
+wire         gnd   = 1'b0;
+wire   [3:0] gnd4  = 4'h0;
+wire  [31:0] gnd32 = 32'h00000000;
  
 wire [31:0]  lm32i_adr,
              lm32d_adr,
              uart0_adr,
              timer0_adr,
+             gpio0_adr,
              bram0_adr,
              ddr0_adr;
 
@@ -72,6 +73,8 @@ wire [31:0]  lm32i_dat_r,
              uart0_dat_w,
              timer0_dat_r,
              timer0_dat_w,
+             gpio0_dat_r,
+             gpio0_dat_w,
              bram0_dat_r,
              bram0_dat_w,
              ddr0_dat_w,
@@ -81,20 +84,23 @@ wire [3:0]   lm32i_sel,
              lm32d_sel,
              uart0_sel,
              timer0_sel,
+             gpio0_sel,
              bram0_sel,
              ddr0_sel;
 
-wire         lm32i_i_we,
-             lm32d_i_we,
-             uart0_i_we,
-             timer0_i_we,
-             bram0_i_we,
-             ddr0_i_we;
+wire         lm32i_we,
+             lm32d_we,
+             uart0_we,
+             timer0_we,
+             gpio0_we,
+             bram0_we,
+             ddr0_we;
 
 wire         lm32i_cyc,
              lm32d_cyc,
              uart0_cyc,
              timer0_cyc,
+             gpio0_cyc,
              bram0_cyc,
              ddr0_cyc;
 
@@ -102,6 +108,7 @@ wire         lm32i_stb,
              lm32d_stb,
              uart0_stb,
              timer0_stb,
+             gpio0_stb,
              bram0_stb,
              ddr0_stb;
 
@@ -109,57 +116,48 @@ wire         lm32i_ack,
              lm32d_ack,
              uart0_ack,
              timer0_ack,
+             gpio0_ack,
              bram0_ack,
              ddr0_ack;
 
 wire         lm32i_rty,
-             lm32d_rty,
-             uart0_rty,
-             timer0_rty,
-             bram0_rty;
+             lm32d_rty;
 
 wire         lm32i_err,
-             lm32d_err,
-             uart0_err,
-             timer0_err,
-             bram0_err;
+             lm32d_err;
 
 wire         lm32i_lock,
-             uart0_lock,
-             timer0_lock,
              lm32d_lock;
 
 wire [2:0]   lm32i_cti,
-             uart0_cti,
-             timer0_cti,
              lm32d_cti;
 
 wire [1:0]   lm32i_bte,
-             uart0_bte,
-             timer0_bte,
              lm32d_bte;
 
-wire [31:0]  intr_n;
+//---------------------------------------------------------------------------
+// Interrupts
+//---------------------------------------------------------------------------
+wire  [31:0] intr_n;
 wire         uart0_intr = 0;
+wire         gpio0_intr;
 wire   [1:0] timer0_intr;
 
-assign intr_n = { 24'hFFFFFF, ~timer0_intr[1], 5'b11111, ~timer0_intr[0], ~uart0_intr };
-assign led_n  = { ~clk, ~rst, ~lm32i_stb, ~lm32i_ack };
+assign intr_n = { 28'hFFFFFFF, ~timer0_intr[1], ~gpio0_intr, ~timer0_intr[0], ~uart0_intr };
 
-
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 // Wishbone Interconnect
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 wb_conbus_top #(
 	.s0_addr_w ( 3 ),
 	.s0_addr   ( 3'h4 ),        // ddr0
 	.s1_addr_w ( 3 ),
-	.s1_addr   ( 3'h5 ),        // flash0
+	.s1_addr   ( 3'h5 ),        
 	.s27_addr_w( 15 ),
 	.s2_addr   ( 15'h0000 ),    // bram0 
 	.s3_addr   ( 15'h7000 ),    // uart0
 	.s4_addr   ( 15'h7001 ),    // timer0
-	.s5_addr   ( 15'h7002 ),
+	.s5_addr   ( 15'h7002 ),    // gpio0
 	.s6_addr   ( 15'h7003 ),
 	.s7_addr   ( 15'h7004 )
 ) conmax0 (
@@ -274,10 +272,16 @@ wb_conbus_top #(
 	.s4_err_i(  timer0_err   ),
 	.s4_rty_i(  timer0_rty   ),
 	// Slave5
-	.s5_dat_i(  gnd32  ),
-	.s5_ack_i(  gnd    ),
-	.s5_err_i(  gnd    ),
-	.s5_rty_i(  gnd    ),
+	.s5_dat_i(  gpio0_dat_r  ),
+	.s5_dat_o(  gpio0_dat_w  ),
+	.s5_adr_o(  gpio0_adr    ),
+	.s5_sel_o(  gpio0_sel    ),
+	.s5_we_o(   gpio0_we     ),
+	.s5_cyc_o(  gpio0_cyc    ),
+	.s5_stb_o(  gpio0_stb    ),
+	.s5_ack_i(  gpio0_ack    ),
+	.s5_err_i(  gnd          ),
+	.s5_rty_i(  gnd          ),
 	// Slave6
 	.s6_dat_i(  gnd32  ),
 	.s6_ack_i(  gnd    ),
@@ -290,10 +294,9 @@ wb_conbus_top #(
 	.s7_rty_i(  gnd    )
 );
 
-
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 // LM32 CPU 
-//------------------------------------------------------------------
+//---------------------------------------------------------------------------
 lm32_cpu lm0 (
 	.clk_i(  clk  ),
 	.rst_i(  rst  ),
@@ -351,7 +354,7 @@ wb_bram #(
 //------------------------------------------------------------------
 // ddr0
 //------------------------------------------------------------------
-wire [2:0] rot = { 1'b0, ~btn_n[1], ~btn_n[3] };
+wire [2:0] ddr0_rot;
 
 wb_ddr #(
 	.clk_freq(     clk_freq         ),
@@ -386,7 +389,7 @@ wb_ddr #(
 	.wb_sel_i(    ddr0_sel     ),
 	.wb_ack_o(    ddr0_ack     ),
 	// phase shifting
-	.rot(          rot         ),
+	.rot(          ddr0_rot    ),
 //	.probe_clk(    probe_clk   ),
 	.probe_sel(    'b0         )
 //	.probe(        probe       )
@@ -440,6 +443,32 @@ wb_timer #(
 );
 
 //------------------------------------------------------------------
+// General Purpose IO
+//------------------------------------------------------------------
+wire [31:0] gpio0_in;
+wire [31:0] gpio0_out;
+wire [31:0] gpio0_oe;
+
+wb_gpio gpio0 (
+	.clk(      clk          ),
+	.reset(    rst          ),
+	//
+	.wb_adr_i( gpio0_adr    ),
+	.wb_dat_i( gpio0_dat_w  ),
+	.wb_dat_o( gpio0_dat_r  ),
+	.wb_stb_i( gpio0_stb    ),
+	.wb_cyc_i( gpio0_cyc    ),
+	.wb_we_i(  gpio0_we     ),
+	.wb_sel_i( gpio0_sel    ),
+	.wb_ack_o( gpio0_ack    ), 
+	.intr(     gpio0_intr   ),
+	// GPIO
+	.gpio_in(  gpio0_in     ),
+	.gpio_out( gpio0_out    ),
+	.gpio_oe(  gpio0_oe     )
+);
+
+//------------------------------------------------------------------
 // LogicAnalyzerComponent
 //------------------------------------------------------------------
 wire        lac_rxd;
@@ -481,8 +510,26 @@ assign probe = (probe_sel[3:0] == 'h0) ? { rst, intr_n[1], lm32i_stb, lm32i_ack,
                (probe_sel[3:0] == 'hb) ? lm32d_adr[15: 8] :
                                          lm32d_adr[ 7: 0] ;
 
+//----------------------------------------------------------------------------
+// Mux UART wires according to sw[0]
+//----------------------------------------------------------------------------
 assign uart_txd  = (sw[0]) ? uart0_txd : lac_txd;
 assign lac_rxd   = (sw[0]) ?         1 : uart_rxd;
 assign uart0_rxd = (sw[0]) ? uart_rxd  : 1;
+
+//----------------------------------------------------------------------------
+// Mux LEDs and Push Buttons according to sw[1]
+//----------------------------------------------------------------------------
+wire [3:0] debug_leds = { lm32i_stb, lm32i_ack, lm32d_stb, lm32d_ack };
+wire [3:0] gpio_leds  = gpio0_out[3:0];
+
+assign led_n   = (sw[1]) ? ~gpio_leds : ~debug_leds;
+
+assign gpio0_in[ 7: 0] =  8'b0;
+assign gpio0_in[12: 8] = (sw[1]) ?     ~btn_n : 8'b0;
+assign gpio0_in[31:13] = 19'b0;
+
+assign ddr0_rot        = (sw[1]) ? 3'b0 : {1'b0,~btn_n[1],~btn_n[3]};  // connect phase shift btn's to
+                                                                       // ddr controller?
 
 endmodule 

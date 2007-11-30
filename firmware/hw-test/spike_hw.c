@@ -2,8 +2,7 @@
 
 uart_t   *uart0  = (uart_t *)   0xf0000000;
 timer_t  *timer0 = (timer_t *)  0xf0010000;
-// gpio_t   *gpio0  = (gpio_t *)   0xF0002000;
-// uint32_t *sram0  = (uint32_t *) 0x40000000;
+gpio_t   *gpio0  = (gpio_t *)   0xF0020000;
 
 isr_ptr_t isr_table[32];
 
