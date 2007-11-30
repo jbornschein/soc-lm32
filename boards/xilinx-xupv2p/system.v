@@ -121,11 +121,7 @@ wire         lm32i_ack,
              ddr0_ack;
 
 wire         lm32i_rty,
-<<<<<<< TREE
              lm32d_rty;
-=======
-             lm33d_rty;
->>>>>>> MERGE-SOURCE
 
 wire         lm32i_err,
              lm32d_err;
