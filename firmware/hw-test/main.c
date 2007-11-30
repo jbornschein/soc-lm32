@@ -86,7 +86,7 @@ int main()
 	writeint(get_gp());
 	uart_putchar('\n');    
 
-	uart_putstr( "Timer Test (2s): " );
+	uart_putstr( "Timer Test (1s): " );
 	for(i=0; i<4; i++) {
 		uart_putstr("tic...");    
 		msleep(1000);
@@ -98,11 +98,11 @@ int main()
 	uart_putchar('\n');    
 
 	int val = tic_msec;
-	uart_putstr( "Shift and Check: " );
+	uart_putstr( "Shift: " );
 	writeint( val );
-	uart_putchar('\n');    
+	uart_putstr(" <-> ");    
 	for(i=0; i<32; i++) {
-		if (val & 0x80)
+		if (val & 0x80000000)
 			uart_putchar( '1' );
 		else
 			uart_putchar( '0' );
@@ -121,7 +121,7 @@ int main()
 			out2 = 0x80 >> i;
 			gpio0->out = out1 | out2;
 
-			msleep(200);
+			msleep(100);
 		}
 	}
 
