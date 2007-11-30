@@ -71,13 +71,13 @@ wire [3:0]   lm32i_sel,
              bram0_sel,
              sram0_sel;
 
-wire         lm32i_i_we,
-             lm32d_i_we,
-             uart0_i_we,
-             timer0_i_we,
-             gpio0_i_we,
-             bram0_i_we,
-             sram0_i_we;
+wire         lm32i_we,
+             lm32d_we,
+             uart0_we,
+             timer0_we,
+             gpio0_we,
+             bram0_we,
+             sram0_we;
 
 wire         lm32i_cyc,
              lm32d_cyc,

@@ -69,13 +69,13 @@ wire [3:0]   lm32i_sel,
              bram0_sel,
              sram0_sel;
 
-wire         lm32i_i_we,
-             lm32d_i_we,
-             uart0_i_we,
-             timer0_i_we,
-             gpio0_i_we,
-             bram0_i_we,
-             sram0_i_we;
+wire         lm32i_we,
+             lm32d_we,
+             uart0_we,
+             timer0_we,
+             gpio0_we,
+             bram0_we,
+             sram0_we;
 
 wire         lm32i_cyc,
              lm32d_cyc,
@@ -111,13 +111,9 @@ wire         lm32i_lock,
              lm32d_lock;
 
 wire [2:0]   lm32i_cti,
-             uart0_cti,
-             timer0_cti,
              lm32d_cti;
 
 wire [1:0]   lm32i_bte,
-             uart0_bte,
-             timer0_bte,
              lm32d_bte;
 
 //---------------------------------------------------------------------------
