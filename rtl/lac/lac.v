@@ -185,6 +185,14 @@ end
 //------------------------------------------------------------------
 // Sampling clock domain
 //------------------------------------------------------------------
+
+// register probe input for better F_max
+reg        [width-1:0] probe_r;    
+
+always @(posedge probe_clk)
+	probe_r <= probe;
+
+// Sampling machinery
 reg                    armed_synced;
 reg                    armed_synced2;
 reg                    sampling;
@@ -194,7 +202,7 @@ wire   [adr_width-1:0] next_adr;
 assign                 next_adr = write_adr + 1;
 
 wire    cond_match;
-assign  cond_match = (probe & trig_mask) == (trig_cond & trig_mask) && armed_synced2;
+assign  cond_match = (probe_r & trig_mask) == (trig_cond & trig_mask) && armed_synced2;
 
 always @(posedge probe_clk)
 begin
@@ -247,7 +255,7 @@ dp_ram #(
 	// write port b
 	.clk_b(     probe_clk   ),
 	.adr_b(     write_adr   ),
-	.dat_b(     probe       ),
+	.dat_b(     probe_r     ),
 	.we_b(      write_en    )
 );
 
