@@ -113,7 +113,7 @@ wire         lm32i_ack,
              ddr0_ack;
 
 wire         lm32i_rty,
-             lm33d_rty;
+             lm32d_rty;
 
 wire         lm32i_err,
              lm32d_err;
