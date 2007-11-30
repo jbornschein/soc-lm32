@@ -33,6 +33,7 @@ SRC=                                      \
 	../../rtl/wb_bram/wb_bram.v           \
 	../../rtl/wb_uart/wb_uart.v           \
 	../../rtl/wb_timer/wb_timer.v         \
+	../../rtl/wb_gpio/wb_gpio.v           \
 	../../rtl/wb_conbus/wb_conbus_top.v   \
 	../../rtl/wb_conbus/wb_conbus_arb.v   \
 	../../rtl/wb_sram/wb_sram32.v

@@ -21,7 +21,7 @@ module wb_gpio (
 	input       [31:0] wb_dat_i,
 	output reg  [31:0] wb_dat_o,
 	//
-	output       [1:0] intr,
+	output             intr,
 	// IO Wires
 	input       [31:0] gpio_in,
 	output reg  [31:0] gpio_out,
@@ -32,7 +32,7 @@ module wb_gpio (
 // 
 //---------------------------------------------------------------------------
 
-wire [31:0] gpiocr = { 28'b0, en0, ar0, irqen0, trig0 };
+wire [31:0] gpiocr = 32'b0;
 
 // Wishbone
 reg  ack;

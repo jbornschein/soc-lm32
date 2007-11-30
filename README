@@ -20,6 +20,7 @@ Directory structure:
   [0x40000000,0x40000000) sram0/ddr0 -- Externam RAM (size depends on actual board)
   [0x70000000,0x70010000) uart0      -- serial communication  component
   [0x70010000,0x70020000) timer0     -- 32 bit dual timer engine
+  [0x70020000,0x70020000) gpio0      -- General Purpose IO 
 
   [0x80000000,0xFFFFFFFF] Non-Cached mirror of [0x00000000,0x7FFFFFFF]
 
