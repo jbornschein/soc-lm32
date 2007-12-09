@@ -12,9 +12,12 @@ boards/*/system.ngd
 boards/*/system.ngm
 boards/*/system.pcf
 boards/*/system.srp
+boards/*/system.mcs
+boards/*/system.prm
 boards/*/system-routed.ncd
 boards/*/system-routed.pad
 boards/*/system-routed.par
+boards/*/system-routed.twr
 boards/*/system-routed.unroutes
 boards/*/system-routed.xpi
 boards/*/system-routed_pad.csv
