@@ -31,6 +31,9 @@ SRC =	                                  \
 	../../rtl/wb_gpio/wb_gpio.v           \
 	../../rtl/wb_conbus/wb_conbus_top.v   \
 	../../rtl/wb_conbus/wb_conbus_arb.v   \
+	../../rtl/wb_farbborg/wb_farbborg.v   \
+	../../rtl/wb_farbborg/dualportram.v   \
+	../../rtl/wb_farbborg/pwm.v           \
 	../../rtl/wb_sram/wb_sram16.v
 
 
@@ -41,7 +44,7 @@ view: system_tb.view
 
 #############################################################################
 # Syntheis constants
-SYNCLEAN     = *.rpt *.chg smart.log *.htm *.eqn *.pin *.sof *.pof db
+SYNCLEAN     = *.rpt system.qsf *.chg smart.log *.htm *.eqn *.pin *.sof *.pof db
 SYNCLEAN_ALL = *.ssf *.csf *.esf *.fsf *.psf *.quartus *.qws
 
 MAP_ARGS = --family="Cyclone II"
@@ -71,12 +74,20 @@ system_tb.vvp: $(SRC) $(SIM_SRC)
 	$(VVP) $<
 
 
+
 ################################################################
 # Synthesis
 #ASSIGNMENT_FILES = system.quartus system.psf system.csf
 ASSIGNMENT_FILES = system.psf system.csf
 
-#system.prj: $(SRC) $(SYN_SRC)
+system.qsf: $(SRC)
+	@rm -f $@
+	@cp -f preferences.qsf $@ 
+	@for i in `echo $^`; do \
+		echo "set_global_assignment -name VERILOG_FILE $$i" >> $@; \
+	done
+
+#system.prj: $(SRC) 
 #	rm -f system.prj
 #	@for i in `echo $^`; do \
 #	    echo "set_global_assignment -name VERILOG_FILE $$i" >> system.prj; \
@@ -90,7 +101,7 @@ ASSIGNMENT_FILES = system.psf system.csf
 # clean: remove output files and database
 # clean_all: removes settings files as well as clean.
 ################################################################
-syn: smart.log $(PROJECT).asm.rpt $(PROJECT).tan.rpt
+syn: system.qsf smart.log $(PROJECT).asm.rpt $(PROJECT).tan.rpt
 
 map: smart.log $(PROJECT).map.rpt
 fit: smart.log $(PROJECT).fit.rpt

@@ -313,28 +313,3 @@ set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim-Altera (VHDL)"
 # =====================
 set_global_assignment -name STRATIX_CONFIGURATION_DEVICE EPCS4
 
-set_global_assignment -name VERILOG_FILE system.v
-set_global_assignment -name VERILOG_FILE ../../rtl/lac/lac.v
-set_global_assignment -name VERILOG_FILE ../../rtl/lac/uart.v
-set_global_assignment -name VERILOG_FILE ../../rtl/lac/dp_ram.v
-set_global_assignment -name VERILOG_FILE ../../rtl/lm32/lm32_cpu.v
-set_global_assignment -name VERILOG_FILE ../../rtl/lm32/lm32_instruction_unit.v
-set_global_assignment -name VERILOG_FILE ../../rtl/lm32/lm32_decoder.v
-set_global_assignment -name VERILOG_FILE ../../rtl/lm32/lm32_load_store_unit.v
-set_global_assignment -name VERILOG_FILE ../../rtl/lm32/lm32_adder.v
-set_global_assignment -name VERILOG_FILE ../../rtl/lm32/lm32_addsub.v
-set_global_assignment -name VERILOG_FILE ../../rtl/lm32/lm32_logic_op.v
-set_global_assignment -name VERILOG_FILE ../../rtl/lm32/lm32_shifter.v
-set_global_assignment -name VERILOG_FILE ../../rtl/lm32/lm32_multiplier.v
-set_global_assignment -name VERILOG_FILE ../../rtl/lm32/lm32_mc_arithmetic.v
-set_global_assignment -name VERILOG_FILE ../../rtl/lm32/lm32_interrupt.v
-set_global_assignment -name VERILOG_FILE ../../rtl/lm32/lm32_icache.v
-set_global_assignment -name VERILOG_FILE ../../rtl/lm32/lm32_dcache.v
-set_global_assignment -name VERILOG_FILE ../../rtl/lm32/lm32_ram.v
-set_global_assignment -name VERILOG_FILE ../../rtl/wb_bram/wb_bram.v
-set_global_assignment -name VERILOG_FILE ../../rtl/wb_uart/wb_uart.v
-set_global_assignment -name VERILOG_FILE ../../rtl/wb_timer/wb_timer.v
-set_global_assignment -name VERILOG_FILE ../../rtl/wb_gpio/wb_gpio.v
-set_global_assignment -name VERILOG_FILE ../../rtl/wb_conbus/wb_conbus_top.v
-set_global_assignment -name VERILOG_FILE ../../rtl/wb_conbus/wb_conbus_arb.v
-set_global_assignment -name VERILOG_FILE ../../rtl/wb_sram/wb_sram16.v

@@ -133,8 +133,8 @@ system #(
 	.uart_rxd(  uart_rxd  ),
 	.uart_txd(  uart_txd  ),
 	// SRAM
-	.sram_addr(  sram_adr  ),
-	.sram_dq(  sram_dat  ),
+	.sram_addr( sram_adr  ),
+	.sram_dq(   sram_dat  ),
 	.sram_ub_n( sram_be_n[1] ),
 	.sram_lb_n( sram_be_n[0] ),
 	.sram_ce_n( sram_ce_n ),
