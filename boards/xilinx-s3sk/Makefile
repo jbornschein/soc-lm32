@@ -103,6 +103,9 @@ system-routed.ncd: system.ncd
 system.bit: system-routed.ncd
 	bitgen -w system-routed.ncd system.bit
 
+system.mcs: system.bit
+	promgen -u 0 system
+
 system-routed.xdl: system-routed.ncd
 	xdl -ncd2xdl system-routed.ncd system-routed.xdl
 
