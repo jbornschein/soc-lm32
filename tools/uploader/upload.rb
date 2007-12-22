@@ -94,7 +94,6 @@ begin
                 sp.putc 'u' 
                 sz = line[2..-5]
                 sz.each_byte do |b|
-                    putc '.'
                     sp.putc b
                 end   
                 c1 = sp.getc
@@ -107,9 +106,9 @@ begin
                 error += 1    
             end while c.hex != line[-4..-3].hex
             begin
-                putc(ch = sp.getc)
+                ch = sp.getc
             end while ch != 62
-            puts " "
+            puts "."
             error = 0
 		end
 	end	

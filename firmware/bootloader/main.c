@@ -9,7 +9,8 @@
 void writeint(uint8_t nibbles, uint32_t val);
 uint32_t readint(uint8_t nibbles, uint8_t* checksum);
 
-uint32_t readint(uint8_t nibbles, uint8_t* checksum) {
+uint32_t readint(uint8_t nibbles, uint8_t* checksum) 
+{
 	uint32_t val = 0, i;
     uint8_t c;
     for (i = 0; i < nibbles; i++) {
@@ -130,3 +131,4 @@ int main(int argc, char **argv)
     		}
 	}
 }
+
