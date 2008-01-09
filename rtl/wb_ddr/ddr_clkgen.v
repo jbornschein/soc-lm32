@@ -20,23 +20,12 @@ module ddr_clkgen
 	output       read_clk,
 	output       write_clk,
 	output       write_clk90,
-	// 
-	input  [2:0] rot
+	// DCM phase shift control 
+	output   reg ps_ready,
+	input        ps_up,
+	input        ps_down
 );
 
-
-//----------------------------------------------------------------------------
-// rotary decoder
-//----------------------------------------------------------------------------
-rotary rotdec0 (
-	.clk(       clk        ),
-	.reset(     reset      ),
-	.rot(       rot        ),
-	// output
-	.rot_btn(   rot_btn    ),
-	.rot_event( rot_event  ),
-	.rot_left(  rot_left   )
-);
 
 //----------------------------------------------------------------------------
 // ~133 MHz DDR Clock generator
@@ -97,6 +86,8 @@ BUFG bufg_fx_clk (
 wire  phase_dcm_reset;
 wire  phase_dcm_locked;
 wire  write_clk_u, write_clk90_u, write_clk180_u, write_clk270_u;
+reg   psen, psincdec; 
+wire  psdone;
 
 DCM #(
 	.CLKDV_DIVIDE(2.0),     // Divide by: 1.5,2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5
@@ -127,16 +118,17 @@ DCM #(
 	.CLKFX(),                    // DCM CLK synthesis out (M/D)
 	.CLKFX180(),                 // 180 degree CLK synthesis out
 	.LOCKED( phase_dcm_locked ), // DCM LOCK status output
-	.PSDONE(),                   // Dynamic phase adjust done output
 	.STATUS(),                   // 8-bit DCM status bits output
 	.CLKFB( write_clk ),         // DCM clock feedback
 	.CLKIN( read_clk ),          // Clock input (from IBUFG, BUFG or DCM)
 	.PSCLK( clk ),               // Dynamic phase adjust clock input
-	.PSEN( rot_event ),          // Dynamic phase adjust enable input
-	.PSINCDEC( rot_left ),       // Dynamic phase adjust increment/decrement
+	.PSEN( psen ),               // Dynamic phase adjust enable input
+	.PSINCDEC( psincdec ),       // Dynamic phase adjust increment/decrement
+	.PSDONE( psdone ),           // Dynamic phase adjust done output
 	.RST( phase_dcm_reset )      // DCM asynchronous reset input
 );
 
+// delayed reset for phase shifting DCM
 reg [3:0] reset_counter;
 assign phase_dcm_reset = reset | (reset_counter != 0);
 
@@ -150,11 +142,62 @@ begin
 	end
 end
 
+//----------------------------------------------------------------------------
+// DCM phase shifting state machine
+//----------------------------------------------------------------------------
+parameter s_init     = 0;
+parameter s_idle     = 1;
+parameter s_waitdone = 2;
+parameter s_waitdone2= 3;
+
+reg [1:0] state;
+
+always @(posedge clk)
+begin
+	if (reset) begin
+		state     <= s_init;
+		psen      <= 0;
+		ps_ready  <= 0;
+	end else begin
+		case (state)
+		s_init: begin
+			if (phase_dcm_locked) begin
+				ps_ready  <= 1;
+				state     <= s_idle;
+			end
+		end
+		s_idle: begin
+			if (ps_up) begin
+				ps_ready  <= 0;
+				psen      <= 1;
+				psincdec  <= 1;
+				state     <= s_waitdone;
+			end else if (ps_down) begin
+				ps_ready  <= 0;
+				psen      <= 1;
+				psincdec  <= 0;
+				state     <= s_waitdone;
+			end
+		end
+		s_waitdone: begin
+			psen     <= 0;
+			if (psdone) begin
+				state     <= s_waitdone2;
+			end
+		end
+		s_waitdone2: begin
+			if (~ps_up && ~ps_down) begin
+				ps_ready  <= 1;
+				state     <= s_idle;
+			end
+		end
+		endcase
+	end
+end
 
 //----------------------------------------------------------------------------
 // BUFG write clock
 //----------------------------------------------------------------------------
-
 BUFG bufg_write_clk (
 	.O(write_clk  ),          // Clock buffer output
 	.I(write_clk_u)           // Clock buffer input

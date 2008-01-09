@@ -40,7 +40,10 @@ module wb_ddr
 	input                    wb_we_i,
 	output reg               wb_ack_o,
 	// XXX Temporary DCM control input XXX
-	input              [2:0] rot,  
+	output                   ps_ready,
+	input                    ps_up,
+	input                    ps_down,
+	// XXX probe wires XXX
 	output                   probe_clk,
 	input              [7:0] probe_sel,
 	output reg         [7:0] probe
@@ -447,7 +450,6 @@ ddr_ctrl #(
 ) ctrl0 (
 	.clk(          clk         ),
 	.reset(        reset       ),
-	.rot(          rot         ),
 	// DDR Ports
 	.ddr_clk(      ddr_clk     ),
 	.ddr_clk_n(    ddr_clk_n   ),
@@ -472,7 +474,11 @@ ddr_ctrl #(
 	.fml_wnext(    fml_wnext2  ),
 	.fml_rempty(   fml_rempty  ),
 	.fml_rdat(     fml_rdat    ),
-	.fml_rnext(    fml_rnext   )
+	.fml_rnext(    fml_rnext   ),
+	// DCM phase shift control
+	.ps_ready(     ps_ready   ),
+	.ps_up(        ps_up      ),
+	.ps_down(      ps_down    )
 );
 
 assign fml_adr = { ls_adr_tag, ls_adr_set };

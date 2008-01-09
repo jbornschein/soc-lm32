@@ -29,17 +29,20 @@ module ddr_ctrl
 	output       [ `DM_RNG] ddr_dm,
 	// FML (FastMemoryLink)
 	output reg              fml_done,
-	input  [`FML_ADR_RNG]   fml_adr,
+	input    [`FML_ADR_RNG] fml_adr,
 	input                   fml_rd,
 	input                   fml_wr,
-	input  [`FML_DAT_RNG]   fml_wdat,
-	input  [`FML_BE_RNG]    fml_wbe,
+	input    [`FML_DAT_RNG] fml_wdat,
+	input     [`FML_BE_RNG] fml_wbe,
 	input                   fml_wnext,
 	output                  fml_rempty,
 	input                   fml_rnext,
-	output [`FML_DAT_RNG]   fml_rdat,
-	// XXX Temporary DCM control input XXX
-	input             [2:0] rot,  
+	output   [`FML_DAT_RNG] fml_rdat,
+	// DCM phase shift control
+	output                  ps_ready,
+	input                   ps_up,
+	input                   ps_down,
+	// Logic Probe
 	output                  probe_clk,
 	input             [7:0] probe_sel,
 	output reg        [7:0] probe
@@ -71,7 +74,9 @@ ddr_clkgen #(
 	.write_clk(       write_clk      ),
 	.write_clk90(     write_clk90    ),
 	// phase shift control
-	.rot(             rot            )      // XXX
+	.ps_ready(        ps_ready      ),
+	.ps_up(           ps_up         ),
+	.ps_down(         ps_down       )
 );
 
 //----------------------------------------------------------------------------
@@ -337,7 +342,7 @@ assign ddr_dq_i  = ddr_dq;
 assign ddr_cs_n  = 2'b00;
 
 //----------------------------------------------------------------------------
-// clock generator
+// Probes
 //----------------------------------------------------------------------------
 assign probe_clk = clk; 
 
@@ -345,7 +350,7 @@ always @(*)
 begin
 	case (probe_sel)
 		8'h00: probe <= { cba_fifo_we, wfifo_we, rfifo_next, 1'b0, cba_fifo_full, wfifo_full, rfifo_empty, 1'b0 };
-		8'h01: probe <= { write_clk, write_clk90, read_clk, 3'b000, rot[1], rot[0] };
+		8'h01: probe <= { write_clk, write_clk90, read_clk, 5'b00000 };
 		8'h10: probe <= { rfifo_empty, rfifo_next, rfifo_dout[ 5: 0] };
 		8'h11: probe <= { rfifo_empty, rfifo_next, rfifo_dout[13: 8] };
 		8'h12: probe <= { rfifo_empty, rfifo_next, rfifo_dout[21:16] };

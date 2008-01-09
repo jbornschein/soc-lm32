@@ -7,6 +7,7 @@
 
 module system
 #(
+//	parameter   bootram_file     = "../../firmware/ddr-phaser/image.ram",
 	parameter   bootram_file     = "../../firmware/bootloader/image.ram",
 	parameter   clk_freq         = 100000000,
 	parameter   uart_baud_rate   = 115200,
@@ -354,7 +355,7 @@ wb_bram #(
 //------------------------------------------------------------------
 // ddr0
 //------------------------------------------------------------------
-wire [2:0] ddr0_rot;
+wire ddr0_ps_ready, ddr0_ps_up, ddr0_ps_down;
 
 wb_ddr #(
 	.clk_freq(     clk_freq         ),
@@ -389,7 +390,10 @@ wb_ddr #(
 	.wb_sel_i(    ddr0_sel     ),
 	.wb_ack_o(    ddr0_ack     ),
 	// phase shifting
-	.rot(          ddr0_rot    ),
+	.ps_ready(   ddr0_ps_ready ),
+	.ps_up(      ddr0_ps_up    ),
+	.ps_down(    ddr0_ps_down  ),
+	// logic probe
 //	.probe_clk(    probe_clk   ),
 	.probe_sel(    'b0         )
 //	.probe(        probe       )
@@ -530,10 +534,15 @@ wire [3:0] gpio_leds  = gpio0_out[3:0];
 assign led_n   = (sw[1]) ? ~gpio_leds : ~debug_leds;
 
 assign gpio0_in[ 7: 0] =  8'b0;
-assign gpio0_in[12: 8] = (sw[1]) ?     ~btn_n : 8'b0;
-assign gpio0_in[31:13] = 19'b0;
+assign gpio0_in[12: 8] = (sw[1]) ?     ~btn_n : 5'b0;
+assign gpio0_in[15:13] =  3'b0;
+assign gpio0_in[31:17] = 15'b0;
 
-assign ddr0_rot        = (sw[1]) ? 3'b0 : {1'b0,~btn_n[1],~btn_n[3]};  // connect phase shift btn's to
-                                                                       // ddr controller?
+//----------------------------------------------------------------------------
+// Wire DDR phase shifting signals
+//----------------------------------------------------------------------------
+assign gpio0_in[16]  = ddr0_ps_ready;          // ddr0 phase shifter 
+assign ddr0_ps_up    = gpio0_out[16];          // ddr0 phase shifter
+assign ddr0_ps_down  = gpio0_out[17];          // ddr0 phase shifter
 
 endmodule 
