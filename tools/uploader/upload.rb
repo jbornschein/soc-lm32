@@ -108,7 +108,7 @@ begin
             begin
                 ch = sp.getc
             end while ch != 62
-            puts "."
+            print "."
             error = 0
 		end
 	end	
