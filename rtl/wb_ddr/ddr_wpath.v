@@ -135,7 +135,7 @@ end
 //----------------------------------------------------------------------------
 reg [7:0] read_shr;
 wire      read_cmd = (cba_cmd == `DDR_CMD_READ) & cba_ack;
-assign    sample   = read_shr[7];
+assign    sample   = read_shr[6];
 
 always @(posedge clk)
 begin

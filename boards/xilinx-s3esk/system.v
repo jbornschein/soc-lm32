@@ -11,9 +11,9 @@ module system
 	parameter   bootram_file     = "../../firmware/bootloader/image.ram",
 	parameter   clk_freq         = 50000000,
 	parameter   uart_baud_rate   = 115200,
-	parameter   ddr_clk_multiply = 12,
+	parameter   ddr_clk_multiply = 13,
 	parameter   ddr_clk_divide   = 5,
-	parameter   ddr_phase_shift  = 0,
+	parameter   ddr_phase_shift  = -41,
 	parameter   ddr_wait200_init = 26
 ) (
 	input                   clk, 

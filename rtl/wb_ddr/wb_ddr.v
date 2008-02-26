@@ -331,7 +331,7 @@ begin
 				state      <= s_write;
 		end
 		s_read: begin
-			if (tag_load_match & wayX_sel_valid) begin
+			if ((tag_load_match0 & way0_sel_valid) | (tag_load_match1 & way1_sel_valid)) begin
 				state      <= s_idle;
 			end else if (store_to_way & ~ls_busy) begin
 				state      <= s_rfill;
@@ -401,11 +401,11 @@ begin
 	case (state)
 	s_idle: begin end
 	s_read: begin
-		if (tag_load_match0 & wayX_sel_valid) begin
+		if (tag_load_match0 & way0_sel_valid) begin
 			update_lru0  <= 1;
 			wb_dat_o     <= way0_load_dat;
 			wb_ack_o     <= 1;
-		end else if (tag_load_match1 & wayX_sel_valid) begin
+		end else if (tag_load_match1 & way1_sel_valid) begin
 			update_lru1  <= 1;
 			wb_dat_o     <= way1_load_dat;
 			wb_ack_o     <= 1;
