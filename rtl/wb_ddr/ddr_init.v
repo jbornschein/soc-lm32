@@ -52,33 +52,6 @@ end
 
 assign wait200 = wait200_reg;
 
-//---------------------------------------------------------------------------
-// Auto refresh counter
-//---------------------------------------------------------------------------
-
-reg [2:0] ar_counter;
-wire      ar_cmd_acked;
-wire      ar_needed;
-wire      ar_badly_needed;
-
-assign ar_cmd_acked    = (cmd_cmd_reg == `DDR_CMD_AR) & mngt_ack;
-assign ar_needed       = (ar_counter != 0) & ~ar_cmd_acked; 
-assign ar_badly_needed = ar_counter[2] == 1'b1;  // >= 4
-
-always @(posedge clk)
-begin
-	if (reset) begin
-		ar_counter <= 0;
-	end else begin
-		if (~init_done)
-			ar_counter <= 0;
-		else if (pulse78 & ~ar_cmd_acked) 
-			ar_counter <= ar_counter + 1;
-		else if (ar_cmd_acked & ~pulse78) 
-			ar_counter <= ar_counter - 1;
-	end
-end
-
 //----------------------------------------------------------------------------
 // DDR Initialization State Machine
 //----------------------------------------------------------------------------
