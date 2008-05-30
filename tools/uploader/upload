@@ -6,7 +6,7 @@ require "optparse"
 port_baud     = 115200
 port_path     = "/dev/ttyUSB0"
 terminal_mode = false
-verose        = false
+verbose       = false
 check         = false
 
 #############################################################################
@@ -136,7 +136,6 @@ begin
 
 	print "Uploading SREC file..."
     uploadFile.each_line do |line|
-		printf "."
 		line.chomp!
 		if line[0..1] == "S7" then
 			startAddress = line[4..11].hex
@@ -145,17 +144,21 @@ begin
 			count = line[2..3].hex
 			addr  = line[4..11].hex
 			dat   = line[12..-3]
-			check = line[-2..-1].hex
+			cksum = line[-2..-1].hex
 			
 			count = count - 5
 			data = Array.new( count )
 			count.times do |i|
 				data[i] = ( dat[ (2*i) .. (2*i+1) ] ).hex
 			end
-			print " [0x%08x] " % addr
-			data.each do |e| print " %02x" % e; end
-			puts
 			port.upload(addr, data)
+			if verbose then
+				print " [0x%08x] " % addr
+				data.each do |e| print " %02x" % e; end
+				puts
+			else 
+				print "."
+			end
 		end
 	end
 	puts "done."
@@ -171,7 +174,7 @@ begin
 				count = line[2..3].hex
 				addr  = line[4..11].hex
 				dat   = line[12..-3]
-				check = line[-2..-1].hex
+				chsum = line[-2..-1].hex
 				
 				count = count/2 - 1
 				soll_data = Array.new( count )
@@ -199,6 +202,7 @@ begin
 
 
 	if terminal_mode 
+		puts "------ entering terminal mode ------"
 		while true do
 			a = select( [port, STDIN], nil, nil );
 
