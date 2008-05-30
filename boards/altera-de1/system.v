@@ -6,7 +6,7 @@
 
 module system
 #(
-	parameter   bootram_file     = "../../firmware/bootloader/image.ram", // XXX IGNORED XXX
+	parameter   bootram_file     = "../../firmware/boot0-serial/image.ram", // XXX IGNORED XXX
 	parameter   clk_freq         = 50000000,
 	parameter   uart_baud_rate   = 115200
 ) (

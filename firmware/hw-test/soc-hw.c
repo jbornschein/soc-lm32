@@ -1,4 +1,4 @@
-#include "spike_hw.h"
+#include "soc-hw.h"
 
 uart_t   *uart0  = (uart_t *)   0xf0000000;
 timer_t  *timer0 = (timer_t *)  0xf0010000;

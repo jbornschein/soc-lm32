@@ -19,11 +19,11 @@ crt0ram.o: crt0ram.S
 main.o: main.c
 	$(LM32_CC) $(CFLAGS) -c main.c
 
-spike_hw.o: spike_hw.c
-	$(LM32_CC) $(CFLAGS) -c spike_hw.c
+soc-hw.o: soc-hw.c
+	$(LM32_CC) $(CFLAGS) -c soc-hw.c
 
-image: crt0ram.o main.o spike_hw.o
-	$(LM32_LD) $(LDFLAGS) -Map image.map -N -o image crt0ram.o main.o spike_hw.o
+image: crt0ram.o main.o soc-hw.o
+	$(LM32_LD) $(LDFLAGS) -Map image.map -N -o image crt0ram.o main.o soc-hw.o
 
 image.lst: image
 	$(LM32_OBJDUMP) -h -S $< > $@

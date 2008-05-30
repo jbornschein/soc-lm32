@@ -8,7 +8,7 @@
 module system
 #(
 //	parameter   bootram_file     = "../../firmware/ddr-phaser/image.ram",
-	parameter   bootram_file     = "../../firmware/bootloader/image.ram",
+	parameter   bootram_file     = "../../firmware/boot0-serial/image.ram",
 	parameter   clk_freq         = 100000000,
 	parameter   uart_baud_rate   = 115200,
 	parameter   ddr_clk_multiply = 13,

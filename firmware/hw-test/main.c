@@ -2,7 +2,7 @@
  * 
  */
 
-#include "spike_hw.h"
+#include "soc-hw.h"
 
 inline void writeint(uint32_t val)
 {
@@ -41,9 +41,9 @@ int main()
     char *str = test2;
     uint32_t i;
     
-    for (i = 0; i < 4; i++)
-        test2[i] = 'l';
-    glob[0]  = 'g';
+//    for (i = 0; i < 4; i++)
+ //       test2[i] = 'l';
+  //  glob[0]  = 'g';
     
  	// Initialize stuff
 	uart_init();

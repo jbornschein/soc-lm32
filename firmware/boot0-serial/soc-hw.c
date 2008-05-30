@@ -1,8 +1,8 @@
-#include "spike_hw.h"
+#include "soc-hw.h"
 
 uart_t   *uart0  = (uart_t *)   0xF0000000;
 timer_t  *timer0 = (timer_t *)  0xF0010000;
-// gpio_t   *gpio0  = (gpio_t *)   0xF0002000;
+gpio_t   *gpio0  = (gpio_t *)   0xF0020000;
 // uint32_t *sram0  = (uint32_t *) 0x40000000;
 
 uint32_t msec = 0;
