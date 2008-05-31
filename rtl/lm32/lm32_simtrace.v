@@ -62,7 +62,6 @@ wire [`LM32_WORD_RNG] branch_immediate;         // Conditional branch immediate
 
 `include "lm32_functions.v"
 
-// synopsys translate_off
 
 wire [4:0]  r3    = instruction[25:21];
 wire [4:0]  r2    = instruction[20:16];
@@ -75,6 +74,8 @@ wire [26:0] imm27 = instruction[26:0];
 //assign high_imm     = {instruction[15:0], 16'h0000};
 wire [`LM32_PC_RNG] call_imm     = {{ 4{instruction[25]}}, instruction[25:0]};
 wire [`LM32_PC_RNG] branch_imm   = {{14{instruction[15]}}, instruction[15:0] };
+
+// synopsys translate_off
 
 always @(posedge clk_i) 
 begin
