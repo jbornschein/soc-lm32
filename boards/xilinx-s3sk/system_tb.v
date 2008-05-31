@@ -152,7 +152,7 @@ system #(
 );
 
 assign btn = { 3'b0, reset };
-assign sw  = { 7'b00000001 };
+assign sw  = { 8'b00000001 };
 
 /* Clocking device */
 initial         clk <= 0;
@@ -204,6 +204,7 @@ begin
 	end
 end
 
+/*
 always @(posedge clk)
 begin
 	if (dut.lm32i_ack) begin
@@ -212,5 +213,6 @@ begin
 		            (dut.lm32i_we) ? dut.lm32i_dat_w : dut.lm32i_dat_r );
 	end
 end
+*/
 
 endmodule

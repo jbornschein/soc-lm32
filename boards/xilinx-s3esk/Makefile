@@ -21,6 +21,7 @@ SRC=                                      \
 	../../rtl/lm32/lm32_cpu.v             \
 	../../rtl/lm32/lm32_instruction_unit.v	\
 	../../rtl/lm32/lm32_decoder.v         \
+	../../rtl/lm32/lm32_simtrace.v        \
 	../../rtl/lm32/lm32_load_store_unit.v \
 	../../rtl/lm32/lm32_adder.v           \
 	../../rtl/lm32/lm32_addsub.v          \
@@ -96,7 +97,7 @@ system_tb.vvp: $(SRC) $(SIM_SRC)
 system.prj: $(SRC) $(SYN_SRC)
 	rm -f system.prj
 	@for i in `echo $^`; do \
-	    echo "verilog worlk $$i" >> system.prj; \
+	    echo "verilog work $$i" >> system.prj; \
 	done
 
 system.ngc: system.prj

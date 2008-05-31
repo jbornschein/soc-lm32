@@ -20,6 +20,7 @@ SRC=                                      \
 	../../rtl/lm32/lm32_cpu.v             \
 	../../rtl/lm32/lm32_instruction_unit.v	\
 	../../rtl/lm32/lm32_decoder.v         \
+	../../rtl/lm32/lm32_simtrace.v        \
 	../../rtl/lm32/lm32_load_store_unit.v \
 	../../rtl/lm32/lm32_adder.v           \
 	../../rtl/lm32/lm32_addsub.v          \

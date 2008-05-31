@@ -757,6 +757,18 @@ lm32_instruction_unit #(
     .instruction_d          (instruction_d)
     );
 
+// Trace instructions in simulation
+lm32_simtrace simtrace (
+    .clk_i                  (clk_i),
+    .rst_i                  (rst_i),
+    .stall_x                (stall_x),
+    .stall_m                (stall_m),
+    .valid_w                (valid_w),
+    .kill_w                 (kill_w),
+    .instruction_d          (instruction_d),
+    .pc_w                   (pc_w)
+    );
+
 // Instruction decoder
 lm32_decoder decoder (
     // ----- Inputs -------
