@@ -160,8 +160,8 @@ always #(tck/2) clk <= ~clk;
 
 /* Simulation setup */
 initial begin
-	$dumpvars(-1);
 	$dumpfile("system_tb.vcd");
+	$dumpvars(-1, dut);
 
 	// reset
 	#0  reset <= 1;

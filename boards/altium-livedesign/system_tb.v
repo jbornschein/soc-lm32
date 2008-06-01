@@ -172,7 +172,7 @@ system #(
 );
 
 assign btn = { 4'b0 };
-assign sw  = { 7'b00000001 };
+assign sw  = { 8'b00000001 };
 
 /* Clocking device */
 initial         clk <= 0;
@@ -180,8 +180,8 @@ always #(tck/2) clk <= ~clk;
 
 /* Simulation setup */
 initial begin
-	$dumpvars(-1);
 	$dumpfile("system_tb.vcd");
+	$dumpvars(-1, dut);
 
 	// reset
 	#0  reset <= 1;
