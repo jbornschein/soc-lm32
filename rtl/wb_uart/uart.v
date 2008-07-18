@@ -124,29 +124,34 @@ begin
 	if (reset) begin
 		tx_busy     <= 0;
 		uart_txd    <= 1;
+		tx_count16  <= 0;
 	end else begin
 		if (tx_wr && !tx_busy) begin
 			txd_reg     <= tx_data;
 			tx_bitcount <= 0;
-			tx_count16  <= 1;
+			tx_count16  <= 0;
 			tx_busy     <= 1;
-			uart_txd    <= 0;
-		end else if (enable16 && tx_busy) begin
+		end 
+
+		if (enable16) begin
 			tx_count16  <= tx_count16 + 1;
 
-			if (tx_count16 == 0) begin
+			if ((tx_count16 == 0) && tx_busy) begin
 				tx_bitcount <= tx_bitcount + 1;
 				
-				if (tx_bitcount == 8) begin
+				if (tx_bitcount == 0) begin
+					uart_txd <= 'b0;
+				end else if (tx_bitcount ==  9) begin
 					uart_txd <= 'b1;
-				end else if (tx_bitcount == 9) begin
-					uart_txd <= 'b1;
+				end else if (tx_bitcount == 10) begin
+					tx_bitcount <= 0;
 					tx_busy  <= 0;
 				end else begin
 					uart_txd <= txd_reg[0];
 					txd_reg  <= { 1'b0, txd_reg[7:1] };
 				end
 			end
+
 		end
 	end
 end
