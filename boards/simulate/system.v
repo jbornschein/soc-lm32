@@ -5,7 +5,7 @@
 
 module system
 #(
-	parameter   ram_file         = "../../firmware/hw-test/image.ram",
+	parameter   ram_file         = "../../firmware/gdb-test/image.ram",
 	parameter   clk_freq         = 100000000,
 	parameter   uart_baud_rate   = 115200
 ) (
