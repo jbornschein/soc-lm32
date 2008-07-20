@@ -63,4 +63,9 @@ firmware/*/image
 firmware/*/image.srec
 firmware/*/image.ram
 firmware/*/image.bin
+firmware/*/zimage
+firmware/*/zimage.srec
+firmware/*/zimage.ram
+firmware/*/zimage.bin
+firmware/*/zimage.zbin
 
